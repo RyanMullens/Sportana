@@ -25,7 +25,6 @@ Our Team
 
  - CS 383 - Artificial Intelligence
  - CS 403 - Robotics
- - CS 585 - Natural Language Processing
  - CS 575 - Combinatorics and Graph Theory
  - CS 491 - Programming the iPhone & iPad
  - CS 326 - Web Programming
