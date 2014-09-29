@@ -7,3 +7,5 @@ I think most sports-related social networks (Fancred, Sportlobster) target the s
 Your Trello board is quite active, which is awesome! Facebook API integration, historically, has taken a fair amount of time to implement so if you decide to use it, make sure to start early! (but it's totally worth it) 
 
 Awesome job on Project 1, can't wait to see your future progress!
+
+P.S. I love your logo!
