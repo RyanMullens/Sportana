@@ -23,9 +23,12 @@ BUDGET + FUND REQUEST
 |         |                                               |                          |
 | Total   | Initial Cost                                  | $4,000                   |
 |         | Yearly Cost                                   |                          |
-|         |                                               |                          |
-|         |                                               |                          |
 
+
+*Hosting Resources
+*Monthly cost for large-web-app server = $1122
+**30% of large web app = $337/month
+**http://calculator.s3.amazonaws.com/index.html#key=calc-LargeWebApp-140323
 
 
 
