@@ -1,5 +1,5 @@
 PROBLEM STATEMENT
-=================
+-----------------
 *@David 9/29*
 
 As understood in psychology[1] and group dynamics[2], people have the natural tendency to socialize by connecting to one another through situations such as playing a game of soccer or basketball. People like to have fun and enjoy simple games with friends. Most of all, people like meeting new people. However, with today’s technology and services, procuring sports events and outings has become difficult and complex, and has since been delegated to companies, clubs, and managers of the like; It’s too much organization for one person to handle.
@@ -11,7 +11,7 @@ Our product enables people to recreate these activities without the need of a ph
 [1: Psych 100] [2: Group Dynamics - Wentworth] [3: CS-311] [4: CS-383]
 
 PRODUCT DEFINITION
-==================
+------------------
 *@Brandon: 9/28 - 10/1*		
 
 Sportana knows what sports you like, who you like playing with, and where you like to play.  Whether you just want some friendly competition or are looking for a formidable face-off, Sportana makes it easy to get out and get moving with people who love to play.
@@ -26,13 +26,17 @@ Sportana solves many problems introduced by conventional social-networking appli
 
 
 TEAM MEMBER ROLES
-================
+------------------
+*@Eli 09/30*
+
 **Jeff Boutotte**
 **Role: Design, Database and Server Implementation**
+
 I come from a family of software engineers - my mom is retired but used to work at Digital and my dad works at CA Technologies so I guess you could say my family revolves around software.  I’m in my senior year here at UMass as a Computer Science major with a concentration in Software Engineering (though also fulfilling requirements for Security & Privacy, Networking, and Software Systems).  My particular area of interest is currently in authentication but I would enjoy working anywhere in the areas I’m studying.  In terms of extracurriculars I enjoy being involved with the LRC at UMass as the Supplemental Instructor for CS 250 (Introduction to Computation) and playing pickup soccer with friends.
 
 **Brandon Read**
 **Role: Front-End, Design**
+
 A successful product is the result of careful consideration, passionate enthusiasm, and obsessive attention to detail. A good idea is not enough. A good design is not enough. When people care about what they make--when they know it’s something that is absolutely essential to your daily life, they can make some remarkable products. That is what I want to do. I want my products to have meaning--I want them to be used because people love using them. I want to make things that are worth making.  In other news, I love french fries, design, and I’m an intersectional feminist.
 Alec Hirsch
 Role: Front-End
@@ -40,23 +44,28 @@ I was always interested in computers and how they worked. In high school I start
 
 **Ryan Mullens**
 **Role: Back-End**
+
 I’ve always been very interested in languages and am currently attempting to learn german. In high school I never really had much luck with spanish and decided to try programming languages instead! And from that day in freshman year, I haven’t stopped programming. I have graded for cs187 and c220 and am currently a tutor for computer science classes at the LRC.
 
 **David SooHoo**
 **Role: Back-End + Front-End**
+
 I’ve always been that one child in my family that wanted to do bigger things, hence the reason I like big data. Understanding the psychology and sociology of humans is really my passion, and big data is one way of examining them. I knew that I’d dive towards some kind of science degree because of my logical nature and so computer science has been the perfect fit since I entered college. Currently I work for IBM and do work with databases and web development.
 
 **Eli Sandler**
 **Role: Back-End**
+
 I arrived at Umass as a undeclared major with no idea of what I wanted to do, so I took some intro level courses. One of those courses was Computer Science 121, which was my first taste of computer science. I've been hooked ever since. Once I graduate I want to go into the industry and hopefully find a job as network administrator.
 
 **Nicholas McAvoy**
 **Role: Front-End** 
+
 I come from a very techie family. My mother is a computer programmer, my sister runs the computer science education program at the high school she teaches at, and my brother is studying computational physics. Only my father had no interest in computer science. I have been interested in math and science all my life but I only realized I was interested in programming early in my high school career. Even though my high school didn’t have very many computer science classes and there wasn’t much not connected with the school, by the end of high school I knew I wanted to do computer science for the rest of my life.
 
 
 BUDGET + FUND REQUEST
-====================
+------------------
+*@Ryan 9/29*
 
 | Name    | Description                                   | Cost                     |
 |---------|-----------------------------------------------|--------------------------|
@@ -76,7 +85,9 @@ BUDGET + FUND REQUEST
 
 
 TIMELINE FOR THE YEAR
-=====================
+------------------
+*@Jeff 9/29*
+
 * September 30-October 5: Original Proposal Document
 * October 6-October 12: Finalize use cases for product
 * October 13-October 19: Complete ER diagram for database, simultaneously design RESTful API calls that server will offer and layout of the front end.
