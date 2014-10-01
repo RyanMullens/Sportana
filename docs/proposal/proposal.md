@@ -15,6 +15,19 @@ TEAM MEMBER ROLES
 BUDGET + FUND REQUEST
 ====================
 
+| Name    | Description                                   | Cost                     |
+|---------|-----------------------------------------------|--------------------------|
+| Hosting | AWS EC2                                       | $337/month               |
+| Domain  | Sportana.com                                  | $4,000 initial, $10/year |
+| Salary  | 7 software engineers combined yearly salaries | $560,000/year            |
+|         |                                               |                          |
+| Total   | Initial Cost                                  | $4,000                   |
+|         | Yearly Cost                                   |                          |
+|         |                                               |                          |
+|         |                                               |                          |
+
+
+
 
 TIMELINE FOR THE YEAR
 =====================
