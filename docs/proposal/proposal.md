@@ -47,6 +47,10 @@ Alec Hirsch
 Role: Front-End
 I was always interested in computers and how they worked. In high school I started writing games for the TI calculators and have loved programming ever since. Currently I am a freelance web developer for WordPress websites, and am looking to expand my current knowledge of web systems. I am interested in pursuing a career in web development.
 
+**Alec Hirsch**
+**Role: Front-End**
+I was always interested in computers and how they worked. In high school I started writing games for the TI calculators and have loved programming ever since. Since then I have been doing freelance web developing with WordPress websites. I and am looking to expand my current knowledge of web systems, and am interested in pursuing a career in web development.
+
 **Ryan Mullens**
 **Role: Back-End**
 
