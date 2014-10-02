@@ -79,7 +79,7 @@ BUDGET + FUND REQUEST
 | Salary  | 7 software engineers combined yearly salaries | $560,000/year            |
 |         |                                               |                          |
 | Total   | Initial Cost                                  | $4,000                   |
-|         | Yearly Cost                                   |                          |
+|         | Yearly Cost                                   | $564,054                 |
 
 
 * Hosting Resources
