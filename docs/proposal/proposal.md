@@ -1,3 +1,8 @@
+Sportana
+=================
+**Stay active, be friendly. Sportana**
+
+
 PROBLEM STATEMENT
 -----------------
 *@David 9/29*
@@ -67,15 +72,14 @@ BUDGET + FUND REQUEST
 ------------------
 *@Ryan 9/29*
 
-| Name    | Description                                   | Cost                     |
-|---------|-----------------------------------------------|--------------------------|
-| Hosting | AWS EC2                                       | $337/month               |
-| Domain  | Sportana.com                                  | $4,000 initial, $10/year |
-| Salary  | 7 software engineers combined yearly salaries | $560,000/year            |
-|         |                                               |                          |
-| Total   | Initial Cost                                  | $4,000                   |
-|         | Yearly Cost                                   |                          |
-
+| Name ||Description || Cost |
+|----------||-------------||------|
+|  Hosting || HostGator Dedicated Server  || $174/month |
+|  Domain  ||  sportana.com   ||  $4,000  |
+|  Salary  ||6 Software Engineers  Salaries ||    $560,000/year |
+|          ||              ||       |
+|  Total   ||Initial Cost || $4,000 |
+|          ||Yearly Cost || $562,098 |
 
 * Hosting Resources
   * Monthly cost for large-web-app server = $1122
@@ -88,13 +92,14 @@ TIMELINE FOR THE YEAR
 ------------------
 *@Jeff 9/29*
 
-* September 30-October 5: Original Proposal Document
-* October 6-October 12: Finalize use cases for product
-* October 13-October 19: Complete ER diagram for database, simultaneously design RESTful API calls that server will offer and layout of the front end.
-* October 20-October 26: Consider integration between components of system - adjusting and finalizing the design document where it needs to be.  Begin initial implementation in three prongs - database/controller, server, and front end.
-* October 27-November 2: Continue implementation of system.
-* November 3-November 9: Target database/controller completion around the beginning of this week - continue working on server and front end.
-* November 10- November 16: Target server completion around the beginning of this week - continue working on front end. Begin work on developing acceptance tests, unit tests, and integration tests.
-* November 17- November 23: Target front end completion towards the end of this week.  Target test harness completion towards the end of this week.
-* November 24- November 30: Run tests and debug where need be.  Clean and finalize product.
-* December 1 - December 7: Demo or Die.
+| Date ||| Activity |
+|:-------------------|||:-------------|
+|  September 30 - October 5 ||| Original Proposal Document  |
+|  October 6 - October 12  |||  Functional Specifications Document   |
+|  October 13 - October 19 ||| ER database diagram, and RESTful API design. |
+|  October 20 - October 26 ||| Finalize design and begin implementation of database controller, server, and front-end. |
+|  October 27 - November 9   ||| Continue implementation of system. |
+| November 10 - November 16 ||| Target completion of server implementation. Begin developing acceptance, unit, and integration tests. |
+| November 17 - November 23 ||| Target front-end completion and test harness completion. |
+| November 24 - November 30 ||| Run tests and debug. Clean and finalize product. |
+| December 1 - December 7 ||| Demo product. |
