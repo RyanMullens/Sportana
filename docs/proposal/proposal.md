@@ -46,6 +46,7 @@ A successful product is the result of careful consideration, passionate enthusia
 
 **Alec Hirsch**
 **Role: Front-End**
+
 I was always interested in computers and how they worked. In high school I started writing games for the TI calculators and have loved programming ever since. Since then I have been doing freelance web developing with WordPress websites. I and am looking to expand my current knowledge of web systems, and am interested in pursuing a career in web development.
 
 **Ryan Mullens**
