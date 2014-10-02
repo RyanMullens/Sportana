@@ -105,4 +105,4 @@ TIMELINE FOR THE YEAR
 | November 10 - November 16 | Target completion of server implementation. Begin developing acceptance, unit, and integration tests. |
 | November 17 - November 23 | Target front-end completion and test harness completion.                                              |
 | November 24 - November 30 | Run tests and debug. Clean and finalize product.                                                      |
-| December 1 - December 7   |                                                                                                       |
+| December 1 - December 7   | Presentation                                                                                                      |
