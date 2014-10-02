@@ -43,9 +43,11 @@ I come from a family of software engineers - my mom is retired but used to work 
 **Role: Front-End, Design**
 
 A successful product is the result of careful consideration, passionate enthusiasm, and obsessive attention to detail. A good idea is not enough. A good design is not enough. When people care about what they make--when they know it’s something that is absolutely essential to your daily life, they can make some remarkable products. That is what I want to do. I want my products to have meaning--I want them to be used because people love using them. I want to make things that are worth making.  In other news, I love french fries, design, and I’m an intersectional feminist.
-Alec Hirsch
-Role: Front-End
-I was always interested in computers and how they worked. In high school I started writing games for the TI calculators and have loved programming ever since. Currently I am a freelance web developer for WordPress websites, and am looking to expand my current knowledge of web systems. I am interested in pursuing a career in web development.
+
+**Alec Hirsch**
+**Role: Front-End**
+
+I was always interested in computers and how they worked. In high school I started writing games for the TI calculators and have loved programming ever since. Since then I have been doing freelance web developing with WordPress websites. I and am looking to expand my current knowledge of web systems, and am interested in pursuing a career in web development.
 
 **Ryan Mullens**
 **Role: Back-End**
@@ -79,7 +81,7 @@ BUDGET + FUND REQUEST
 | Salary  | 7 software engineers combined yearly salaries | $560,000/year            |
 |         |                                               |                          |
 | Total   | Initial Cost                                  | $4,000                   |
-|         | Yearly Cost                                   |                          |
+|         | Yearly Cost                                   | $564,054                 |
 
 
 * Hosting Resources
