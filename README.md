@@ -1,3 +1,6 @@
+![Sportana](http://blogs.umass.edu/bread/files/2014/10/sportana-02-1024x352.png)
+
+
 # Sportana Overview
 -----------------
 Sportana knows what sports you like, who you like playing with, and where you like to play.  Whether you just want some friendly competition or are looking for a formidable face-off, Sportana makes it easy to get out and get moving with people who love to play.
