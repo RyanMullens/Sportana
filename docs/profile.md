@@ -1,6 +1,3 @@
-----------
-
-
 ![Kiwi Mango](http://blogs.umass.edu/bread/files/2014/09/kiwi-01.png)
 
 Connecting People Through Sports
