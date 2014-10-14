@@ -2,12 +2,12 @@
 =======
 
 
-Create Date: September 30, 2014
-Last Modified Date: October 13, 2014
-Version 1.0
+  Create Date: September 30, 2014
+  Last Modified Date: October 13, 2014
+  Version 1.0
 
-Jeff Boutotte, Eli Sandler, Brandon Read, Ryan Mullens, Alec Hirsch, David Soohoo
-Team Kiwi Mango
+  Jeff Boutotte, Eli Sandler, Brandon Read, Ryan Mullens, Alec Hirsch, David Soohoo
+  Team Kiwi Mango
 
 
 
@@ -15,19 +15,19 @@ Team Kiwi Mango
 
 Team Organization
 -------
->Jeff Boutotte
-Role: Back end + Design
-Responsibilities: Design and implement the database and RESTful API calls for the back end of the application.
+Jeff Boutotte
+>Role: Back end + Design
+>Responsibilities: Design and implement the database and RESTful API calls for the back end of the application.
 
 ---
->Eli Sandler
-Role:  
-Responsibilities:  
+Eli Sandler
+>Role:  
+>Responsibilities:  
 
 ---
->Brandon Read
-Role: Front End + Visual Design
-Responsibilities: Research and implement the front-end data-binding model using Angular.js.  Consume the RESTful API.  Style using HTML + CSS.
+Brandon Read
+>Role: Front End + Visual Design
+>Responsibilities: Research and implement the front-end data-binding model using Angular.js.  Consume the RESTful API.  Style using HTML + CSS.
 
 ---
 >Ryan Mullens
@@ -55,6 +55,7 @@ This specification intends to profile the web based application Sportana.  It ai
 Scenarios
 -------
 **Look for a Game**
+
 Brandon Read
 
 >A user navigates to their ‘Games’ page.  Because they have not yet queued up for a game or created their own, the page displays some text recommending they join the Game Queue or Create a Game.  Two large buttons will be prominently centered underneath the prompt text.  One for ‘Look for Game’ and another for ‘Create Game’.  The user clicks ‘Look for Game’ and the page pops up a card that will used to collect information about their queueing preferences.  The user currently has no game history, so there are no ‘recent preferences’ available to pick and they must proceed manually.  For each piece of information Sportana asks for, only that information and a ‘Next’ button is present on the card.  This engages the user so that they emphasize what they really want so that Sportana curates only relevant games.  For optional information beyond the basics (eg. basics == sport, age range preference), another button will be available on the card with ‘Look for Game!’ that the user may click to finish the queueing process.  One of the most important parameters is the player’s availability for the game.  The user will be shown a ‘week view’ range of days and they may select whole days for availability, or click and drag between the desired hours on a specific day.  They may then manually adjust the time-frame as desired.  They may continue entering more information such as ‘location suggestions,’ ‘competitive level,’ and more.  Once they click ‘Look for Game,’ Sportana will begin the search for players and some text will be displayed to let the player know that they will be notified when a game is found.
@@ -62,20 +63,24 @@ Brandon Read
 >Consider another case where the user has previously played some games.  When they decide to join a game,  They will be shown recent profiles to start the queueing with.  For example, if they recently queued for basketball with an age range of 18-24, then the user may select that profile and modify the optional parameters as they desire.  This speeds things up for the user while giving them control to make modifications as they see fit.
 
 **Create a game**
+
 Brandon Read
 >The user navigates to the ‘Games’ page and clicks the ‘Create Game’ button.  A new card sequence appears as styled like the preferences scenario for queuing to join a game.  The user selects the sport they want to play and then selects other parameters such as location, tentative time frame, etc.  They may choose to invite friends to the game during the event creation. This will notify friends of the game which they may accept or decline.  Once they press the ‘Create’ button, Sportana will ask if they wish to make the game public.  If they choose yes, this allows Sportana to search for players to add to the game.  One conflict with this is that other players may be discovered before friends respond.  This means that their slots may fill up!  To combat this, Sportana allows you to reserve a desired number of slots for friends and then will work to discover players for the remaining slots.  Once the user completes the final steps, the game is created and the card sequence goes away, adding the new game to the list of games in the content view of the ‘Games’ page that they are currently in.
 
 **Modify Queueing Preferences**
+
 Brandon Read
 >From the ‘Games’ page, the user may choose to adjust their queueing preferences.  If the user selects a queue that they are currently waiting in, they will be able to make changes to their time availability, age preferences, etc.  If they decide they no longer want to be looking for that particular game, they can choose to delete the queue by hovering over and and selecting the ‘X’ which will prompt the user, asking if they really want to drop from that queue.
 
 **View a players profile**
+
 Jeff Boutotte
 >At this point in the application our fictitious user Alice has logged in and selected a user that she is friends with, we’ll call him Bob.  This will bring Alice to Bob’s profile page where she will see information about him including his first and last name, the city he has told Sportana he lives in, his age, sports he has told Sportana he is interested in, his profile picture, and his overall rating.  Alice will also be able to see a list of past games that Bob has attended under a tabbed view.  If she clicks the “upcoming events” tab, this view of events will switch to the events that Bob has elected to attend that will happen in the future (his upcoming events).  Also on this page, Alice will see an option labeled “my rating” which will be the rating that she specifically has given Bob (n/a if she hasn’t rated him yet).  Alice will be able to adjust this rating and press a “rate” button to send the information to the backend.  Alice will notice Bob’s average rating update to reflect this new rating when she presses this button.
 
 >If Alice was not friends with Bob, she would be able to see all of this information except for Bob’s upcoming events and age.  She would also see a request friend button, which would send Bob a friend request (see Request friend use case).
 
 **Manage your own profile**
+
 Jeff Boutotte
 
 >At this point in the application our fictitious user Alice has created an account and wants to change some of her information.  She navigates to her profile and presses a settings button, which takes her to the manage profile page.  On the manage profile page Alice will see all of the information she has previously entered for her profile in editable fields including:
@@ -84,22 +89,26 @@ Jeff Boutotte
 - sports she is interested in
 - profile picture
 - Birthday
-Alice will be able to edit any of these fields as she likes before pressing a “confirm changes” button at the bottom of the page.  On pressing this button, all of her information will be updated to the new values she has input into the fields on the page and she will be redirected back to her profile page - which will reflect the changes that Alice has just made.
+>Alice will be able to edit any of these fields as she likes before pressing a “confirm changes” button at the bottom of the page.  On pressing this button, all of her information will be updated to the new values she has input into the fields on the page and she will be redirected back to her profile page - which will reflect the changes that Alice has just made.
 Alice will also see a “change password” button on her manage profile page, which when clicked will bring up a prompt for her to enter in her old password, enter a new password, and confirm the new password with a “confirm” button at the bottom of the prompt.  Alice can change her password by typing in her old password correctly and a new password matching in both the “enter a new password” field and the “confirm new password” fields.  These will be sent to the backend and if the old password matches and the two new password are the same then Alice will receive confirmation that her password has been changed.  If any of those conditions are not met, then Alice will be shown an error prompt with the reason her password was unable to be changed.  
 
 **Send friend request**
+
 Jeff Boutotte
 >At this point in the application, Alice is on a users profile who she is not friends with - “Carl Casey”.  Alice wants to request Carl as a friend and notices a “request friend” button on his profile page and clicks it.  The button shows a check mark to confirm that the request has been sent to Carl.
 
 **Respond to friend request**
+
 Jeff Boutotte
 >Carl logs in to his account on Sportana and notices that he has some notifications.  He navigates to the notifications page and sees that Alice has sent him a friend request.  On this notification, he will see options for “accept”, “deny”, and “view profile”.  On pressing “accept”, Carl would be shown a confirmation that he and Alice are now friends and Alice would appear on his friends list when he next navigated to that page.  On pressing “deny” Carl would receive confirmation that the friend request was denied and he would not see Alice in his friends list when he next navigated to that page.  On pressing “view profile” Carl would be navigated to Alice’s user page and shown the information there as described in the “view a players profile” use case as if he and Alice were not friends (they aren’t at this point in the scenario) with the only difference being the button for “request friend” would instead read “respond to request”.  If Carl were to click this button a pop up selection would appear above the button with options “accept” and “deny”.  On clicking “accept”, he and Alice would become friends and he would be shown confirmation of this.  On clicking “deny”, he and Alice would not become friends and he would be shown confirmation of this.
 
 **Respond to game invitation**
+
 Jeff Boutotte
 >Carl logs in to his account on Sportana and notices that he has some notifications.  He navigates to the notifications page and sees that Alice has sent him an invitation to a game.  On this notification, he will see options for “accept”, “deny”, and “view game”.  On pressing “accept”, Carl would be shown a confirmation that he has joined that game.  On pressing “deny” Carl would receive confirmation that he has not joined the game.  On pressing “view game” Carl would be navigated to the Game’s page and shown the information there as described in the “view a game” use case.  He will see a button on this page for “Join Game”.  If Carl were to click this button a pop up selection would appear above the button with options “accept” and “deny”.  On clicking “accept”, he would join the game and be shown confirmation of this.  On clicking “deny”, he would not join the game and would be shown confirmation of this.
 
 **Respond to Queue Invitation**
+
 Jeff Boutotte
 >This use case will look identical to the “respond to game invitation” use case only it will be for games that have not yet reached the minimum number of players specified by the creator.  The user will have all of the same options as someone who is responding to a game invitation and will see the same information, but will be shown a message on the game page that the game has not yet reached the minimum players needed for the game.  Upon the game reaching the minimum players needed for the game players who responded to queue invitations will be given subsequent notifications that the game they have joined is actually going to be played.
 
