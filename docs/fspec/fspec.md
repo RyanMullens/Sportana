@@ -2,12 +2,15 @@
 =======
 
 
-  Create Date: September 30, 2014
-  Last Modified Date: October 13, 2014
-  Version 1.0
+>Create Date: September 30, 2014
 
-  Jeff Boutotte, Eli Sandler, Brandon Read, Ryan Mullens, Alec Hirsch, David Soohoo
-  Team Kiwi Mango
+>Last Modified Date: October 14, 2014
+
+>Version 1.0
+
+>Jeff Boutotte, Eli Sandler, Brandon Read, Ryan Mullens, Alec Hirsch, David Soohoo
+
+>Team Kiwi Mango
 
 
 
@@ -60,6 +63,32 @@ This specification intends to profile the web based application Sportana.  It ai
 
 Scenarios
 -------
+
+**Create Account**
+
+David Soohoo
+>Alice, a sports enthusiast decides she wants to extend her reach in playing games and events and discovers Sportana, but she doesn’t have an account. She sees in the top right corner a login and password field, and underneath that, a “Create Account” link and a “Connect with Facebook”. Alice clicks on “Create Account” and is brought to a new field to register an account with Sportana.com. She enters her information correspondingly into the fields: email, password, first name, last name, birthday, and city. Alice then clicks a button at the bottom labeled “Create Account” at the bottom of the page. Alice’s account is now created and she is redirected to her profile page where she can further edit information about herself such as the sports she likes.
+
+**Connect With Facebook**
+
+David Soohoo
+>Carl discovers Sportana through Alice and decides he wants to join too. On visiting sportana.com, he realizes he has to make an account. In the top right corner, he sees a “Connect with Facebook” button next to a “Create Account” button. He decides he wants to connect via Facebook and clicks on that button, where he is redirected to the Facebook authentication portal and prompted to enter his Facebook credentials. After entering his email and password into Facebook and pressing “Login”, Carl is prompted with a box that says Sportana would like to access his Facebook profile’s information. Carl accepts and is afterwards, redirected to his profile page on sportana.com where he sees his email, city, birthday, and profile picture already filled in with data from his Facebook profile.
+
+**Login**
+
+David Soohoo
+>Bob is a user of Sportana and decides he wants to login. In the top right corner are two input boxes that are labeled respectively “Email” and “Password”. Bob clicks on the fields and enters his credentials and clicks the “Login” button next to it. The page is then refreshed and redirects Bob to his game homepage (game feed page). Bob now sees his email and a “Logout” button displayed in the top right corner of the page and knows he is logged in, and can now play around with his profile, begin looking for games, post to walls, find friends, and enjoy the many other features of Sportana.
+
+**Logout**
+
+David Soohoo
+>Bob, a logged-in user of Sportana, is done doing his activities on Sportana.com and decides he now wants to logout. In the top right corner of any page, there is a clickable “Logout” text button next to his account email. Bob clicks on it and the page deletes his session and redirects Bob to the main page of sportana.com where he is no longer logged into his account.
+
+**Forgot Password**
+
+Alec Hirsch
+>Alice has now recovered from her biking accident and is able to play the games she loves. She wants to reactivate her account, but she forgot the password that she used to create it. Alice notices a link that says ‘forgot password’ and clicks on it. She is prompted to provide her email address that she created her account with. After entering her address and clicking submit, she receives an email from sportana with a new randomly generated password that Alice can use to log in to her account.
+
 **Look for a Game**
 
 Brandon Read
@@ -99,6 +128,11 @@ Jeff Boutotte
 >Alice will be able to edit any of these fields as she likes before pressing a “confirm changes” button at the bottom of the page.  On pressing this button, all of her information will be updated to the new values she has input into the fields on the page and she will be redirected back to her profile page - which will reflect the changes that Alice has just made.
 Alice will also see a “change password” button on her manage profile page, which when clicked will bring up a prompt for her to enter in her old password, enter a new password, and confirm the new password with a “confirm” button at the bottom of the prompt.  Alice can change her password by typing in her old password correctly and a new password matching in both the “enter a new password” field and the “confirm new password” fields.  These will be sent to the backend and if the old password matches and the two new password are the same then Alice will receive confirmation that her password has been changed.  If any of those conditions are not met, then Alice will be shown an error prompt with the reason her password was unable to be changed.  
 
+**View notifications**
+
+Eli Sandler
+>Alice is a user logged into Sportana on her home page. She wants to see if any of her friends have invited her to a game so she clicks on the “notifications” button at the top of her home page. This opens a drop down menu that displays a list of the notifications she has not yet responded to from most recent to oldest. Alice can click on any of the notifications to respond to them appropriate to the type of notification (respond to friend request, respond to game invitation, and respond to queue invitation use cases).  
+
 **Send friend request**
 
 Jeff Boutotte
@@ -108,6 +142,11 @@ Jeff Boutotte
 
 Jeff Boutotte
 >Carl logs in to his account on Sportana and notices that he has some notifications.  He navigates to the notifications page and sees that Alice has sent him a friend request.  On this notification, he will see options for “accept”, “deny”, and “view profile”.  On pressing “accept”, Carl would be shown a confirmation that he and Alice are now friends and Alice would appear on his friends list when he next navigated to that page.  On pressing “deny” Carl would receive confirmation that the friend request was denied and he would not see Alice in his friends list when he next navigated to that page.  On pressing “view profile” Carl would be navigated to Alice’s user page and shown the information there as described in the “view a players profile” use case as if he and Alice were not friends (they aren’t at this point in the scenario) with the only difference being the button for “request friend” would instead read “respond to request”.  If Carl were to click this button a pop up selection would appear above the button with options “accept” and “deny”.  On clicking “accept”, he and Alice would become friends and he would be shown confirmation of this.  On clicking “deny”, he and Alice would not become friends and he would be shown confirmation of this.
+
+**Invite friends to a game**
+
+Eli Sandler
+>Alice is a user logged into Sportana. She has navigated to a game page that was previously created from the “create game” use case, in order to play a game of Ultimate Frisbee. Alice clicks on the button “Invite Friends” which opens a list of friends, in the format described in the “view a list of friends use case” with a checkable box next to each user. Alice can then select one or more friends that she wants to invite to the game by checking the box in that users row. When she is done selecting the friends she wants to invite Alice will scroll down to the bottom of the prompt that is open and click on “Invite” or “Cancel”. Invite will send notifications to those friends that she indicated and close the prompt bringing her back to the game page. Cancel will not send notifications to any of her friends and also bring her back to the game page.  
 
 **Respond to game invitation**
 
@@ -123,11 +162,6 @@ Jeff Boutotte
 
 Alec Hirsch
 >Alice is no longer interested in having an account on Sportana because she got injured from falling off of her bike.  Under her account settings she finds buttons to deactivate her account and delete her account. She is still interested in some day coming back to sportana after her recovery, so she choses to deactivate. If she instead chose to delete her account, she would not be able to reactivate it; all of her profile information would be lost forever. After she deactivates the account, none of her friends can find her or invite her to games. However, her account still exists so she can reactivate it by simply logging in.
-
-**Forgot Password**
-
-Alec Hirsch
->Alice has now recovered from her biking accident and is able to play the games she loves. She wants to reactivate her account, but she forgot the password that she used to create it. Alice notices a link that says ‘forgot password’ and clicks on it. She is prompted to provide her email address that she created her account with. After entering her address and clicking submit, she receives an email from sportana with a new randomly generated password that Alice can use to log in to her account.
 
 **Reactivate account**
 
@@ -149,50 +183,21 @@ Ryan Mullens
 Ryan Mullens
 >Alice has once again signed up for an Ultimate Frisbee game. She’s remembered when and where it is (huge accomplishment!) but she has a question… Should she bring her set of cones? Well once again, Alice doesn’t have to worry! She can just go to her “View Games” page and find and click on the appropriate game. Once she gets to the “View Game” page, she can just go over to the “Wall”, type her question into a text field, and click the “Post” button. This post will be displayed to all the other players participating in the game for them to write replies to. Alice is so happy this crisis was averted! Now she doesn’t have to lug the whole ¼ pound extra weight a whole 100 yards from her dorm to the field. 
 
-**Create Account**
+**View a list of friends**
 
-David Soohoo
->Alice, a sports enthusiast decides she wants to extend her reach in playing games and events and discovers Sportana, but she doesn’t have an account. She sees in the top right corner a login and password field, and underneath that, a “Create Account” link and a “Connect with Facebook”. Alice clicks on “Create Account” and is brought to a new field to register an account with Sportana.com. She enters her information correspondingly into the fields: email, password, first name, last name, birthday, and city. Alice then clicks a button at the bottom labeled “Create Account” at the bottom of the page. Alice’s account is now created and she is redirected to her profile page where she can further edit information about herself such as the sports she likes.
-
-**Connect With Facebook**
-
-David Soohoo
->Carl discovers Sportana through Alice and decides he wants to join too. On visiting sportana.com, he realizes he has to make an account. In the top right corner, he sees a “Connect with Facebook” button next to a “Create Account” button. He decides he wants to connect via Facebook and clicks on that button, where he is redirected to the Facebook authentication portal and prompted to enter his Facebook credentials. After entering his email and password into Facebook and pressing “Login”, Carl is prompted with a box that says Sportana would like to access his Facebook profile’s information. Carl accepts and is afterwards, redirected to his profile page on sportana.com where he sees his email, city, birthday, and profile picture already filled in with data from his Facebook profile.
-
-**Login**
-
-David Soohoo
->Bob is a user of Sportana and decides he wants to login. In the top right corner are two input boxes that are labeled respectively “Email” and “Password”. Bob clicks on the fields and enters his credentials and clicks the “Login” button next to it. The page is then refreshed and redirects Bob to his game homepage (game feed page). Bob now sees his email and a “Logout” button displayed in the top right corner of the page and knows he is logged in, and can now play around with his profile, begin looking for games, post to walls, find friends, and enjoy the many other features of Sportana.
-
-**Logout**
-
-David Soohoo
->Bob, a logged-in user of Sportana, is done doing his activities on Sportana.com and decides he now wants to logout. In the top right corner of any page, there is a clickable “Logout” text button next to his account email. Bob clicks on it and the page deletes his session and redirects Bob to the main page of sportana.com where he is no longer logged into his account.
+Eli Sandler
+>Alice is a user logged into Sportana.  She clicks the “friends” button on the navigation tab and is brought to her friends list page.  On the friends list Alice will see a list of all of the users she is friends with including a profile picture and the friends name for each player in the list.  Alice will be able to click on a friend and be brought to that friends home page (view a players profile use case).
 
 **Remove a friend**
 
 Eli Sandler
 >Alice is a user logged into Sportana. Alice decides that she no longer wants to be friends with Bob, so she navigates to Bob’s profile page and clicks on the button “Remove Friend”. This will bring up a prompt asking Alice to confirm her decision to remove Bob as a friend. If she clicks on ‘Remove’ Bob will be removed from her list of friends and she will be redirected to her home page. If Alice clicks on ‘Cancel’ then the prompt will close, she will stay on Bob's homepage, and Bob will not be removed from her friends list.
 
-**View a list of friends**
-
-Eli Sandler
->Alice is a user logged into Sportana.  She clicks the “friends” button on the navigation tab and is brought to her friends list page.  On the friends list Alice will see a list of all of the users she is friends with including a profile picture and the friends name for each player in the list.  Alice will be able to click on a friend and be brought to that friends home page (view a players profile use case).
-
 **Search for a player**
 
 Eli Sandler
 >Sportana will include a search page.  Alice can navigate to the search page where there will be a search bar where Alice can enter a search term into and a “Search” button next to the search bar.  This search button will trigger a query including the text of the search bar to be sent to the backend. The backend will then return a list of potential matches to Alice which will be displayed on the search page underneath the search bar.  The rows of results displayed will include a profile picture of the user, the users first and last name, and a button titled “Request Friend”.  If Alice clicks on any of these users then she will be directed to that players profile (view a players profile use case).  If Alice clicks on the “Request Friend” button then a friend request from Alice will be sent to that user (request friend use case).  Alice can also enter another search into the search bar at the top of this page and click “Search” to repeat this use case for a different query as many times as she likes.
 
-**View notifications**
-
-Eli Sandler
->Alice is a user logged into Sportana on her home page. She wants to see if any of her friends have invited her to a game so she clicks on the “notifications” button at the top of her home page. This opens a drop down menu that displays a list of the notifications she has not yet responded to from most recent to oldest. Alice can click on any of the notifications to respond to them appropriate to the type of notification (respond to friend request, respond to game invitation, and respond to queue invitation use cases).  
-
-**Invite friends to a game**
-
-Eli Sandler
->Alice is a user logged into Sportana. She has navigated to a game page that was previously created from the “create game” use case, in order to play a game of Ultimate Frisbee. Alice clicks on the button “Invite Friends” which opens a list of friends, in the format described in the “view a list of friends use case” with a checkable box next to each user. Alice can then select one or more friends that she wants to invite to the game by checking the box in that users row. When she is done selecting the friends she wants to invite Alice will scroll down to the bottom of the prompt that is open and click on “Invite” or “Cancel”. Invite will send notifications to those friends that she indicated and close the prompt bringing her back to the game page. Cancel will not send notifications to any of her friends and also bring her back to the game page.  
 
 Non-goals
 ---------
