@@ -225,15 +225,15 @@ Flow Diagram
 Screen By Screen
 ----------------
 
-##View Profile
+###View Profile
 ![screen1](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image00.png)
-##View Friends List
+###View Friends List
 ![screen2](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image01.png)
-##Landing Page
+###Landing Page
 ![screen3](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image02.png)
-##View Friend
+###View Friend
 ![screen4](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image03.png)
-##Find Game
+###Find Game
 ![screen5](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image04.png)
 
 
