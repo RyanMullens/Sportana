@@ -28,5 +28,3 @@ Brandon Read:		bread@umass.edu
 Eli Sandler:		ecsandle@umass.edu
 
 David SooHoo:		soohoo@umass.edu
-
-Nicholas McAvoy 	nmcavoy@umass.edu
