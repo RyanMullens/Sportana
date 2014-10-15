@@ -16,7 +16,7 @@
 ![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/logo.png)
 
 
-![companyLogo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/companyLogo.png)
+<img src="https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/companyLogo.png" width="250px"/>
 
 
 Team Organization
