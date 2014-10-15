@@ -16,6 +16,10 @@
 ![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/logo.png)
 
 
+
+![companyLogo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/companyLogo.png)
+
+
 Team Organization
 -------
 Jeff Boutotte
@@ -217,14 +221,14 @@ Sportana will not support chat directly between users. Users who wish to communi
 
 Flow Diagram
 ------------
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/flowDiagram.png)
+![flowDiagram](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/flowDiagram.png)
 
 Screen By Screen
 ----------------
 
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image00.png)
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image01.png)
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image02.png)
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image03.png)
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image04.png)
+![screen1](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image00.png)
+![screen2](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image01.png)
+![screen3](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image02.png)
+![screen4](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image03.png)
+![screen5](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image04.png)
 
