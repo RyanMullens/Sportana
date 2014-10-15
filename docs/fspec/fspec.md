@@ -214,3 +214,13 @@ Sportana will not support chat directly between users. Users who wish to communi
 >Sportana will not send email to the user of the application except when the user requests a password reset or to verify the users email upon account creation.
 
 >Sportana will not remind users of an upcoming game they have signed up for - it will be the users responsibility to keep track of games that they have signed up to play in.
+
+Screen By Screen
+----------------
+
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image00.png)
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image01.png)
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image02.png)
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image03.png)
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image04.png)
+
