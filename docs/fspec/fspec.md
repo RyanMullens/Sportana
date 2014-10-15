@@ -215,6 +215,10 @@ Sportana will not support chat directly between users. Users who wish to communi
 
 >Sportana will not remind users of an upcoming game they have signed up for - it will be the users responsibility to keep track of games that they have signed up to play in.
 
+Flow Diagram
+------------
+![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/flowDiagram.png)
+
 Screen By Screen
 ----------------
 
