@@ -13,7 +13,7 @@
 >Team Kiwi Mango
 
 
-
+![logo](https://github.com/umass-cs-326/kiwi-mango/raw/master/docs/images/logo.png)
 
 
 Team Organization
