@@ -48,7 +48,7 @@ Ryan Mullens
 Alec Hirsch
 >Role: Front End + Back End
 
->Responsibilities: 
+>Responsibilities: Helping to implement RESTful API in back end as well as Angular.js in the front end.
 
 ---
 David Soohoo
