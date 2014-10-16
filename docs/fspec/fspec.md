@@ -233,7 +233,11 @@ Screen By Screen
 ![screen3](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image02.png)
 ###View Friend
 ![screen4](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image03.png)
-###Find Game
+###Find Game 1
+![screen5](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image05.png)
+###Find Game 2
+![screen5](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image06.png)
+###Game Found
 ![screen5](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image04.png)
 
 
