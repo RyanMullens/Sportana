@@ -28,9 +28,9 @@ Jeff Boutotte
 
 ---
 Eli Sandler
->Role:  
+>Role:  Back End support
 
->Responsibilities:  
+>Responsibilities:  Helping to implement the database and RESTful API in the back end.
 
 ---
 Brandon Read
