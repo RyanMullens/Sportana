@@ -4,7 +4,7 @@
 
 >Create Date: September 30, 2014
 
->Last Modified Date: October 14, 2014
+>Last Modified Date: October 16, 2014
 
 >Version 1.0
 
@@ -245,9 +245,4 @@ Created By:  Brandon Read
 
 Revision History
 ----------------
-????????????????
-
-
-Open Issues
-----------------
-????????????????
+Version 1.0 : Initial Draft
