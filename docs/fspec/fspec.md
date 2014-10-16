@@ -224,6 +224,8 @@ Flow Diagram
 
 Screen By Screen
 ----------------
+Created By:  Brandon Read
+
 
 ###View Profile
 ![screen1](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/image00.png)
