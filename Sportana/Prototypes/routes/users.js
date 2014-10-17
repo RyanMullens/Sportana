@@ -1,0 +1,41 @@
+var express = require('express');
+var router = express.Router();
+
+var pg = require('pg');
+var connString = "postgres://student:student@localhost:5432/sportana"; //postgres://user:pass@localhost:5432/database
+
+/* POST users listing. */
+router.post('/', function(req, res) 
+{
+	console.log(req.body);
+
+	var email = req.body.email;
+	var password = req.body.password;
+
+	if(email && password)
+	{		
+		var client = new pg.Client(connString);
+		client.connect();
+		client.query("INSERT into users(email,password) VALUES('" + email + "','" + password + "')", function(err, result) {
+			console.log(result);
+		});
+		res.end();
+	}else{
+		res.end();
+		console.log("Not adding, bad email and/or password");
+	}
+});
+
+/* GET users listing. */
+router.get('/', function(req, res) 
+{
+	var client = new pg.Client(connString);
+	client.connect();
+	client.query('SELECT * FROM users', function(err, result) {
+		console.log(JSON.stringify(result.rows));
+		res.send(JSON.stringify(result.rows));
+		res.end();
+	});
+});
+
+module.exports = router;
