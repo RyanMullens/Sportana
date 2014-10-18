@@ -19,14 +19,7 @@
 
 <body>
   <div class="container-fluid">
-    <div class="col-md-4">
-      <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Messages</a></li>
-      </ul>
-    </div>
-    <div class="col-md-8">
+    <div class="col-md-2 left-menu vcenter">
       <div ng-controller="SignupController as signup">
         <div class="page-header"><h1>Sign-up</h1></div>
         <form name="signupForm" id="signupForm" ng-submit="signupForm.$valid && signup.createUser()" novalidate>
@@ -42,9 +35,8 @@
         </form>
 
       </div>
-
-
-
+    </div>
+    <div class="col-md-10">
       <div id="users" ng-controller="UserController as userCtrl">
         <div class="page-header"><h1>Users <button ng-click="userCtrl.refresh()" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-refresh"></span></button></h1></div>
 
