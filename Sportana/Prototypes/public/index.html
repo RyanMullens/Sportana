@@ -21,19 +21,15 @@
   <div class="container-fluid">
     <div class="col-md-2 left-menu vcenter">
       <div ng-controller="SignupController as signup">
-        <div class="page-header"><h1>Sign-up</h1></div>
-        <form name="signupForm" id="signupForm" ng-submit="signupForm.$valid && signup.createUser()" novalidate>
-          <p>
+        <h1 id="welcome">Welcome Back</h1>
+        <div class="sign-in">
+          <form name="signupForm" id="signupForm" ng-show="tab === 1" ng-submit="signupForm.$valid && signup.createUser()" novalidate>
             <input class="form-control" type="email" ng-model="signup.user.email" placeholder="Email" required></input>
-          </p>
-          <p>
             <input class="form-control" type="password" ng-model="signup.user.password" Placeholder="Password" required></input>
-          </p>
-          <p>
             <input class="btn btn-lg btn-primary" type="submit" value="Sign Up"></input>
-          </p>
-        </form>
-
+          </form>
+          <a href ng-click="tab = 1">Create Account</a> | <a href ng-click="tab = 2">Log In</a> {{tab}}
+        </div>
       </div>
     </div>
     <div class="col-md-10">

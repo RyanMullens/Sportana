@@ -8,6 +8,7 @@ Create database sportana;
 
 CREATE TABLE users (
     uid integer NOT NULL,
+    name text,
     email text,
     password text
 );
@@ -47,12 +48,12 @@ ALTER TABLE ONLY users ALTER COLUMN uid SET DEFAULT nextval('users_uid_seq'::reg
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: student
 --
 
-INSERT INTO users VALUES (1, 'ryan@mullens', 'password');
-INSERT INTO users VALUES (2, 'John@Smith.com', 'apple');
-INSERT INTO users VALUES (3, 'jane@doe.com', '12345');
-INSERT INTO users VALUES (4, 'test@test.com', 'test');
-INSERT INTO users VALUES (5, 'Apple@sauce.com', '123321');
-INSERT INTO users VALUES (16, 'rmullens@umass.edu', '12345');
+INSERT INTO users VALUES (1, 'Ryan Mullens', 'ryan@mullens', 'password');
+INSERT INTO users VALUES (2, 'John Smith', 'John@Smith.com', 'apple');
+INSERT INTO users VALUES (3, 'Jane Doe', 'jane@doe.com', '12345');
+INSERT INTO users VALUES (4, 'Test Test', 'test@test.com', 'test');
+INSERT INTO users VALUES (5, 'Apple Sauce', 'Apple@sauce.com', '123321');
+INSERT INTO users VALUES (16, 'Ryan Mullens', 'rmullens@umass.edu', '12345');
 
 
 --

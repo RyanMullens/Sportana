@@ -1,3 +1,21 @@
+input {
+	margin-bottom:10px;
+}
+
+#welcome{
+	text-decoration: none;
+	color: #FFF;
+	text-align: center;
+}
+
+.sign-in{
+	background-color: #ccc;
+	padding:10px;
+	border-radius:10px;
+}
+#signupForm .btn{
+	width:100%;
+}
 .ng-dirty.ng-invalid
 {
 	border-color: red;
@@ -17,7 +35,7 @@
 }
 
 .left-menu {
-	background-color: #ccc;
+	background-color: #A5A5A5;
 	height: 100%;
 }
 
