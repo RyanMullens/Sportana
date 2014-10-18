@@ -31,6 +31,7 @@ app.controller("SignupController", function($http)
 {
 	this.user = {};
 
+	this.user.name = "";
 	this.user.email = "";
 	this.user.password = "";
 
@@ -49,3 +50,8 @@ app.controller("SignupController", function($http)
 	}
 
 });
+
+  app.controller('WelcomeSwitch', function(){
+    this.isLogIn()
+    
+  });

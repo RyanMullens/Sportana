@@ -11,12 +11,13 @@ router.post('/', function(req, res)
 
 	var email = req.body.email;
 	var password = req.body.password;
+	var name = req.body.name;
 
-	if(email && password)
+	if(email && password && name)
 	{		
 		var client = new pg.Client(connString);
 		client.connect();
-		client.query("INSERT into users(email,password) VALUES('" + email + "','" + password + "')", function(err, result) {
+		client.query("INSERT into users(email,name,password) VALUES('" + email + "','" + name + "','" + password + "')", function(err, result) {
 			console.log(result);
 		});
 		res.end();
