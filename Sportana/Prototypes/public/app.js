@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.bootstrap']);
+var app = angular.module('app', ['ui.bootstrap','ui.router']);
 
 var users = [];//[{"email":"ryan@mullens.com","password":"12345"},{"email":"john@doe.com","password":"password"},{"email":"jane@doe.com","password":"secret"},{"email":"james@smith.com","password":"weeeee"}] ;
 
