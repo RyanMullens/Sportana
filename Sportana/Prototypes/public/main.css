@@ -13,7 +13,8 @@ input {
 	padding:10px;
 	border-radius:10px;
 }
-#signupForm .btn{
+#signupForm .btn
+{
 	width:100%;
 }
 .ng-dirty.ng-invalid

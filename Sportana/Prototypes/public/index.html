@@ -8,6 +8,8 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 
+  <script src="/javascripts/ui-bootstrap-tpls-0.11.2.min.js"></script>
+
   <!-- imports our angular app -->
   <script src="app.js"></script>
 
@@ -23,7 +25,7 @@
         <h1 id="welcome">Welcome Back</h1>
         <div class="sign-in" ng-switch on="tab">
           <form name="loginForm" id="signupForm" ng-show="!tab || tab === 1" ng-submit="signupForm.$valid" novalidate>
-            <input class="form-control" type="email"placeholder="Email" required></input>
+            <input class="form-control" type="email" placeholder="Email" required></input>
             <input class="form-control" type="password" Placeholder="Password" required></input>
             <input class="btn btn-lg btn-primary" type="submit" value="Log in"></input>
             <button href ng-click="tab = 2" type="button" class="btn btn-link">Create Account</button>
@@ -41,7 +43,10 @@
   <div class="container-fluid">
     <div class="col-md-10">
       <div id="users" ng-controller="UserController as userCtrl">
+
         <div class="page-header"><h1>Users <button ng-click="userCtrl.refresh()" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-refresh"></span></button></h1></div>
+
+        <alert type="Success" ng-controller="UITestController as uiCtrl" ng-hide="uiCtrl.shouldHide()" close="uiCtrl.closeAlert()">Look! I'm using AngularJS UI to display an alert! :D</alert>
 
         <div>
           <table class="table table-striped">

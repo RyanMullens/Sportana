@@ -20,7 +20,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(express.static(path.join(__dirname, '/public')));
 
 //Gives user our main web app. Angular will move around by itself.
 app.get('/', function(req, res) {
@@ -58,7 +59,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;
 
