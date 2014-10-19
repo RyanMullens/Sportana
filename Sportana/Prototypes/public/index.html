@@ -25,7 +25,11 @@
 
 <div class="col-md-2 left-menu vcenter">
       <div ng-controller="SignupController as signup">
-        <h1 id="welcome">Welcome Back</h1>
+        <img width="200px" src="images/logo.png">
+
+        <br>
+        <br>
+
         <div class="sign-in" ng-switch on="tab">
           <form name="loginForm" id="signupForm" ng-show="!tab || tab === 1" ng-submit="signupForm.$valid" novalidate>
             <input class="form-control" type="email" placeholder="Email" required></input>
