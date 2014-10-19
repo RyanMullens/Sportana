@@ -7,10 +7,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
 
   <script src="/javascripts/ui-bootstrap-tpls-0.11.2.min.js"></script>
   <script src="/javascripts/angular-ui-router.min.js"></script>
-  
+
   <!-- imports our angular app -->
   <script src="app.js"></script>
 
@@ -21,6 +22,7 @@
 </head>
 
 <body>
+
 <div class="col-md-2 left-menu vcenter">
       <div ng-controller="SignupController as signup">
         <h1 id="welcome">Welcome Back</h1>
@@ -40,34 +42,24 @@
           </form>
         </div>
       </div>
+
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#/about">About</a></li>
+        <li><a href="#/home">Login Home</a></li>
+        <li><a href="#/">Landing Page</a></li>
+      </ul>
+
     </div>
+
   <div class="container-fluid">
+    
+  <div class="col-md-10" ng-view></div>
+
+  <!--
     <div class="col-md-10">
-      <div id="users" ng-controller="UserController as userCtrl">
-
-        <div class="page-header"><h1>Users <button ng-click="userCtrl.refresh()" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-refresh"></span></button></h1></div>
-
-        <alert type="Success" ng-controller="UITestController as uiCtrl" ng-hide="uiCtrl.shouldHide()" close="uiCtrl.closeAlert()">Look! I'm using AngularJS UI to display an alert! :D</alert>
-
-        <div>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Password</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="user in userCtrl.users">
-                <td>{{user.name}}</td>
-                <td>{{user.email}}</td>
-                <td>{{user.password}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      
       </div>
+      !-->
 
     </div>
 

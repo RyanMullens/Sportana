@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.bootstrap','ui.router']);
+var app = angular.module('app', ['ui.bootstrap','ui.router','ngRoute']);
 
 var users = [];//[{"email":"ryan@mullens.com","password":"12345"},{"email":"john@doe.com","password":"password"},{"email":"jane@doe.com","password":"secret"},{"email":"james@smith.com","password":"weeeee"}] ;
 
@@ -71,3 +71,26 @@ app.controller("SignupController", function($http)
     this.isLogIn()
     
   });
+
+
+
+
+
+
+
+
+
+
+
+
+  /** * Configure the Routes */ 
+  app.config(['$routeProvider', function ($routeProvider) 
+  {
+ $routeProvider 
+ // Home 
+ .when("/", {templateUrl: "partials/landing.html"}) 
+ // Pages 
+ .when("/about", {templateUrl: "partials/about.html"}) 
+ .when("/home", {templateUrl: "partials/home.html"}) 
+ // else 404 
+ .otherwise("/404", {templateUrl: "partials/404.html"}); }]);
