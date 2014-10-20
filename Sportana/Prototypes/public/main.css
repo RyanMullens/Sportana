@@ -40,7 +40,14 @@ input {
 
 .team-member {
 	display:inline-block;
+	padding:10px;
 
+}
+.team-member.even {
+	background:#eee;
+}
+.team-member.odd {
+	background:#D2D2D2;
 }
 .team-member img{
 	padding-right:10px;

@@ -1,6 +1,6 @@
 <div ng-controller="TeamController as teamCtrl">
 	<h1 class="page-header">About <small>Meet the Team</small> </h1>
-	<div ng-repeat="member in teamCtrl.team" class="team-member">
+	<div ng-repeat="member in teamCtrl.team" class="team-member" ng-class-odd="'odd'" ng-class-even="'even'">
 		<img src="images/person.png" class="img-circle pull-left" width="140px" height="140px"/>
 		<h2>{{member.name}}</h2>
 		<b>Role: {{member.role}}</b>
