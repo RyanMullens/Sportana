@@ -38,6 +38,15 @@ input {
 	height: auto;
 }
 
+.team-member {
+	display:inline-block;
+
+}
+.team-member img{
+	padding-right:10px;
+	
+}
+
 @media (min-width: 992px) { 
 	.left-menu {
 		max-width: auto;

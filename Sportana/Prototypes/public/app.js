@@ -1,6 +1,7 @@
 var app = angular.module('app', ['ui.bootstrap','ui.router','ngRoute']);
 
 var users = [];//[{"email":"ryan@mullens.com","password":"12345"},{"email":"john@doe.com","password":"password"},{"email":"jane@doe.com","password":"secret"},{"email":"james@smith.com","password":"weeeee"}] ;
+var team = [];
 
 app.controller("UITestController", function()
 {
@@ -16,6 +17,24 @@ app.controller("UITestController", function()
 	{
 		return this.hide;
 	}
+});
+
+app.controller("TeamController", function($http){
+	$http.get('/team').
+	success(function(data, status, headers, config) 
+		{
+		  	team.length = 0;
+		  	for(member in data)
+		  	{
+		  		this.team.push(data[member]);
+		  	}
+  		}).
+		error(function(data, status, headers, config) 
+		{
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+		});
+		this.team = team;
 });
 
 app.controller("UserController", function($http){
