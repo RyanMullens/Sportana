@@ -9,10 +9,12 @@ router.get('/', function(req, res)
 {
 	var client = new pg.Client(connString);
 	client.connect();
+	//pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	client.query('SELECT * FROM team', function(err, result) {
 		res.send(JSON.stringify(result.rows));
 		res.end();
 	});
+	//});
 });
 
 module.exports = router;

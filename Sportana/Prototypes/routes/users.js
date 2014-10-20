@@ -17,9 +17,11 @@ router.post('/', function(req, res)
 	{		
 		var client = new pg.Client(connString);
 		client.connect();
+		//pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		client.query("INSERT into users(email,name,password) VALUES('" + email + "','" + name + "','" + password + "')", function(err, result) {
 			console.log(result);
 		});
+		//});
 		res.end();
 	}else{
 		res.end();
@@ -32,11 +34,14 @@ router.get('/', function(req, res)
 {
 	var client = new pg.Client(connString);
 	client.connect();
+
+	//pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 	client.query('SELECT * FROM users', function(err, result) {
 		console.log(JSON.stringify(result.rows));
 		res.send(JSON.stringify(result.rows));
 		res.end();
 	});
+	//});
 });
 
 module.exports = router;
