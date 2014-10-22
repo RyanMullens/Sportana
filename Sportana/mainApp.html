@@ -24,23 +24,30 @@
 </head>
 
 <body>
-<div ng-view></div>
-
+  <div class="container-fluid">
+    <div class="row-fluid">
+     <div id="side-bar" class="col-md-2">
+       <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/friends">View Friends</a></li>
+        <li><a href="/user/search/query">Search Player</a></li>
+        <li><a href="/user/userId">View Profile</a></li>
+        <li><a href="/settings">Settings</a></li>
+        <li><a href="/game/gameId">View Game</a></li>
+        <li><a href="/game/create">Create Game</a></li>
+        <li><a href="/game/join">Join Game</a></li>
+        <li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect to home</a></li>
+      </ul>
+    </div>
+    <div class="col-md-10" ng-view>
+     <!--Body content-->
+   </div>
+ </div>
+</div>
 <div>
 
-<ul>
-<li><a href="/">Home</a></li>
-<li><a href="/friends">View Friends</a></li>
-<li><a href="/user/search/query">Search Player</a></li>
-<li><a href="/user/userId">View Profile</a></li>
-<li><a href="/settings">Settings</a></li>
-<li><a href="/game/gameId">View Game</a></li>
-<li><a href="/game/create">Create Game</a></li>
-<li><a href="/game/join">Join Game</a></li>
-<li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect to home</a></li>
-</ul>
+
 
 </div>
 
 </body>
-      
