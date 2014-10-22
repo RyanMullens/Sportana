@@ -1,0 +1,46 @@
+<html ng-app="app">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1">
+
+  <!-- Javascript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
+  <script src="/javascripts/UI-Bootstrap/ui-bootstrap-tpls-0.11.2.min.js"></script>
+
+
+  <!-- imports our angular app -->
+  <script src="/javascripts/mainApp.js"></script>
+
+  <!-- CSS -->
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/stylesheets/style.css" rel="stylesheet">
+
+
+  <base href="/">
+
+</head>
+
+<body>
+<div ng-view></div>
+
+<div>
+
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/friends">View Friends</a></li>
+<li><a href="/user/search/query">Search Player</a></li>
+<li><a href="/user/userId">View Profile</a></li>
+<li><a href="/settings">Settings</a></li>
+<li><a href="/game/gameId">View Game</a></li>
+<li><a href="/game/create">Create Game</a></li>
+<li><a href="/game/join">Join Game</a></li>
+<li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect to home</a></li>
+</ul>
+
+</div>
+
+</body>
+      
