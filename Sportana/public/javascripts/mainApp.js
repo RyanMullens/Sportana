@@ -21,3 +21,10 @@ var app = angular.module('app', ['ui.bootstrap','ngRoute']);
  // else go home 
  .otherwise({redirectTo :'/'});
   });
+
+
+$(document).ready(function () {
+  $('[data-toggle="offcanvas"]').click(function () {
+    $('.row-offcanvas').toggleClass('active')
+  });
+});
