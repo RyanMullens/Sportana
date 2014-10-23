@@ -48,6 +48,18 @@ a {
 }
 
 
+@media (max-width: 767px) {
+	.navbar-form
+	{
+		padding-bottom: 0px;
+		margin-top: 0px;
+		border-bottom: none;
+		border-top: none;
+	}
+}
+
+
+
 
 /* Main */
 

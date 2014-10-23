@@ -27,35 +27,41 @@
 <body>
 
 
-<div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar" ng-controller="SidebarController">
-              <li ng-class="{ active: isActive('/')}"><a href="/">Home</a></li>
-              <li ng-class="{ active: isActive('/friends')}" ><a href="/friends">View Friends</a></li>
-              <li ng-class="{ active: isActive('/user/search/query')}"><a href="/user/search/query">Search Player</a></li>
-              <li ng-class="{ active: isActive('/user/userId')}"><a href="/user/userId">View Profile</a></li>
-              <li ng-class="{ active: isActive('/settings')}"><a href="/settings">Settings</a></li>
-              <li ng-class="{ active: isActive('/game/gameId')}"><a href="/game/gameId">View Game</a></li>
-              <li ng-class="{ active: isActive('/game/create')}"><a href="/game/create">Create Game</a></li>
-              <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
-              <li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li>
-          </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-
-          <div class="navbar navbar-default navbar-fixed-top container col-sm-offset-3 col-md-offset-2" role="navigation">
-        
-              
-
-          </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar" ng-controller="SidebarController">
 
 
-          <div class="container-fluid" ng-view></div>
-        </div>
+
+        <ul class="nav nav-sidebar" >
+          <li ng-class="{ active: isActive('/')}"><a href="/">Home</a></li>
+          <li ng-class="{ active: isActive('/friends')}" ><a href="/friends">View Friends</a></li>
+          <li ng-class="{ active: isActive('/user/search/query')}"><a href="/user/search/query">Search Player</a></li>
+          <li ng-class="{ active: isActive('/user/userId')}"><a href="/user/userId">View Profile</a></li>
+          <li ng-class="{ active: isActive('/settings')}"><a href="/settings">Settings</a></li>
+          <li ng-class="{ active: isActive('/game/gameId')}"><a href="/game/gameId">View Game</a></li>
+          <li ng-class="{ active: isActive('/game/create')}"><a href="/game/create">Create Game</a></li>
+          <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
+          <li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li>
+        </ul>
       </div>
-</div>
-          
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+        <div class="navbar navbar-default navbar-fixed-top container col-sm-offset-3 col-md-offset-2" role="navigation">
+
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+          </form>
+
+        </div>
+
+
+        <div class="container-fluid" ng-view></div>
+      </div>
+    </div>
+  </div>
+
 
 </body>
-      
