@@ -30,8 +30,8 @@
 
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar" ng-controller="SidebarController">
+      <div class="row row-offcanvas row-offcanvas-left">
+        <div class="col-sm-3 col-md-2 sidebar-offcanvas sidebar" id="sidebar" ng-controller="SidebarController">
 
           <image id="logo" src="/images/logo.png" width="auto" alt="Sportana"></image>
 
@@ -63,6 +63,8 @@
             </form>
 
           </div>
+
+          <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
 
 
           <div class="container-fluid" ng-view></div>
