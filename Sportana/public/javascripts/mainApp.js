@@ -1,16 +1,11 @@
 var app = angular.module('app', ['ui.bootstrap','ngRoute']);
 
 
-console.log("WOOOOOOO");
-
-
 
   /** * Configure the Routes */ 
   app.config(function ($routeProvider,$locationProvider) 
   {
   	$locationProvider.html5Mode(true);
-
-  	console.log($locationProvider);
 
  $routeProvider 
  // Home 
