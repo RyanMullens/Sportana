@@ -3,6 +3,7 @@ CREATE DATABASE Sportana;
 
 CREATE TABLE IF NOT EXISTS Users (
 login VARCHAR(50),
+emailSuffix VARCHAR(25),
 password VARCHAR(50) NOT NULL,
 firstName VARCHAR(50),
 lastName VARCHAR(50),
