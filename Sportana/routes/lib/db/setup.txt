@@ -1,0 +1,12 @@
+1) Install postgres if you haven't already done so. Instructions for doing this on the lubuntu virtual image can be found on http://www-edlab.cs.umass.edu/cs326/weeks/w04/overview/.
+If installing to a mac:
+	a) Download postgres from http://postgresapp.com
+	b) Adjust the path to support psql commands:
+    		- export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.3/bin/
+	c) To keep these settings set up a .bash_profile
+   		- cd ~/
+   		- touch .bash_profile
+   		- echo PATH=$PATH >> .bash_profile
+	d) You can now run psql and postgres commands.
+
+2)
