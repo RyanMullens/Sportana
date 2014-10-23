@@ -9,9 +9,9 @@ a {
 
 
 /* Hide for mobile, show later */
-.sidebar {
+/*.sidebar {
   display: none;
-}
+}*/
 @media (min-width: 768px) {
   .sidebar {
     position: fixed;
@@ -26,15 +26,17 @@ a {
     background-color: #f5f5f5;
     border-right: 1px solid #eee;
   }
+
+  .nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+  }
 }
 
 /* Sidebar navigation */
 
-.nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
+
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
