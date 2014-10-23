@@ -56,16 +56,17 @@
 
           <div class="navbar navbar-default navbar-fixed-top container col-sm-offset-3 col-md-offset-2" role="navigation">
 
+
+
             <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
+              <button type="button" class="col-xs-2 btn btn-md btn-default" id="toggleMenuBtn" data-toggle="offcanvas"><span class="glyphicon glyphicon-th-list"></span></button>
+
+              <div class="form-group col-xs-10">
                 <input type="text" class="form-control" placeholder="Search">
               </div>
             </form>
 
           </div>
-
-          <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
-
 
           <div class="container-fluid" ng-view></div>
         </div>

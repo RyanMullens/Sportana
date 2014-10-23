@@ -48,6 +48,9 @@ a {
   background-color: #428bca;
 }
 
+#toggleMenuBtn{
+    display: none;
+  }
 
 @media (max-width: 767px) {
 	.navbar-form
@@ -57,6 +60,12 @@ a {
 		border-bottom: none;
 		border-top: none;
 	}
+
+  #toggleMenuBtn{
+    display: block;
+
+    height:auto;
+  }
 }
 
 
@@ -82,26 +91,11 @@ a {
 }
 .main .page-header {
   margin-top: 0;
-<<<<<<< HEAD
 }
 
 
 
 
-/*
- * Style tweaks
- * --------------------------------------------------
- */
-html,
-body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
-}
-body {
-  padding-top: 70px;
-}
-footer {
-  padding: 30px 0;
-}
 
 /*
  * Off Canvas
