@@ -24,23 +24,33 @@
 </head>
 
 <body>
-<div ng-view></div>
 
-<div>
 
-<ul>
-<li><a href="/">Home</a></li>
-<li><a href="/friends">View Friends</a></li>
-<li><a href="/user/search/query">Search Player</a></li>
-<li><a href="/user/userId">View Profile</a></li>
-<li><a href="/settings">Settings</a></li>
-<li><a href="/game/gameId">View Game</a></li>
-<li><a href="/game/create">Create Game</a></li>
-<li><a href="/game/join">Join Game</a></li>
-<li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect to home</a></li>
-</ul>
 
+
+
+
+<div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+              <li><a href="/">Home</a></li>
+              <li><a href="/friends">View Friends</a></li>
+              <li><a href="/user/search/query">Search Player</a></li>
+              <li><a href="/user/userId">View Profile</a></li>
+              <li><a href="/settings">Settings</a></li>
+              <li><a href="/game/gameId">View Game</a></li>
+              <li><a href="/game/create">Create Game</a></li>
+              <li><a href="/game/join">Join Game</a></li>
+              <li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <div ng-view></div>
+        </div>
+      </div>
 </div>
+          
 
 </body>
       
