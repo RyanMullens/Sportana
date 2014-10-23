@@ -1,3 +1,6 @@
+CREATE DATABASE Sportana;
+\c sportana;
+
 CREATE TABLE IF NOT EXISTS Users (
 login VARCHAR(50),
 password VARCHAR(50) NOT NULL,
@@ -8,37 +11,35 @@ birthday DATE,
 isActive BOOLEAN DEFAULT TRUE,
 numNotifications INT,
 auth VARCHAR(100) UNIQUE,
-friendliness DOUBLE,
-timeliness DOUBLE,
-skillLevel DOUBLE,
-sportsmanship DOUBLE,
+friendliness REAL,
+timeliness REAL,
+skillLevel REAL,
 profilePicture VARCHAR(100),
 PRIMARY KEY(login)
 );
 
 CREATE TABLE IF NOT EXISTS Friends (
-loginA VARCHAR(50),
-loginB VARCHAR(50),
-PRIMARY KEY (loginA, loginB),
-FOREIGN KEY (loginA)
+userA VARCHAR(50),
+userB VARCHAR(50),
+PRIMARY KEY (userA, userB),
+FOREIGN KEY (userA)
 REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE,
-FOREIGN KEY (loginB)
+FOREIGN KEY (userB)
 REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Ratings(
-user VARCHAR(50),
+userRated VARCHAR(50),
 rater VARCHAR(50),
 friendliness INT,
 timeliness INT,
 skillLevel INT,
-sportsmanship INT,
-PRIMARY KEY (user, rater),
-FOREIGN KEY (user)
+PRIMARY KEY (userRated, rater),
+FOREIGN KEY (userRated)
 REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE,
@@ -50,14 +51,15 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Sport(
 sport VARCHAR(50),
+imageURL VARCHAR(100),
 PRIMARY KEY (sport)
 );
 
 CREATE TABLE IF NOT EXISTS FavoriteSports(
-user VARCHAR(50),
+login VARCHAR(50),
 sport VARCHAR(50),
-PRIMARY KEY (user, sport),
-FOREIGN KEY (user)
+PRIMARY KEY (login, sport),
+FOREIGN KEY (login)
 REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE,
@@ -69,9 +71,10 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Game(
 creator VARCHAR(50),
-gameID INT,
+gameID SERIAL,
 gameDate DATE,
-gameTime TIME,
+gameStart TIME,
+gameEnd TIME,
 sport VARCHAR(50),
 location VARCHAR(100),
 numParticipants INT,
@@ -80,7 +83,7 @@ maxPlayers INT,
 reservedSpots INT,
 minAge INT,
 maxAge INT,
-isPublic BOOLEAN
+isPublic BOOLEAN,
 PRIMARY KEY (creator, gameID),
 FOREIGN KEY (creator)
 REFERENCES Users(login)
@@ -93,22 +96,105 @@ ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Participant(
-user VARCHAR(50),
+login VARCHAR(50),
 creator VARCHAR(50),
 gameID INT,
-status INT,
+status INT, -- 0: going, 1: queued, 2: no response
 numUnreadNotifications INT,
-PRIMARY KEY (user, creator, gameID),
-FOREIGN KEY (user)
-REFERENCES Users(login),
+PRIMARY KEY (login, creator, gameID),
+FOREIGN KEY (login)
+REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE,
-FOREIGN KEY (creator)
-REFERENCES Game(creator)
+FOREIGN KEY (creator, gameID)
+REFERENCES Game(creator, gameID)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Notifications(
+userTo VARCHAR(50),
+userFrom VARCHAR(50),
+nid SERIAL,
+type INT, -- 0: friend, 1: game, 2: queue, 3: game reminder
+timeSent TIMESTAMP,
+creator VARCHAR(50),
+gameID INT,
+PRIMARY KEY (userTo, userFrom, nid),
+FOREIGN KEY (userTo)
+REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE,
-FOREIGN KEY (gameID)
-REFERENCES Game(gameID)
+FOREIGN KEY (userFrom)
+REFERENCES Users(login)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (creator, gameID)
+REFERENCES Game(creator, gameID)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS GameWallPost(
+userPosting VARCHAR(50),
+gameCreator VARCHAR(50),
+gameID INT,
+pid INT,
+post VARCHAR(500),
+PRIMARY KEY(gameCreator, gameID, userPosting, pid),
+FOREIGN KEY (gameCreator, gameID)
+REFERENCES Game(creator, gameID)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (userPosting)
+REFERENCES Users(login)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Queue(
+login VARCHAR(50),
+sport VARCHAR(50),
+minAge INT,
+maxAge INT,
+location VARCHAR(100),
+PRIMARY KEY(login, sport),
+FOREIGN KEY (login)
+REFERENCES Users(login)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (sport)
+REFERENCES Sport(sport)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS SearchProfile(
+login VARCHAR(50),
+sport VARCHAR(50),
+minAge INT,
+maxAge INT,
+location VARCHAR(100),
+pid SERIAL,
+PRIMARY KEY (login, pid),
+FOREIGN KEY (login)
+REFERENCES Users(login)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (sport)
+REFERENCES Sport(sport)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Times(
+login VARCHAR(50),
+dateAvailable DATE,
+startTime TIME,
+endTime TIME,
+PRIMARY KEY(login, dateAvailable, startTime, endTime),
+FOREIGN KEY (login)
+REFERENCES Users(login)
 ON DELETE NO ACTION
 ON UPDATE CASCADE
 );

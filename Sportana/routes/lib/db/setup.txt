@@ -9,4 +9,18 @@ If installing to a mac:
    		- echo PATH=$PATH >> .bash_profile
 	d) You can now run psql and postgres commands.
 
-2)
+2) To setup the database you need to run the db-setup script:
+    - ./db-setup.sh
+    - If this doesn't run then make the file executable by running
+    	chmod +x db-setup.sh
+    	and then run the script again.
+    - If you've already created the sportana database and started to edit things in it then drop the tables you've created in psql or run the script drop-all-tables.sh, which looks for all of the tables created in the other script and drops them.
+    	./drop-all-tables.sh
+    	Again if this does not work try:
+    		chmod +x drop-all-tables.sh
+    		and then run the script again.
+
+
+Notes:
+- The owner of the Sportana database defaults to the current user in postgres (probably student).
+
