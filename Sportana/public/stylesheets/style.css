@@ -106,8 +106,70 @@ a {
 }
 
 
+/*
+ * Sport Selection (Needs a heavy refactoring.  CSS is such a fucking hack...)
+ * --------------------------------------------------
+ */
 
+#sportPicker { 
+  width:          auto;
+  height:         400px;
+  overflow-x:     scroll;
+  overflow-y:     hidden;
+  white-space:    nowrap; 
+  border-left:   1px solid #909090 ;
+  border-right:   1px solid #909090 ;
+}
 
+#instructions {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+  color: #000000;
+  font-size: 20pt;
+  margin: 50px auto;
+  text-align: center;
+}
+
+#selectedSports {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+  color: #000000;
+  font-size: 20pt;
+  margin: 50px auto;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.selectedSport {
+  display: inline-block;
+  margin: auto 5px;
+}
+
+.sportPanel { 
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+  font-size: 18pt;
+  width: 200px;
+  height: 100%;
+  vertical-align: top;
+  padding: 10px;
+  border-top:     1px solid #909090 ;
+  border-bottom:  1px solid #909090 ;
+  border-right:   1px solid #909090 ;
+  display: inline-block;
+  white-space:normal;
+  text-align: center;
+}
+
+.sportPanel .text {
+  vertical-align: bottom;
+} 
+
+label {
+  min-height: 100%;
+  display: block; 
+  opacity:0
+}
 
 /*
  * Off Canvas

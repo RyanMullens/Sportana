@@ -23,28 +23,23 @@
 	
 	<div id="instructions">
 		Select your preferred sports.
-		<button class="btn" ng-click="sportCtrl.finish()">
-			Next
-		</button>
+		<button class="btn" ng-click="sportCtrl.finish()">NEXT</button>
 	</div>
 
 	<div id="sportPicker">
-		<ul>
-	    	<li ng-repeat="sport in sportCtrl.getSports()">
-	    		<img ng-src="{{sport.icon}}"/><br>{{sport.name}}<br>{{sport.description}}<br>
-	    		<input type="checkbox" value="{{sport}}" check-list="selectedSports">
-	    	</li>
-	   </ul>
+    	<div class="sportPanel" ng-repeat="sport in sportCtrl.getSports()">
+    		<img ng-src="{{sport.icon}}"/><br>
+    		<span class="text">
+	    		<br>{{sport.name}}<br><br>{{sport.description}}<br>
+	    		<label><input class="panelCheck" type="checkbox" value="{{sport}}" check-list="selectedSports"></label>
+    		</span>
+	   </div>
 	</div>
 
 	<div id="selectedSports">
-		<ul>
-	    	<li ng-repeat="sport in selectedSports">
-	    		{{sport.name}}
-	    		<button class="btn" ng-click="sportCtrl.removeSport(sport)">
-					<!-- TODO: 'X' image -->
-				</button>
-	    	</li>
-	   </ul>
+		<div class="selectedSport" ng-repeat="sport in selectedSports">
+    		<button class="btn" ng-click="sportCtrl.removeSport(sport)">{{sport.icon}}BUTTON X</button>
+		</div>
 	</div>
+
 </div>
