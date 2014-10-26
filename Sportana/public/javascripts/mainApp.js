@@ -11,7 +11,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         .state("home", {
         	url: "/" ,
         	templateUrl: "../partials/index.html", 
-        	controller: "HomeController" }) 
+        	controller: "HomeController as homeCtrl" }) 
         .state("friends", {
         	url: "/friends" ,
         	templateUrl: "../partials/viewFriends.html", 
@@ -19,7 +19,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		.state("createGame", {
         	url: "/game/create" ,
         	templateUrl: "../partials/createGame.html", 
-        	controller: "CreateGameController" }) 
+        	controller: "CreateGameController as createGameCtrl" }) 
+        //TODO Conform to the new(my :D) standards. I don't wanna touch your code though brandon.
         .state("joinGame", {
         	url: "/game/join" ,
         	templateUrl: "../partials/joinGame.html", 
@@ -27,19 +28,19 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         .state("viewGame", {
         	url: "/game/:gameId" ,
         	templateUrl: "../partials/viewGame.html", 
-        	controller: "ViewGameController" }) 
+        	controller: "ViewGameController as viewGameCtrl" }) 
         .state("searchPlayer", {
         	url: "/user/search/:query" ,
         	templateUrl: "../partials/searchPlayer.html", 
-        	controller: "SearchPlayerController" }) 
+        	controller: "SearchPlayerController as searchPlayerCtrl" }) 
         .state("user", {
         	url: "/user/:userId" ,
         	templateUrl: "../partials/viewProfile.html", 
-        	controller: "ViewProfileController" }) 
+        	controller: "ViewProfileController as viewProfileCtrl" }) 
         .state("settings", {
         	url: "/settings" ,
         	templateUrl: "../partials/settings.html", 
-        	controller: "SettingsController" })         
+        	controller: "SettingsController as settingsCtrl" })         
 });
 
 

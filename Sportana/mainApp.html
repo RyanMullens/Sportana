@@ -15,6 +15,16 @@
   <script src="/javascripts/mainApp.js"></script>
   <script src="/javascripts/controllers.js"></script>
 
+  <!-- each pages app !-->
+
+  <script src="/javascripts/controllers/createGame.js"></script>
+  <script src="/javascripts/controllers/home.js"></script>
+  <script src="/javascripts/controllers/searchPlayer.js"></script>
+  <script src="/javascripts/controllers/settings.js"></script>
+  <script src="/javascripts/controllers/viewFriends.js"></script>
+  <script src="/javascripts/controllers/viewGame.js"></script>
+  <script src="/javascripts/controllers/viewProfile.js"></script>
+
   <!-- CSS -->
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="/stylesheets/style.css" rel="stylesheet">
@@ -75,9 +85,7 @@
         </div>
 
         <!-- @PARTIALS are injected here -->
-        <div class="container-fluid injected" ng-view></div>
-        <div ui-view></div>
-        
+        <div class="container-fluid injected" ui-view></div>
       </div>
     </div>
   </div>
