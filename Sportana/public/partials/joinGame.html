@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!-- <h1 class="page-header">Join Game</h1>
 
 <div id="queue" ng-controller="QueueController as qCtrl">
@@ -33,17 +32,14 @@
 		<ul>
 	    	<li ng-repeat="sport in sportCtrl.getSports()">
 	    		<img ng-src="{{sport.icon}}"/><br>{{sport.name}}<br>{{sport.description}}<br>
-	    		<!-- <input type="checkbox" value="{{sport}}"/> -->
-	    		<button class="btn" ng-click="sportCtrl.addSport(sport)">
-					Add
-				</button>
+	    		<input type="checkbox" value="{{sport}}" check-list="selectedSports">
 	    	</li>
 	   </ul>
 	</div>
 
 	<div id="selectedSports">
 		<ul>
-	    	<li ng-repeat="sport in sportCtrl.selectedSports()">
+	    	<li ng-repeat="sport in selectedSports">
 	    		{{sport.name}}
 	    		<button class="btn" ng-click="sportCtrl.removeSport(sport)">
 					<!-- TODO: 'X' image -->
@@ -51,9 +47,4 @@
 	    	</li>
 	   </ul>
 	</div>
-
 </div>
-=======
-<h1 class="page-header">Join Game</h1>
-<body><p>temporarily commented out the actual db connection and json return because we're still working on db</p></body>
->>>>>>> 003168132a58fd8ffc3cc0592c97051e3fa4208e

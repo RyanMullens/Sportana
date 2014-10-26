@@ -43,7 +43,7 @@ app.controller("QueueController", function(){
 });
 
 // Created by: @bread on 10/25
-app.controller("SportSelectionController", function(){
+app.controller("SportSelectionController", function($scope){
 
 	var sports = [
 		{icon: "icon", name: "Basketball", 	description: "A game about hoops and nets."},
@@ -57,7 +57,7 @@ app.controller("SportSelectionController", function(){
 		{icon: "icon", name: "Biking", 			description: "Moving up roads."},
 	]; // TODO = $http.get('/api/sports')
 
-	var selectedSports = [];
+	$scope.selectedSports = [];
 
 	this.finish = function() {
 
@@ -70,20 +70,47 @@ app.controller("SportSelectionController", function(){
 		return sports;
 	}
 
-	this.selectedSports = function() {
-		return selectedSports;
-	}
-
+	// Currently unused
 	this.addSport = function(sport) {
 		if (selectedSports.indexOf(sport) != -1) return;
 		selectedSports.push(sport);
 	}
 
 	this.removeSport = function(sport) {
-
-		var index = selectedSports.indexOf(sport);
+		var index = $scope.selectedSports.indexOf(sport);
 		if(index === -1) return;
-		selectedSports.splice(index, 1);
+		$scope.selectedSports.splice(index, 1);
 	}
 
+});
+
+app.directive('checkList', function() {
+  return {
+    scope: {
+      list: '=checkList',
+      value: '@'
+    },
+    link: function(scope, elem, attrs) {
+      var handler = function(setup) {
+        var checked = elem.prop('checked');
+        var index = scope.list.indexOf(scope.value);
+
+        if (checked && index == -1) {
+          if (setup) elem.prop('checked', false);
+          else scope.list.push(scope.value);
+        } else if (!checked && index != -1) {
+          if (setup) elem.prop('checked', true);
+          else scope.list.splice(index, 1);
+        }
+      };
+
+      var setupHandler = handler.bind(null, true);
+      var changeHandler = handler.bind(null, false);
+
+      elem.bind('change', function() {
+        scope.$apply(changeHandler);
+      });
+      scope.$watch('list', setupHandler, true);
+    }
+  };
 });
