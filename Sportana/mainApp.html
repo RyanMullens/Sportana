@@ -9,7 +9,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
   <script src="/javascripts/UI-Bootstrap/ui-bootstrap-tpls-0.11.2.min.js"></script>
-
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
 
   <!-- imports our angular app -->
   <script src="/javascripts/mainApp.js"></script>
@@ -76,7 +76,8 @@
 
         <!-- @PARTIALS are injected here -->
         <div class="container-fluid injected" ng-view></div>
-
+        <div ui-view></div>
+        
       </div>
     </div>
   </div>
