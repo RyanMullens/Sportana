@@ -1,19 +1,14 @@
 html
 {
-  width: 100%;
-  overflow-x:hidden;
+  width: auto !important;
+  overflow-x: hidden !important;
 }
+
 body {
-  width: 100%;
-  overflow-x:hidden;
+  width: auto !important;
+  overflow-x: hidden !important;
   padding-top: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
-a {
-  color: #00B7FF;
-}
-
 
 /* Hide for mobile, show later */
 /*.sidebar {
@@ -21,7 +16,10 @@ a {
 }*/
 
 .sidebar {
-  background-color: #ffffff;
+  background-color: #808386;
+  font-size: 20pt;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
 }
 
 @media (min-width: 768px) {
@@ -35,8 +33,6 @@ a {
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
   }
 
   .nav-sidebar {
@@ -47,22 +43,37 @@ a {
 }
 
 /* Sidebar navigation */
-
-
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
 }
-.nav-sidebar > .active > a,
-.nav-sidebar > .active > a:hover,
-.nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
+
+.nav-sidebar a {
+  color: #C4C5C8;
+}
+
+.nav-sidebar .active a {
+  color: #FFFFFF;
+}
+
+.nav-sidebar > .active > a:hover {
+  color: #000000;
+}
+
+.nav-sidebar a:hover {
+  color: #808386;
+  background-color: #000000;
 }
 
 #toggleMenuBtn{
-    display: none;
-  }
+  display: none;
+}
+
+.nav-sidebar > a:hover {
+  background-color: #000000;
+}
+
+
 
 @media (max-width: 767px) {
 	.navbar-form
@@ -87,18 +98,32 @@ a {
 	margin-bottom: 20px;
 }
 
+#searchBar {
+  background-color: #AFB0B3;
+  width: 100%;
+}
+
+.container-fluid {
+  padding-right: 7px;
+  padding-left: 5px;
+}
+
 
 
 /* Main */
 
 
 .main {
-  padding: 20px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+  background-color: #F0F0F1;
+  height: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
 }
 @media (min-width: 768px) {
   .main {
-    padding-right: 40px;
-    padding-left: 40px;
+
   }
 }
 .main .page-header {
@@ -111,64 +136,85 @@ a {
  * --------------------------------------------------
  */
 
-#sportPicker { 
-  width:          auto;
-  height:         400px;
-  overflow-x:     scroll;
-  overflow-y:     hidden;
-  white-space:    nowrap; 
-  border-left:   1px solid #909090 ;
-  border-right:   1px solid #909090 ;
-}
-
 #instructions {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-  font-weight: 300;
-  color: #000000;
+
   font-size: 20pt;
+  font-weight: 200;
+  color: #464648;
+  height: 50px;
   margin: 50px auto;
   text-align: center;
 }
 
-#selectedSports {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-  font-weight: 300;
-  color: #000000;
-  font-size: 20pt;
-  margin: 50px auto;
-  text-align: center;
-  white-space: nowrap;
+#instructions > .btn {
+  color: #FFFFFF;
+  background-color: #15A95F;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5;
+  padding-bottom: 5;
 }
 
-.selectedSport {
-  display: inline-block;
-  margin: auto 5px;
+#sportPicker { 
+  width: auto;
+  height: 400px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap; 
 }
 
 .sportPanel { 
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-  font-weight: 300;
+  
   font-size: 18pt;
   width: 200px;
   height: 100%;
   vertical-align: top;
   padding: 10px;
-  border-top:     1px solid #909090 ;
-  border-bottom:  1px solid #909090 ;
-  border-right:   1px solid #909090 ;
+  border-top: 1px solid #C7C8CA;
+  border-bottom: 1px solid #C7C8CA;
+  border-right: 1px solid #C7C8CA;
   display: inline-block;
   white-space:normal;
   text-align: center;
+  background-color: #FFFFFF;
+  position: relative 
 }
 
-.sportPanel .text {
-  vertical-align: bottom;
+.sportPanel .description {
+  font-size: 18px;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
 } 
 
-label {
-  min-height: 100%;
-  display: block; 
-  opacity:0
+.sportPanel .sportIcon {
+  width: 100%;
+  padding: 20px;
+}
+
+#sportPicker .selected {
+  background-color: #E1E2E4;
+  border-right: 1px solid #FFFFFF ;
+} 
+
+#selectedSports {
+  
+  font-size: 20pt;
+  margin: 50px auto;
+  text-align: center;
+  white-space:normal;
+}
+
+#selectedSports .btn {
+  display: inline-block;
+  margin: 5px 5px;
+  color: #FFFFFF;
+  background-color: #464648;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5;
+  padding-bottom: 5;
 }
 
 /*
