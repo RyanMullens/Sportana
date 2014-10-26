@@ -1,1 +1,54 @@
-<h1 class="page-header">Join Game</h1>
+<!-- <h1 class="page-header">Join Game</h1>
+
+<div id="queue" ng-controller="QueueController as qCtrl">
+
+	<div ng-hide="qCtrl.gamesFound()" class="ng-hide">No games have been found matching your preferences.
+	<button ng-click="qCtrl.startQueue()" class="btn">Join Queue</button>
+	</div>
+
+	<div id="discovered-games" ng-show="qCtrl.gamesFound()" ng-controller="DiscoveredGamesController as dgCtrl">
+	<div class="discovered-game-row" ng-repeat="game in dgCtrl.games">
+		TODO : GAME INFO
+	</div>	
+	</div>
+</div> -->
+
+<!-- MAIN CONTENT -->
+	
+	<!-- LOOK FOR GAME (if not queued) -->
+	<!-- DISCOVERED GAMES (if queued && games found) -->
+	<!-- CREATE GAME (if no games found matching preferences) -->
+
+<div id="sportSelection" ng-controller="SportSelectionController as sportCtrl">
+	
+	<div id="instructions">
+		Select your preferred sports.
+		<button class="btn" ng-click="sportCtrl.finish()">
+			Next
+		</button>
+	</div>
+
+	<div id="sportPicker">
+		<ul>
+	    	<li ng-repeat="sport in sportCtrl.getSports()">
+	    		<img ng-src="{{sport.icon}}"/><br>{{sport.name}}<br>{{sport.description}}<br>
+	    		<!-- <input type="checkbox" value="{{sport}}"/> -->
+	    		<button class="btn" ng-click="sportCtrl.addSport(sport)">
+					Add
+				</button>
+	    	</li>
+	   </ul>
+	</div>
+
+	<div id="selectedSports">
+		<ul>
+	    	<li ng-repeat="sport in sportCtrl.selectedSports()">
+	    		{{sport.name}}
+	    		<button class="btn" ng-click="sportCtrl.removeSport(sport)">
+					<!-- TODO: 'X' image -->
+				</button>
+	    	</li>
+	   </ul>
+	</div>
+
+</div>
