@@ -44,4 +44,17 @@ router.get('/', function(req, res)
 	//});
 });
 
+/* GET user's profile. */
+router.get('/', function(req, res) 
+{
+	var login = req.body.login;
+	
+	var client = new pg.Client(connString);
+	client.connect();
+	client.query('SELECT * FROM users where login = ' + login + '', function(err, result) {
+		res.send(JSON.stringify(result.rows));
+		res.end();
+	});
+});
+
 module.exports = router;
