@@ -4,6 +4,19 @@
 
 //Sidebar.js
 
+app.controller("SearchbarController", function($scope, $state)
+{
+	this.searchQuery = '';
+	
+	$scope.submitSearch = function()
+	{
+		//alert("TEST: " + this.searchQuery);
+		//console.log("TEST: " + this.searchQuery);
+		$state.go('searchPlayer', {query: this.searchQuery});
+	}
+
+});
+
 app.controller("SidebarController", function($scope, $location)
 {
 	this.currentTab = 'home';
@@ -21,9 +34,6 @@ app.controller("SidebarController", function($scope, $location)
 	{
 		return this.currentTab == tab;
 	}
-
-
-
 });
 
 app.controller("ViewFriendsController", function($http){
