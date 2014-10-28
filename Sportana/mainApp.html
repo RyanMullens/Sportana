@@ -23,6 +23,7 @@
   <script src="/javascripts/controllers/settings.js"></script>
   <script src="/javascripts/controllers/viewFriends.js"></script>
   <script src="/javascripts/controllers/viewGame.js"></script>
+  <script src="/javascripts/controllers/viewGames.js"></script>
   <script src="/javascripts/controllers/viewProfile.js"></script>
 
   <!-- CSS -->
@@ -66,9 +67,14 @@
           </ul>
 
           <ul class="nav nav-sidebar">
-          <li><a ui-sref="home">Dashboard</a></li>
-          <li><a ui-sref="user({userId: 'rmullens'})">Profile</a></li>
-          <li><a ui-sref="createGame">Games</a></li>
+          <li><a ng-click="setTab('none')" ui-sref="home">Dashboard</a></li>
+          <li><a ng-click="setTab('none')" ui-sref="user({userId: 'rmullens'})">Profile</a></li>
+          <li><a ng-click="setTab('games')">Games</a></li>
+          <ul ng-show="isShown('games')">
+            <li><a ui-sref="joinGame">Join Game</a></li>
+            <li><a ui-sref="games">My Games</a></li>
+            
+          </ul>
           <li><a ui-sref="friends">Friends</a></li>
           </ul>
 

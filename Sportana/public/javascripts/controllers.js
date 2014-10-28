@@ -6,9 +6,24 @@
 
 app.controller("SidebarController", function($scope, $location)
 {
+	this.currentTab = 'home';
+
 	$scope.isActive = function (viewLocation) { 
 		return viewLocation === $location.path();
 	};
+
+	$scope.setTab = function(newTab)
+	{
+		this.currentTab = newTab;
+	}
+
+	$scope.isShown = function(tab)
+	{
+		return this.currentTab == tab;
+	}
+
+
+
 });
 
 app.controller("ViewFriendsController", function($http){
