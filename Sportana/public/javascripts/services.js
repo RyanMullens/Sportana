@@ -63,8 +63,4 @@ app.service('queueService', function() {
 
   // TODO: AVAILABILITY + INVITES
 
-  return {
-    setRadius : setRadius
-  };
-
 });

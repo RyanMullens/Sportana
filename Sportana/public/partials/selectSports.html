@@ -1,29 +1,24 @@
-<div id="sportSelection" ng-controller="SportSelectionController as sportCtrl">
+<div id="sportSelection">
+
+<!--  ng-controller="SportSelectionController as sportCtrl" -->
 	
 	<div id="instructions">
 		Select your preferred sports.
-		<button class="btn" ng-click="finish">
-			Next
-		</button>
+		<button class="btn" ng-show="sportCtrl.hasSelectedSports()" ng-click="sportCtrl.finish()">Next</button>
 	</div>
 
 	<div id="sportPicker">
-		<ul>
-	    	<li ng-repeat="sport in sportCtrl.getSports" onclick="addSport(sport)">
-	    		<img ng-src="{{sport.icon}}"/><br>{{sport.name}}<br>{{sport.desc}}
-	    	</li>
-	   </ul>
+    	<div class="sportPanel" ng-repeat="sport in sportCtrl.getSports()" ng-class="{selected: sportCtrl.isSelected(sport)}" ng-click="sportCtrl.toggle(sport)">
+    		<img class="sportIcon" ng-src="{{sport.icon}}"/>
+    		<br>{{sport.name}}<br>
+    		<span class="description">
+	    		{{sport.description}}
+    		</span>
+	   </div>
 	</div>
 
 	<div id="selectedSports">
-		<ul>
-	    	<li ng-repeat="sport in selectedSports">
-	    		{{sport.name}}
-	    		<button class="btn" ng-click="removeSport(sport)">
-					<!-- TODO: 'X' image -->
-				</button>
-	    	</li>
-	   </ul>
+		<button class="btn" ng-repeat="sport in sportCtrl.getSelectedSports()" ng-click="sportCtrl.removeSport(sport)">{{sport.name}}  X</button>
 	</div>
 
 </div>

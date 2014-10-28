@@ -23,8 +23,12 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         //TODO Conform to the new(my :D) standards. I don't wanna touch your code though brandon.
         .state("joinGame", {
         	url: "/game/join" ,
-        	templateUrl: "../partials/joinGame.html", 
-        	controller: "SportSelectionController as sportCtrl" }) 
+        	templateUrl: "../partials/queueSport.html", 
+        	controller: "QueueSportController as sportCtrl" })
+        .state("queueLocation", {
+            url: "/game/queueLocation" ,
+            templateUrl: "../partials/queueLocation.html", 
+            controller: "QueueLocationController as locCtrl" })
         .state("viewGame", {
         	url: "/game/:gameId" ,
         	templateUrl: "../partials/viewGame.html", 
