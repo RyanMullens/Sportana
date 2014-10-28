@@ -54,6 +54,7 @@ body {
 
 .nav-sidebar .active a {
   color: #FFFFFF;
+  font-size: 30pt;
 }
 
 .nav-sidebar > .active > a:hover {
@@ -109,6 +110,13 @@ body {
 }
 
 
+#search {
+  width: 400px;
+  text-align: center;
+  margin 0 0;
+  white-space:normal;
+}
+
 
 /* Main */
 
@@ -129,6 +137,8 @@ body {
 .main .page-header {
   margin-top: 0;
 }
+
+
 
 
 /*
