@@ -9,11 +9,21 @@
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
   <script src="/javascripts/UI-Bootstrap/ui-bootstrap-tpls-0.11.2.min.js"></script>
-
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.11/angular-ui-router.min.js"></script>
 
   <!-- imports our angular app -->
   <script src="/javascripts/mainApp.js"></script>
   <script src="/javascripts/controllers.js"></script>
+
+  <!-- each pages app !-->
+
+  <script src="/javascripts/controllers/createGame.js"></script>
+  <script src="/javascripts/controllers/home.js"></script>
+  <script src="/javascripts/controllers/searchPlayer.js"></script>
+  <script src="/javascripts/controllers/settings.js"></script>
+  <script src="/javascripts/controllers/viewFriends.js"></script>
+  <script src="/javascripts/controllers/viewGame.js"></script>
+  <script src="/javascripts/controllers/viewProfile.js"></script>
 
   <!-- CSS -->
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -52,8 +62,16 @@
                 <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
               </ul>
             </li>
-            <li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li>
+            <!--<li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li> !-->
           </ul>
+
+          <ul class="nav nav-sidebar">
+          <li><a ui-sref="home">Dashboard</a></li>
+          <li><a ui-sref="user({userId: 'rmullens'})">Profile</a></li>
+          <li><a ui-sref="createGame">Games</a></li>
+          <li><a ui-sref="friends">Friends</a></li>
+          </ul>
+
         </div>
 
         <!-- @CONTENT_VIEW Size -->
@@ -75,8 +93,7 @@
         </div>
 
         <!-- @PARTIALS are injected here -->
-        <div class="container-fluid injected" ng-view></div>
-
+        <div class="container-fluid injected" ui-view></div>
       </div>
     </div>
   </div>

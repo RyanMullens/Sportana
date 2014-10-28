@@ -103,5 +103,4 @@ app.controller("SportSelectionController", function($scope){
 		if(index === -1) return;
 		selectedSports.splice(index, 1);
 	}
-
 });

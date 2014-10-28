@@ -6,12 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var friends = require('./routes/viewFriends');
+/*var friends = require('./routes/viewFriends');
 var user = require('./routes/user');
 var settings = require('./routes/settings');
 var game = require('./routes/viewGame');
 var join = require('./routes/joinGame');
-var create = require('./routes/createGame');
+var create = require('./routes/createGame');*/
 var apis = require('./routes/api');
 
 var app = express();
@@ -29,13 +29,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //All apis
-app.use('/api/*', apis);
-app.use('/friends', friends);
+app.use('/api/', apis);
+
+/*app.use('/friends', friends);
 app.use('/user', user);
 app.use('/settings', settings);
 app.use('/game/:gameId', game);
 app.use('/game/join', join);
-app.use('/game/create', create);
+app.use('/game/create', create);*/
 
 //Everything else? For now
 app.use('*', routes);
