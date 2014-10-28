@@ -1,0 +1,22 @@
+<div id="sportSelection">
+	
+	<div id="instructions">
+		Select your preferred sports.
+		<button class="btn" ng-show="sportCtrl.hasSelectedSports()" ng-click="sportCtrl.finish()">Next</button>
+	</div>
+
+	<div id="sportPicker">
+    	<div class="sportPanel" ng-repeat="sport in sportCtrl.getSports()" ng-class="{selected: sportCtrl.isSelected(sport)}" ng-click="sportCtrl.toggle(sport)">
+    		<img class="sportIcon" ng-src="{{sport.icon}}"/>
+    		<br>{{sport.name}}<br>
+    		<span class="description">
+	    		{{sport.description}}
+    		</span>
+	   </div>
+	</div>
+
+	<div id="selectedSports">
+		<button class="btn" ng-repeat="sport in sportCtrl.getSelectedSports()" ng-click="sportCtrl.removeSport(sport)">{{sport.name}}  X</button>
+	</div>
+
+</div>
