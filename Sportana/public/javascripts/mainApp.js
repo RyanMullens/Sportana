@@ -13,9 +13,14 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         	templateUrl: "../partials/index.html", 
         	controller: "HomeController as homeCtrl" }) 
         .state("friends", {
-        	url: "/friends" ,
-        	templateUrl: "../partials/viewFriends.html", 
-        	controller: "ViewFriendsController as friendCtrl" }) 
+            url: "/friends" ,
+            templateUrl: "../partials/viewFriends.html", 
+            controller: "ViewFriendsController as friendCtrl" }) 
+        .state("games", {
+            url: "/games" ,
+            templateUrl: "../partials/viewGames.html", 
+            controller: "ViewGamesController as gameCtrl" }) 
+
 		.state("createGame", {
         	url: "/game/create" ,
         	templateUrl: "../partials/createGame.html", 
