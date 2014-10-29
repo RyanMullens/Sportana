@@ -1,6 +1,6 @@
 var pg = require('pg');
 
-var connString = 'postgres://student:student@localhost/sportana';
+var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
 
 function getLogin(callback, login, password) {
   pg.connect(connString, function (err, client, done) {
