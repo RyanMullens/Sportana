@@ -1,4 +1,4 @@
-![Sportana](http://blogs.umass.edu/bread/files/2014/10/sportana-02-1024x352.png)
+![Sportana](https://github.com/umass-cs-326/team-kiwi-mango/blob/master/docs/images/SportanaBlackLogo-09.png)
 
 
 # Sportana Overview
