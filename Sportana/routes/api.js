@@ -5,8 +5,56 @@ var router = express.Router();
 var pg = require('pg');
 var connString = "postgres://student:student@localhost:5432/sportana";
 
+var dbc = require('db'); // Database Controller
+
+var passport = require('passport');
+LocalStrategy = require('passport-local').Strategy;
+
+var crypto = require('crypto'); // For generating secure tokens
+var base64url = require('base64url'); // for base 64 encoding
+
 //localhost:8888/api/route
 //example: localhost:8888/api/friends
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    dbc.getLogin(username, password, function (err, success) {
+      if (err) { return done(err); }
+      if (success === false) {
+        return done(null, false);
+      } else {
+	      return done(null, true);
+	  }
+    });
+  }
+));
+
+function makeAuthToken(size) {
+    return base64url(crypto.randomBytes(size));
+}
+
+passport.serializeUser(function(user, done) {
+  var auth = "";
+  var uniqueAuthLoop = true;
+  while (uniqueAuthLoop) {
+  	auth = makeAuthToken(64);
+  	dbc.putUserAuth(user, auth, function(err, success) {
+  		if (err || (success === false)) {
+  			// repeat loop
+  		} else {
+  			uniqueAuthLoop = false;
+  		}
+  	});
+ }
+  done(null, auth);
+
+});
+
+passport.deserializeUser(function(id, done) {
+  dbc.getUserByAuth(id, function(err, username) {
+    done(err, username);
+  });
+});
 
 router.get('/', function(req, res) {
   res.send('respond with a resource');
@@ -14,7 +62,18 @@ router.get('/', function(req, res) {
 
 /* POST logs in user */
 router.post('/login', function(req, res) {
-	res.send("lkasdad");
+   passport.authenticate('local', function(err, username, info) {
+    if (err) {
+
+    }
+    if (!username) {
+    	return res.redirect('/login');
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/' + username);
+    });
+  })(req, res, next);
 });
 
 /* PUT creates a new user */
