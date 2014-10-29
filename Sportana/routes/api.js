@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-/* temporary */
-var pg = require('pg');
-var connString = "postgres://student:student@localhost:5432/sportana";
-
 var dbc = require('db'); // Database Controller
 
 var passport = require('passport');
@@ -76,72 +72,80 @@ router.post('/login', function(req, res) {
   })(req, res, next);
 });
 
-/* PUT creates a new user */
-router.get('/users/:login/:firstname/:lastname', function(req, res) { //should be router.put
-	var login = req.params.login;
-	var firstname = req.params.firstname;
-	var lastname = req.params.lastname;
-/*	
-	if(login && firstname && lastname){
-	var client = new pg.Client(connString);
-	client.connect();
-	client.query("INSERT into users(login,firstname,lastname) VALUES('" + login + "','" + firstname + "','" + lastname + "')", function(err, result){
-		console.log(result);
-		console.log("got here");
-	});
-	res.end();
-	}
-	else{
-		console.log("error");
-		res.send("error");
-		res.end();
-	}
-*/
-	res.send("login, firstname, lastname: " + login + firstname + lastname);
-});
-
 /* GET retrieves user profile */
 router.get('/users/:login', function(req, res) {
-	res.send("lkasdad");
+	var login = req.params.login;
+	var json = getUserProfile(login);
+	res.send(json);
+});
+
+/* PUT creates a new user */
+//router.get('/users/:login/:firstname/:lastname', function(req, res) { //should be router.put
+router.get('/users/', function(req, res) {
+	var email = req.body.email.split("@");
+	var login = email[0];
+	var emailSuffix = email[1];
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var dateOfBirth = req.body.dateOfBirth;
+	var city = req.body.city;
+
+	//pass parameters to method, get back json object
+	//console.log(JSON.parse(data));
+	//res.json(data);
+	res.json({login: login , firstname: firstname , lastname: lastname});
 });
 
 /* POST rates users */
 router.post('/ratings', function(req, res) {
-	res.send("lkasdad");
+	var auth = req.body.auth;
+	var targetID = req.body.targetID;
+	var friendliness = req.body.friendliness;
+	var timeliness = req.body.timeliness;
+	var skill = req.body.skill;
+	
+	//call db method and pass params, get back json object (boolean?)
+	//console.log(JSON.parse(data);
+	//res.send(data);
 });
 
 /* PUT password reset */
 router.put('/password-reset', function(req, res) {
-	res.send("lkasdad");
-});
-
-/* DELETE remove user */
-//THIS IS FOR TESTING PURPOSES, SHOULD BE router.delete
-router.get('/users/delete/:login', function(req, res) {
-	var login = req.params.login;
-/*
-	if(login){
-	var client = new pg.Client(connString);
-	client.connect();
-	client.query("SELECT * from users where login = " + login + ""), function(err, result){
-		console.log(result);
-		client.query("DELETE * from users where login = " + login + ""), function(err, result2){
-			console.log("deleted!");
-		}
-	}
-	res.end();
-	}
-	else{
-		console.log("error");
-		res.send("error");
-		res.end();
-	}
-*/
-	res.send("login: " + login);
+	var email = req.body.email;
+	email = email.split("@");
+	var login = email[0];
+	emailSuffix = email[1];
+	
+	//pass parameters to db method, get back json object
+	//console.log(JSON.parse(data);
+	//res.send(json);
 });
 
 /* GET friends of requesting user */
 router.get('/friends', function(req, res) {
+	var auth = req.body.auth;
+	
+	//send to db method, get back list of friends as json object
+	//console.log(JSON.parse(data));
+	//res.send(data);
+});
+
+/* DELETE user deletes friendID */
+router.get('/friends/:friendID', function(req, res) {
+	
+//	console.log("req.body: " + req.body.toString() + " , req.params: " + req.params.friendID);
+//	res.send("req.body: " + req.body + " , req.params: " + req.params);
+	var auth = req.body.params;
+	var login = req.body.login;
+	var friendID = req.body.friendID;
+	
+	//send to db controller, get back json object (success?)
+	//console.log(JSON.parse(data));
+	//res.send(data);
+});
+
+/* POST request a friend to join a game */
+router.post('/requests/game', function(req, res) {
 	res.send("lkasdad");
 });
 
@@ -150,10 +154,6 @@ router.get('/requests/:friendID', function(req, res) {
 	res.send("lkasdad");
 });
 
-/* DELETE user deletes friendID */
-router.delete('/friends/:friendID', function(req, res) {
-	res.send("lkasdad");
-});
 
 /* POST requestID of notification*/
 router.post('/requests/:requestID', function(req, res) {
@@ -165,11 +165,7 @@ router.put('/games', function(req, res) {
 	res.send("lkasdad");
 });
 
-/* POST request a friend to join a game */
-router.post('/requests/game', function(req, res) {
-	res.send("lkasdad");
-});
-
 //search
 
 module.exports = router;
+
