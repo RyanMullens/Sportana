@@ -15,7 +15,7 @@ auth VARCHAR(100) UNIQUE,
 friendliness REAL,
 timeliness REAL,
 skillLevel REAL,
-profilePicture VARCHAR(100),
+profilePicture VARCHAR(250),
 PRIMARY KEY(login)
 );
 
@@ -52,7 +52,7 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Sport(
 sport VARCHAR(50),
-imageURL VARCHAR(100),
+imageURL VARCHAR(250),
 PRIMARY KEY (sport)
 );
 
