@@ -1,6 +1,5 @@
 <h1 class="page-header">View Friends</h1>
-<body><p>temporarily commented out the actual db connection and json return because we're still working on db</p>
-<div id="friends">
+<div id="friends" ng-controller="ViewFriendsController as friendCtrl">
 	<div class="row friend" ng-repeat="friend in friends" ng-src="/user/{{friend.id}}">
 		<img ng-src="{{friend.profilePhoto}}" class="img-round"/>
 		{{friend.firstName}} {{friend.lastName}}
@@ -8,4 +7,3 @@
 		City: {{friend.city}}
 	</div>	
 </div>
-</body>
