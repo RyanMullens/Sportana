@@ -13,7 +13,7 @@
 >Team Kiwi Mango
 
 
-![logo](https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/logo.png)
+![logo](https://github.com/umass-cs-326/team-kiwi-mango/blob/master/docs/images/SportanaBlackLogo-09.png)
 
 
 <img src="https://raw.githubusercontent.com/umass-cs-326/team-kiwi-mango/master/docs/images/companyLogo.png" width="250px"/>
