@@ -15,9 +15,14 @@ app.controller("QueueSportController", function($location, queueService, $state)
 
 	var selectedSports = [];
 
+	this.init = function() {
+		selectedSports = queueService.getSports();
+	}
+
 	this.finish = function() {
 		queueService.setSports(selectedSports);
 		$state.go('queueLocation');
+		this.selectedSports = [];
     }
 
 	this.toggle = function(sport) {
@@ -57,4 +62,6 @@ app.controller("QueueSportController", function($location, queueService, $state)
 		if(index === -1) return;
 		selectedSports.splice(index, 1);
 	}
+
+	this.init();
 });

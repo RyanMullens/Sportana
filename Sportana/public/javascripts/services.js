@@ -2,7 +2,9 @@
 // TODO : Use nested services (eg. Scheduling should be a separate service)
 app.service('queueService', function() {
 
-  var preferences = {};
+  var preferences = {
+    sports: []
+  };
 
   // SPORTS
   this.setSports = function(sports) {
