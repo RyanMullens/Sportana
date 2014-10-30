@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var dbc = require('db'); // Database Controller
+var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var passport = require('passport');
 LocalStrategy = require('passport-local').Strategy;
