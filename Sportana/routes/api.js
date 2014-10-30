@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 /* temporary */
+
+/*
 var pg = require('pg');
 var connString = "postgres://student:student@localhost:5432/sportana";
 
@@ -56,6 +58,8 @@ passport.deserializeUser(function(id, done) {
     done(err, username);
   });
 });
+
+*/
 
 router.get('/', function(req, res) {
   res.send('respond with a resource');
