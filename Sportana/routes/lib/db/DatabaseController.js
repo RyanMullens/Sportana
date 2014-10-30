@@ -11,7 +11,7 @@ function getLogin(callback, login, password) {
     else {
     	var SQLQuery = "SELECT Users.password FROM Users " +
                      "WHERE Users.login = $1";
-      client.query({ text : SQLQuery,
+    	client.query({ text : SQLQuery,
                      values [login]},
         function (err, result) {
         // Ends the "transaction":
@@ -39,9 +39,9 @@ function getUserByAuth(id, callback) {
       callback(err);
     }
     else {
-      var SQLQuery = "SELECT Users.login FROM Users " +
+    	var SQLQuery = "SELECT Users.login FROM Users " +
                      "WHERE Users.auth = $1";
-      client.query({ text : SQLQuery,
+      	client.query({ text : SQLQuery,
                      values [id]},
         function (err, result) {
         // Ends the "transaction":
@@ -61,6 +61,31 @@ function getUserByAuth(id, callback) {
       });
     }
   });
+}
+
+function getUserProfile(login, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(err)
+		}
+		else {
+			var SQLQuery = "SELECT * FROM Users " +
+            "WHERE Users.login = $1";
+			client.query({ text : SQLQuery,
+            values [login]},
+            function(err, result){
+            	done();
+            	client.end();
+            	if(err){
+            		callback(err);
+            	}
+            	else {
+            		console.log("Database returned: \n" + result.rows);
+            		return JSON.stringify(result.rows);
+            	}
+            }
+		});
+	});
 }
 
 exports.getLogin = getLogin;
