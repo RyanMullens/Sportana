@@ -3,29 +3,31 @@
 	<p>
 		<div>
 			Name: {{ viewProfileCtrl.getFullName() }}
+			<br>
 			Username: {{ viewProfileCtrl.getUsername() }}
+			<br>
 			City: {{ viewProfileCtrl.getCity() }}
+			<br>
 			Age: {{ viewProfileCtrl.getAge() }}
+			<br>
 			Rated: {{ viewProfileCtrl.isRated() }}
+			<br>
 			Self: {{ viewProfileCtrl.isSelf() }}
 
-			<div id='RatingsContainer'>
-				<div ng-repeat="rating in getRatings()" class='Rating'>
-					Friendliness: {{rating.friendliness}}
+			<div id='Ratings'>
+					Friendliness: {{viewProfileCtrl.getRatings().friendliness}}
 					<br>
-					Timeliness: {{rating.timeliness}}
+					Timeliness: {{viewProfileCtrl.getRatings().timeliness}}
 					<br>
-					Skill: {{rating.skill}}
+					Skill: {{viewProfileCtrl.getRatings().skill}}
 					<br>
 					<br>
-					}
-				</div>
 			</div>
 
 			<div id='SportsContainer'>
-				<div ng-repeat="sport in getFavoriteSports()" class='Sport'>
-					Sport: {{sport.sportName}}
-					Img: <img ng-src="{{sport.sportImage}}"/>
+				<div ng-repeat="sport in viewProfileCtrl.getFavoriteSports()" class='Sport'>
+					{{sport.sportName}}
+					<img ng-src="{{sport.sportImage}}"/>
 					
 					<br>
 					<br>
