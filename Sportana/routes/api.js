@@ -5,7 +5,7 @@ var router = express.Router();
 var pg = require('pg');
 var connString = "postgres://student:student@localhost:5432/sportana";
 
-var dbc = require('db'); // Database Controller
+var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var passport = require('passport');
 LocalStrategy = require('passport-local').Strategy;
