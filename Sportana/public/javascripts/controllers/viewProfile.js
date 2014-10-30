@@ -40,9 +40,6 @@ app.controller("ViewProfileController", function($http, $stateParams){
 	this.user.rated = false;
 
 
-	console.log("Wtf...  " + JSON.stringify($stateParams));
-	console.log("First name = " + this.user.firstName);
-
 	$http.get('/api/users/' + $stateParams.userId)
 		.success(function(data, status, headers, config) 
 		{
@@ -52,3 +49,47 @@ app.controller("ViewProfileController", function($http, $stateParams){
     		console.log('There was an error retrieving user profile');
 		});
 });
+
+
+
+
+
+this.getFullName = function()
+{
+	return this.user.firstName + " " + this.user.lastName;
+}
+
+this.getUsername = function()
+{
+	return this.user.user;
+}
+
+this.getCity = function()
+{
+	return this.user.city;
+}
+
+this.getAge = function()
+{
+	return 21;//return this.user.age;
+}
+
+this.getFavoriteSports = function()
+{
+	return this.user.favoriteSports;
+}
+
+this.getRatings = function()
+{
+	return this.user.rating;
+}
+
+this.isRated = function()
+{
+	return this.user.rated;
+}
+
+this.isSelf = function()
+{
+	return true; // this.user.self?
+}

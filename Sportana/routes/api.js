@@ -1,7 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+
+/* temporary */
+
+/*
+var pg = require('pg');
+var connString = "postgres://student:student@localhost:5432/sportana";
+
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
+
 
 var passport = require('passport');
 LocalStrategy = require('passport-local').Strategy;
@@ -51,6 +59,8 @@ passport.deserializeUser(function(id, done) {
     done(err, username);
   });
 });
+
+*/
 
 router.get('/', function(req, res) {
   res.send('respond with a resource');

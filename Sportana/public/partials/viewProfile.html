@@ -2,7 +2,37 @@
 <body>
 	<p>
 		<div>
-			{{ viewProfileCtrl.user.firstName }}
+			Name: {{ viewProfileCtrl.getFullName() }}
+			Username: {{ viewProfileCtrl.getUsername() }}
+			City: {{ viewProfileCtrl.getCity() }}
+			Age: {{ viewProfileCtrl.getAge() }}
+			Rated: {{ viewProfileCtrl.isRated() }}
+			Self: {{ viewProfileCtrl.isSelf() }}
+
+			<div id='RatingsContainer'>
+				<div ng-repeat="rating in getRatings()" class='Rating'>
+					Friendliness: {{rating.friendliness}}
+					<br>
+					Timeliness: {{rating.timeliness}}
+					<br>
+					Skill: {{rating.skill}}
+					<br>
+					<br>
+					}
+				</div>
+			</div>
+
+			<div id='SportsContainer'>
+				<div ng-repeat="sport in getFavoriteSports()" class='Sport'>
+					Sport: {{sport.sportName}}
+					Img: <img ng-src="{{sport.sportImage}}"/>
+					
+					<br>
+					<br>
+					}
+				</div>
+			</div>
+
 		</div>
 	</p>
 </body>
