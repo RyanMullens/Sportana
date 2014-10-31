@@ -1,22 +1,23 @@
-app.controller("ViewGamesController", function($http){
+app.controller("ViewGamesController", function($http, $scope){
 	/*$http.get('/api/games').success(function(data, status, headers, config) {
 		this.games = data;
 	}).error(function(data, status, headers, config) {
 		console.log('there was an error');
 	});*/
-	this.games = [
-		{sport: 'Football', sportImg: '/images/icon_73766.png', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
+	var games = [
+		{id: 7, sport: 'Football', sportImg: '/images/icon_73766.png', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
 	];
 
-	this.hasGames = function(){
-		return this.games.length;
-	}
-});
-
-app.controller("Notification Controller", function($http){
 	this.notifications = [{}];
-});
 
+	this.hasGames = function(){
+		return games.length;
+	};
+
+	this.getGames = function(){
+		return games;
+	};
+});
 
 /*
 Game info:

@@ -19,7 +19,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         .state("games", {
             url: "/games" ,
             templateUrl: "../partials/viewGames.html", 
-            controller: "ViewGamesController as gameCtrl" }) 
+            controller: "ViewGamesController as viewGamesCtrl" }) 
 
 		.state("createGame", {
         	url: "/game/create" ,
