@@ -6,6 +6,6 @@
 	</div>
 	<div class="games" ng-show="viewGamesCtrl.hasGames()">
 		<div class="game" ng-repeat="game in viewGamesCtrl.getGames()" >
-			{{game.sport}} <img ng-src='{{game.sportImg}}' /> Players Joined: {{game.playersJoined}} Players Invited: {{game.playersInvited}} Date: {{game.date}} Time: {{game.time}} Location: {{game.location}} <a class="button" ui-sref="game({gameId: '{{game.id}}'})">View Game</a>
+			{{game.sport}} <img ng-src='{{game.sportImg}}' /> Players Joined: {{game.playersJoined}} Players Invited: {{game.playersInvited}} Date: {{game.date}} Time: {{game.time}} Location: {{game.location}} <a class="button" ui-sref="viewGame({gameId: game.id})">View Game</a>
 		</div>	
 	</div>

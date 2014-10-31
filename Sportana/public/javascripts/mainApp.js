@@ -25,7 +25,6 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         	url: "/game/create" ,
         	templateUrl: "../partials/createGame.html", 
         	controller: "CreateGameController as createGameCtrl" }) 
-        //TODO Conform to the new(my :D) standards. I don't wanna touch your code though brandon.
         .state("joinGame", {
         	url: "/game/join" ,
         	templateUrl: "../partials/queueSport.html", 
