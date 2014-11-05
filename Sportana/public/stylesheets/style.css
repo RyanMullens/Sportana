@@ -118,9 +118,7 @@ body {
 }
 
 
-/* Main */
-
-
+/* Main -- The region of the screen excluding the sidebar and search bar */
 .main {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   font-weight: 300;
@@ -129,16 +127,21 @@ body {
   padding-right: 0px;
   padding-left: 0px;
 }
-@media (min-width: 768px) {
-  .main {
 
-  }
+@media (min-width: 768px) {
+  .main { }
 }
 .main .page-header {
   margin-top: 0;
 }
 
+#queue-content {
+  background-color: red
+}
 
+#queue-preferences {
+  background-color: black
+}
 
 
 /*

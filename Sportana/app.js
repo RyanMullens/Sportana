@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //All apis
-app.use('/api/', apis);
+// app.use('/api/', apis);
 
 /*app.use('/friends', friends);
 app.use('/user', user);

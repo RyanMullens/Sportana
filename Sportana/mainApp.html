@@ -66,19 +66,17 @@
                 <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
               </ul>
             </li>
-            <!--<li><a href="/SUPER-404-LOLOLOLOLOL">404 Redirect</a></li> !-->
           </ul>
 
           <ul class="nav nav-sidebar">
-          <li><a ng-click="setTab('none')" ui-sref="home">Dashboard</a></li>
-          <li><a ng-click="setTab('none')" ui-sref="user({userId: 'rmullens'})">Profile</a></li>
-          <li><a ng-click="setTab('games')">Games</a></li>
+            <li><a ng-click="setTab('none')" ui-sref="home">Dashboard</a></li>
+            <li><a ng-click="setTab('none')" ui-sref="user({userId: 'rmullens'})">Profile</a></li>
+            <li><a ng-click="setTab('games')">Games</a></li>
           <ul ng-show="isShown('games')">
-            <li><a ui-sref="joinGame">Join Game</a></li>
-            <li><a ui-sref="games">My Games</a></li>
-            
+            <li><a ui-sref="queue">Join Game</a></li>
+            <li><a ui-sref="games">My Games</a>
           </ul>
-          <li><a ui-sref="friends">Friends</a></li>
+            <li><a ui-sref="friends">Friends</a></li>
           </ul>
 
         </div>
