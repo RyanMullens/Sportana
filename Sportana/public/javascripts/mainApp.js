@@ -76,7 +76,6 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     	templateUrl: "../partials/settings.html", 
     	controller: "SettingsController as settingsCtrl" 
     })         
-
 });
 
 

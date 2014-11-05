@@ -1,108 +1,118 @@
-// var express = require('express');
-// var router = express.Router();
+var express = require('express');
+var router = express.Router();
 
-// var dbc = require('db'); // Database Controller
 
-// var passport = require('passport');
-// LocalStrategy = require('passport-local').Strategy;
+/* temporary */
 
-// var crypto = require('crypto'); // For generating secure tokens
-// var base64url = require('base64url'); // for base 64 encoding
+/*
+var pg = require('pg');
+var connString = "postgres://student:student@localhost:5432/sportana";
 
-// //localhost:8888/api/route
-// //example: localhost:8888/api/friends
+var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//     dbc.getLogin(username, password, function (err, success) {
-//       if (err) { return done(err); }
-//       if (success === false) {
-//         return done(null, false);
-//       } else {
-// 	      return done(null, true);
-// 	  }
-//     });
-//   }
-// ));
 
-// function makeAuthToken(size) {
-//     return base64url(crypto.randomBytes(size));
-// }
+var passport = require('passport');
+LocalStrategy = require('passport-local').Strategy;
 
-// passport.serializeUser(function(user, done) {
-//   var auth = "";
-//   var uniqueAuthLoop = true;
-//   while (uniqueAuthLoop) {
-//   	auth = makeAuthToken(64);
-//   	dbc.putUserAuth(user, auth, function(err, success) {
-//   		if (err || (success === false)) {
-//   			// repeat loop
-//   		} else {
-//   			uniqueAuthLoop = false;
-//   		}
-//   	});
-//  }
-//   done(null, auth);
+var crypto = require('crypto'); // For generating secure tokens
+var base64url = require('base64url'); // for base 64 encoding
 
-// });
+//localhost:8888/api/route
+//example: localhost:8888/api/friends
 
-// passport.deserializeUser(function(id, done) {
-//   dbc.getUserByAuth(id, function(err, username) {
-//     done(err, username);
-//   });
-// });
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    dbc.getLogin(username, password, function (err, success) {
+      if (err) { return done(err); }
+      if (success === false) {
+        return done(null, false);
+      } else {
+	      return done(null, true);
+	  }
+    });
+  }
+));
 
-// router.get('/', function(req, res) {
-//   res.send('respond with a resource');
-// });
+function makeAuthToken(size) {
+    return base64url(crypto.randomBytes(size));
+}
 
-// /* POST logs in user */
-// router.post('/login', function(req, res) {
-//    passport.authenticate('local', function(err, username, info) {
-//     if (err) {
+passport.serializeUser(function(user, done) {
+  var auth = "";
+  var uniqueAuthLoop = true;
+  while (uniqueAuthLoop) {
+  	auth = makeAuthToken(64);
+  	dbc.putUserAuth(user, auth, function(err, success) {
+  		if (err || (success === false)) {
+  			// repeat loop
+  		} else {
+  			uniqueAuthLoop = false;
+  		}
+  	});
+ }
+  done(null, auth);
 
-//     }
-//     if (!username) {
-//     	return res.redirect('/login');
-//     }
-//     req.logIn(user, function(err) {
-//       if (err) { return next(err); }
-//       return res.redirect('/users/' + username);
-//     });
-//   })(req, res, next);
-// });
+});
 
-// /* GET retrieves user profile */
-// router.get('/users/:login', function(req, res) {
-// 	var login = req.params.login;
-// 	var json = getUserProfile(login);
-// 	res.send(json);
-// });
+passport.deserializeUser(function(id, done) {
+  dbc.getUserByAuth(id, function(err, username) {
+    done(err, username);
+  });
+});
 
-// /* PUT creates a new user */
-// //router.get('/users/:login/:firstname/:lastname', function(req, res) { //should be router.put
-// router.get('/users/', function(req, res) {
-// 	var email = req.body.email.split("@");
-// 	var login = email[0];
-// 	var emailSuffix = email[1];
-// 	var firstname = req.body.firstname;
-// 	var lastname = req.body.lastname;
-// 	var dateOfBirth = req.body.dateOfBirth;
-// 	var city = req.body.city;
+*/
 
-// 	//pass parameters to method, get back json object
-// 	//console.log(JSON.parse(data));
-// 	//res.json(data);
-// 	res.json({login: login , firstname: firstname , lastname: lastname});
-// });
+router.get('/', function(req, res) {
+  res.send('respond with a resource');
+});
 
-// /* POST rates users */
-// router.post('/ratings', function(req, res) {
-// 	var auth = req.body.auth;
-// 	var targetID = req.body.targetID;
-// 	var friendliness = req.body.friendliness;
-// 	var timeliness = req.body.timeliness;
-// 	var skill = req.body.skill;
+/* POST logs in user */
+router.post('/login', function(req, res) {
+   passport.authenticate('local', function(err, username, info) {
+    if (err) {
+
+    }
+    if (!username) {
+    	return res.redirect('/login');
+    }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/' + username);
+    });
+  })(req, res, next);
+});
+
+/* GET retrieves user profile */
+router.get('/users/:login', function(req, res) {
+	var login = req.params.login;
+	var json = getUserProfile(login);
+	res.send(json);
+});
+
+/* PUT creates a new user */
+//router.get('/users/:login/:firstname/:lastname', function(req, res) { //should be router.put
+router.get('/users/', function(req, res) {
+	var email = req.body.email.split("@");
+	var login = email[0];
+	var emailSuffix = email[1];
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var dateOfBirth = req.body.dateOfBirth;
+	var city = req.body.city;
+
+	//pass parameters to method, get back json object
+	//console.log(JSON.parse(data));
+	//res.json(data);
+	res.json({login: login , firstname: firstname , lastname: lastname});
+});
+
+/* POST rates users */
+router.post('/ratings', function(req, res) {
+	var auth = req.body.auth;
+	var targetID = req.body.targetID;
+	var friendliness = req.body.friendliness;
+	var timeliness = req.body.timeliness;
+	var skill = req.body.skill;
 	
 // 	//call db method and pass params, get back json object (boolean?)
 // 	//console.log(JSON.parse(data);

@@ -29,10 +29,10 @@ app.controller("ViewProfileController", function($http, $stateParams){
 	this.user.lastName = "Mullens";
 	this.user.dateOfBirth = "02-27-1994";
 	this.user.city = "Holliston"
-	this.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/images/icon_73766"}
-							,{"sportName":"Soccer","sportImage":"/images/icon_73766"}
-							,{"sportName":"Baseball","sportImage":"/images/icon_73766"}
-							,{"sportName":"Hockey","sportImage":"/images/icon_73766"}];
+	this.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/images/icon_73766.png"}
+							,{"sportName":"Soccer","sportImage":"/images/icon_73766.png"}
+							,{"sportName":"Baseball","sportImage":"/images/icon_73766.png"}
+							,{"sportName":"Hockey","sportImage":"/images/icon_73766.png"}];
 	this.user.rating = {"friendliness":5,
 				   "timeliness":4,
 				   "skill": 3};
@@ -40,10 +40,7 @@ app.controller("ViewProfileController", function($http, $stateParams){
 	this.user.rated = false;
 
 
-	console.log("Wtf...  " + JSON.stringify($stateParams));
-	console.log("First name = " + this.user.firstName);
-
-	$http.get('/api/users/' + $stateParams.userId)
+	$http.get('/api/user/' + $stateParams.userId)
 		.success(function(data, status, headers, config) 
 		{
     		//this.user = data;
@@ -51,4 +48,48 @@ app.controller("ViewProfileController", function($http, $stateParams){
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
 		});
+
+
+
+
+this.getFullName = function()
+{
+	return this.user.firstName + " " + this.user.lastName;
+}
+
+this.getUsername = function()
+{
+	return this.user.user;
+}
+
+this.getCity = function()
+{
+	return this.user.city;
+}
+
+this.getAge = function()
+{
+	return 21;//return this.user.age;
+}
+
+this.getFavoriteSports = function()
+{
+	return this.user.favoriteSports;
+}
+
+this.getRatings = function()
+{
+	return this.user.rating;
+}
+
+this.isRated = function()
+{
+	return this.user.rated;
+}
+
+this.isSelf = function()
+{
+	return true; // this.user.self?
+}
+
 });
