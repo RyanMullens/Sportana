@@ -113,6 +113,7 @@ router.post('/ratings', function(req, res) {
 	var friendliness = req.body.friendliness;
 	var timeliness = req.body.timeliness;
 	var skill = req.body.skill;
+});
 	
 // 	//call db method and pass params, get back json object (boolean?)
 // 	//console.log(JSON.parse(data);
