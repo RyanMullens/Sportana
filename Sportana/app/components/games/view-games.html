@@ -1,6 +1,6 @@
 <h1 class="page-header">View Games</h1>
 <div id="viewGames">
-	<div ng-show="viewGames.hasNotifications" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
+	<div ng-show="viewGames.hasNotifications()" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
 	<div class="row notifications" ng-show="viewGames.hasNotifications">
 		<div class="row notification" ng-repeat="notification in viewGames.getNotifications()">
 			<div class="row">
