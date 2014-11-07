@@ -72,8 +72,8 @@ function getUserProfile(login, callback) {
 			var SQLQuery = "SELECT * FROM Users " +
             "WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
-            values : [login]},
-            function(err, result){
+            			   values : [login]},
+             function(err, result){
             	done();
             	client.end();
             	if(err){
@@ -83,8 +83,8 @@ function getUserProfile(login, callback) {
             		console.log("Database returned: \n" + result.rows);
             		return JSON.stringify(result.rows);
             	}
-            }
-		});
+             });
+		}
 	});
 }
 
