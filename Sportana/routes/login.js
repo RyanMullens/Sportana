@@ -9,7 +9,8 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 var authenticator = require('./authentication'); // Authentication Handler
 
 /* POST logs in user */
-router.post('/', function(req, res) {
+router.post('', function(req, res) {
+
 	var email = req.body.email;
 	var password = req.body.password;
 	var arr = email.split("@");

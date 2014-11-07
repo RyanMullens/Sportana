@@ -8,6 +8,11 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var authenticator = require('./authentication'); // Authentication Handler
 
+
+router.get('/requests', function (req, res) {
+
+});
+
 router.put('/game', function(req, res) {
 
 });

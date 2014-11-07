@@ -56,32 +56,32 @@ INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , n
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
 ('ckent' , '2014-09-20' , '08:00:00' , '09:00:00' , 'soccer' , 'umass', 14 , 30 , 10 , 6 , 10 , 30 , true);
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
-('jbond' , '2014-10-21' , '13:00:00' , '15:00:00' , 'football1' , 'Mcguirk', 30 , 50 , 20 , 15 , 15 , 35 , true);
+('jbond' , '2014-10-21' , '13:00:00' , '15:00:00' , 'football' , 'Mcguirk', 30 , 50 , 20 , 15 , 15 , 35 , true);
 
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
-('bwayne' , 'mscott' , 2 , 0 , 3);
+('bwayne' , 'mscott' , 1 , 0 , 3);
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
-('mscott' , 'mscott' , 2 , 0 , 3);
+('mscott' , 'mscott' , 1 , 0 , 3);
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
-('ckent' , 'mscott' , 2 , 0 , 3);
+('ckent' , 'mscott' , 1 , 0 , 3);
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
-('myoda' , 'mscott' , 2 , 0 , 3);
+('myoda' , 'mscott' , 1 , 0 , 3);
 
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('ckent' , 'myoda' , 3 , 'mscott' , 2);
+('ckent' , 'myoda' , 3 , 'mscott' , 1);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('bwayne' , 'jbond' , 1 , 'ckent' , 2);
+('bwayne' , 'jbond' , 1 , 'ckent' , 1);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('jbond' , 'bwayne' , 0 , 'mscott' , 2);
+('jbond' , 'bwayne' , 0 , 'mscott' , 1);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('myoda' , 'bwayne' , 2 , 'mscott' , 2);
+('myoda' , 'bwayne' , 2 , 'mscott' , 1);
 
-INSERT INTO GameWallPost(userPosting , gameCreator , gameID , pid , post) values
-('ckent' , 'jbond' , 2 , 1 , 'This game is going to be awesome!');
-INSERT INTO GameWallPost(userPosting , gameCreator , gameID , pid , post) values
-('jbond' , 'mscott' , 1 , 12 , 'What time is the game?');
-INSERT INTO GameWallPost(userPosting , gameCreator , gameID , pid , post) values
-('myoda' , 'jbond' , 3 , 1 , 'So are we going to play today?');
+INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
+('ckent' , 'jbond' , 1 , 'This game is going to be awesome!');
+INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
+('jbond' , 'mscott' , 1 , 'What time is the game?');
+INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
+('myoda' , 'jbond' , 1 , 'So are we going to play today?');
 
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('bwayne' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
@@ -93,8 +93,6 @@ INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('bwayne' , 'soccer' , 10 , 35 , 'umass');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('jbond' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'football' , 10 , 20 , 'Mcguirk');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('ckent' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
@@ -118,10 +116,10 @@ INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
 ('mscott' , 'football' , 10 , 20 , 'Mcguirk');
 
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values
-('mscott' , '2014-09-09' , 10:00:00 , 11:00:00);
+('mscott' , '2014-09-09' , '10:00:00' , '11:00:00');
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values
-('bwayne' , '2014-11-15' , 11:00:00 , 12:00:00);
+('bwayne' , '2014-11-15' , '11:00:00' , '12:00:00');
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values
-('ckent' , '2014-12-20' , 13:00:00 , 15:00:00);
+('ckent' , '2014-12-20' , '13:00:00' , '15:00:00');
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values
-('jbond' , '2014-11-03' , 07:00:00 , 09:30:00);
+('jbond' , '2014-11-03' , '07:00:00' , '09:30:00');

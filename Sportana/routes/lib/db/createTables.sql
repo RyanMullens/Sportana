@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS GameWallPost(
 userPosting VARCHAR(50),
 gameCreator VARCHAR(50),
 gameID INT,
-pid INT,
+pid SERIAL,
 post VARCHAR(500),
 PRIMARY KEY(gameCreator, gameID, userPosting, pid),
 FOREIGN KEY (gameCreator, gameID)
