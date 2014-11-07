@@ -1,10 +1,10 @@
 <h1 class="page-header">Search Players!</h1>
 
-<p>Searching for players {{searchPlayerCtrl.query}}</p>
+<p>Searching for players {{searchPlayer.query}}</p>
 
 <div id="searchResults">
 	
-	<div ng-repeat="result in searchPlayerCtrl.results" class="searchResult">
+	<div ng-repeat="result in searchPlayer.results" class="searchResult">
 	
 		Name: {{ result.firstName + " " + result.lastName }}
 			<br>
@@ -12,7 +12,7 @@
 			<br>
 			Age: {{ result.age }}
 			<br>
-			<a ui-sref="user({userId: result.user})">Link</a>
+			<a ui-sref="app.user({userId: result.user})">Link</a>
 			<br>
 			<hr>		
 

@@ -13,11 +13,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     views: {
       "sidebar@": {
         templateUrl: "/shared/sidebar/sidebar.html",
-        controller: "SidebarController"
+        controller: "SidebarController as sidebar"
       },
       "searchbar@": {
         templateUrl: "/shared/searchbar/searchbar.html",
-        controller: "SearchbarController"
+        controller: "SearchbarController as searchbar"
       }
     }
   })

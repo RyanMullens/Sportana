@@ -34,7 +34,11 @@ app.controller("ViewGamesController", function($http, $scope){
 	    // or server returns response with an error status.
 		});
 */
-		delete notifications[];
+		if(accepted){
+			games.push(notification);
+			
+		}
+		notifications.splice(notifications.indexOf(notification),1);
 		console.log(notifications);
 	};
 
