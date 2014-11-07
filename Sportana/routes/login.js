@@ -10,7 +10,7 @@ var authenticator = require('./authentication'); // Authentication Handler
 
 /* POST logs in user */
 router.post('/', function(req, res) {
-   passport.authenticate('local', function(err, username, info) {
+   authenticator.authenticate(user, function(err, username, info) {
     if (err) {
 
     }

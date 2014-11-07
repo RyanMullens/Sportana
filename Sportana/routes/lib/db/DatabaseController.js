@@ -3,7 +3,7 @@ var pg = require('pg');
 //connectionString = process.env.DATABASE_URL || allows for deployed app db connection
 var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
 
-function getLogin(callback, login, password) {
+function getLogin(login, password, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
       callback(err);
@@ -19,7 +19,7 @@ function getLogin(callback, login, password) {
         // Disconnects from the database:
         client.end();
         if (err) {
-          callback(err);
+          callback(err, false);
         }
         else {
           if (result.rows["password"] === password) {

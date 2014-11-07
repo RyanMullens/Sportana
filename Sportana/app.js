@@ -26,11 +26,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app')));
 
-app.use('/', index);
-app.use('/friends', friends);
-app.use('/login', login);
-app.use('/users', users);
-app.use('/requests', requests);
+app.use('/api/friends', friends);
+app.use('/api/login', login);
+app.use('/api/users', users);
+app.use('/api/requests', requests);
+app.use('*', index);
 
 
 // catch 404 and forward to error handler
