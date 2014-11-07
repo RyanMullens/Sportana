@@ -6,8 +6,14 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   $urlRouterProvider.otherwise('/');
   $stateProvider
 
+    .state("landing", {
+      url: "/" ,
+      templateUrl: "/components/landing/landing.html",
+      controller: "HomeController as home"
+    })
+
     .state("home", {
-    	url: "/" ,
+    	url: "/home" ,
     	templateUrl: "/components/home/home.html",
     	controller: "HomeController as home"
     })
