@@ -6,9 +6,9 @@ app.controller("SearchbarController", function($scope, $state)
 	{
 		//alert("TEST: " + this.searchQuery);
 		//console.log("TEST: " + this.searchQuery);
-		$state.go('searchPlayer', {query: encodeURIComponent(this.searchQuery)});
+		$state.go('app.searchPlayer', {query: encodeURIComponent(this.searchQuery)});
 	}
 
-	$scope.escape
+	//$scope.escape
 
 });
