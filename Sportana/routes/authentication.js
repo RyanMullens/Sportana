@@ -32,7 +32,7 @@ exports.deserializeUser = function(id, done) {
 exports.authenticateUser = function(username, password, callback) {
 	dbc.getLogin(username, password, function(err, status) {
 		if (err) {
-			
+			callback(err, "");
 		}
 		if (status === true) {
 			serializeUser(username, callback);

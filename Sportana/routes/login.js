@@ -10,18 +10,25 @@ var authenticator = require('./authentication'); // Authentication Handler
 
 /* POST logs in user */
 router.post('/', function(req, res) {
-   authenticator.authenticate(user, function(err, username, info) {
-    if (err) {
-
-    }
-    if (!username) {
-    	return res.redirect('/login');
-    }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.redirect('/users/' + username);
+	var email = req.body.email;
+	var password = req.body.password;
+	var arr = email.split("@");
+	var username = arr[0]; // Username is part before the @
+	
+   authenticator.authenticate(username, password, function(err, authenticationToken) {
+    	  var response = {};
+    	  if (err) {
+    	    response.message = err;	
+    	    response.authenticationToken = "";
+    	  } else {
+    	  	response.message = "";
+    	  	response.authenticationToken = authenticationToken;
+    	  }
+    	  console.log(authenticationToken);
+    	  var json = JSON.stringify(response);
+          res.write(json);
+          res.end();
     });
-  })(req, res, next);
 });
 
 
