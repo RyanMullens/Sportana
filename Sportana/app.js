@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // Routes
+var index = require('./routes/index');
 var friends = require('./routes/friends');
 var login = require('./routes/login');
 var users = require('./routes/users');
@@ -14,7 +15,7 @@ var requests = require('./routes/requests');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
@@ -25,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app')));
 
-
+app.use('/', index);
 app.use('/friends', friends);
 app.use('/login', login);
 app.use('/users', users);
