@@ -50,3 +50,8 @@ INSERT INTO FavoriteSports(login , sport) values
 ('mscott' , 'soccer');
 INSERT INTO FavoriteSports(login , sport) values
 ('ckent' , 'billiards');
+
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
+('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'basketball' , 'Orchard Hill courts', 10 , 20 , 8 , 4 , 10 , 30 , true);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
+('ckent' , '2014-13-20' , '08:00:00' , '09:00:00' , 'soccer' , 'umass', 14 , 30 , 10 , 6 , 10 , 30 , true);
