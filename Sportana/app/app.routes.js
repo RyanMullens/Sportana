@@ -21,6 +21,16 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
       }
     }
   })
+  .state("app.landing", {
+    url: "/landing" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/landing/landing.html",
+        controller: "HomeController as home"
+      }
+    }
+  })
+
   .state("app.home", {
    url: "/" ,
    views: {
