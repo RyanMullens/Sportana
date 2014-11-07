@@ -72,7 +72,7 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Game(
 creator VARCHAR(50),
-gameID SERIAL,
+gameID INT,
 gameDate DATE,
 gameStart TIME,
 gameEnd TIME,
@@ -116,7 +116,7 @@ ON UPDATE CASCADE
 CREATE TABLE IF NOT EXISTS Notifications(
 userTo VARCHAR(50),
 userFrom VARCHAR(50),
-nid SERIAL,
+nid INT,
 type INT, -- 0: friend, 1: game, 2: queue, 3: game reminder
 timeSent TIMESTAMP,
 creator VARCHAR(50),
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS GameWallPost(
 userPosting VARCHAR(50),
 gameCreator VARCHAR(50),
 gameID INT,
-pid SERIAL,
+pid INT,
 post VARCHAR(500),
 PRIMARY KEY(gameCreator, gameID, userPosting, pid),
 FOREIGN KEY (gameCreator, gameID)
@@ -200,3 +200,62 @@ ON DELETE NO ACTION
 ON UPDATE CASCADE
 );
 
+CREATE OR REPLACE FUNCTION update_gameID()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		x := (SELECT max(gameID) FROM Game WHERE Game.creator = NEW.creator);
+		IF (x > 0) THEN
+	   		NEW.gameID = 1 + x;
+		ELSE
+	   		NEW.gameID = 1;
+		END IF;	   
+		RETURN NEW;
+	END;
+	$$ language 'plpgsql';
+	
+CREATE OR REPLACE FUNCTION update_gameWallPostID()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		x := (SELECT max(pid) FROM GameWallPost WHERE GameWallPost.userPosting = NEW.userPosting);
+		IF (x > 0) THEN
+	   		NEW.pid = 1 + x;
+		ELSE
+	  	 	NEW.pid = 1;
+		END IF;	   
+	   	RETURN NEW;
+	END;
+	$$ language 'plpgsql';
+	
+CREATE OR REPLACE FUNCTION update_notificationID()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		x := (SELECT max(nid) FROM Notifications WHERE Notifications.userTo = NEW.userTo);
+		IF (x > 0) THEN
+	   		NEW.nid = 1 + x;
+		ELSE
+	   		NEW.nid = 1;
+		END IF;	   
+	   		RETURN NEW;
+	END;
+	$$ language 'plpgsql';		
+
+CREATE TRIGGER auto_increment_gameID
+	BEFORE INSERT ON Game
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_gameID();         
+
+CREATE TRIGGER auto_increment_gameWallPostID
+	BEFORE INSERT ON GameWallPost
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_gameWallPostID();  
+	
+CREATE TRIGGER auto_increment_notificationID
+	BEFORE INSERT ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_notificationID();  	
