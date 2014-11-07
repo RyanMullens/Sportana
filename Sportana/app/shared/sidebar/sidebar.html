@@ -1,0 +1,32 @@
+<div class="col-sm-3 col-md-3 sidebar-offcanvas sidebar" id="sidebar">
+
+          <image id="logo" src="/assets/img/SportanaWhite-08.png" width="auto" alt="Sportana"></image>
+
+          <ul class="nav nav-sidebar" >
+            <li ng-class="{ active: isActive('/')}"><a href="/">Home</a></li>
+            <li ng-class="{ active: isActive('/friends')}" ><a href="/friends">View Friends</a></li>
+            <li ng-class="{ active: isActive('/user/search/query')}"><a href="/user/search/query">Search Player</a></li>
+            <li ng-class="{ active: isActive('/user/userId')}"><a href="/user/userId">View Profile</a></li>
+            <li ng-class="{ active: isActive('/settings')}"><a href="/settings">Settings</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">Game<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-class="{ active: isActive('/game/gameId')}"><a href="/game/gameId">View Game</a></li>
+                <li ng-class="{ active: isActive('/game/create')}"><a href="/game/create">Create Game</a></li>
+                <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="nav nav-sidebar">
+            <li><a ng-click="setTab('none')" ui-sref="app.home">Dashboard</a></li>
+            <li><a ng-click="setTab('none')" ui-sref="app.user({userId: 'rmullens'})">Profile</a></li>
+            <li><a ng-click="setTab('games')">Games</a></li>
+          <ul ng-show="isShown('games')">
+            <li><a ui-sref="app.queue">Join Game</a></li>
+            <li><a ui-sref="app.games">My Games</a>
+          </ul>
+            <li><a ui-sref="app.friends">Friends</a></li>
+          </ul>
+
+        </div>

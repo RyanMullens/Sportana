@@ -5,10 +5,14 @@ app.controller("ViewGamesController", function($http, $scope){
 		console.log('there was an error');
 	});*/
 	var games = [
-		{id: 7, sport: 'Football', sportImg: '/assets/img/icon_73766.png', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
+		{id: 7, sport: 'Football', sportImg: '/assets/img/icon_73766.png', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'},
+		{id: 8, sport: 'Baseball', sportImg: '/assets/img/icon_73766.png', playersJoined: 5, playersInvited: 4, date: 'Novermber 1 2014', time: '5:30pm', location: 'Sharon'},
 	];
 
-	this.notifications = [{}];
+	var notifications = [
+		{id: 9, sport: 'Football', sportImg: '/assets/img/icon_73766.png', invitedBy: 'Alec', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'},
+		{id: 10, sport: 'Football', sportImg: '/assets/img/icon_73766.png', invitedBy: 'Ryan', playersJoined: 5, playersInvited: 4, date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
+	];
 
 	this.hasGames = function(){
 		return games.length;
@@ -16,6 +20,30 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	this.getGames = function(){
 		return games;
+	};
+
+	this.acceptGame = function(notification, accepted){
+		/*
+		this.acceptGame = $http.post('/requests/'+notification.id, {confirmed:accepted}).
+		success(function(data, status, headers, config) {
+	    // this callback will be called asynchronously
+	    // when the response is available
+		}).
+		error(function(data, status, headers, config) {
+	    // called asynchronously if an error occurs
+	    // or server returns response with an error status.
+		});
+*/
+		delete notifications[];
+		console.log(notifications);
+	};
+
+	this.hasNotifications = function(){
+		return notifications.length;
+	};
+
+	this.getNotifications = function(){
+		return notifications;
 	};
 });
 

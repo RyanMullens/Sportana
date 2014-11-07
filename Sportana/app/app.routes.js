@@ -6,77 +6,155 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   $urlRouterProvider.otherwise('/');
   $stateProvider
 
-    .state("home", {
-    	url: "/" ,
-    	templateUrl: "/components/home/home.html",
-    	controller: "HomeController as home"
-    })
+  .state("app",
+  {
+    url: "",
+    abstract: true,
+    views: {
+      "sidebar@": {
+        templateUrl: "/shared/sidebar/sidebar.html",
+        controller: "SidebarController"
+      },
+      "searchbar@": {
+        templateUrl: "/shared/searchbar/searchbar.html",
+        controller: "SearchbarController"
+      }
+    }
+  })
+  .state("app.landing", {
+    url: "/landing" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/landing/landing.html",
+        controller: "HomeController as home"
+      }
+    }
+  })
 
-    .state("friends", {
-      url: "/friends" ,
-      templateUrl: "/components/friends/view-friends.html",
-      controller: "ViewFriendsController as viewFriends"
-    })
+  .state("app.home", {
+   url: "/" ,
+   views: {
+    "content@": {
+      templateUrl: "/components/home/home.html",
+      controller: "HomeController as home"
+    }
+  }
+})
 
-    .state("games", {
-      url: "/games" ,
-      templateUrl: "/components/games/view-games.html",
-      controller: "ViewGamesController as viewGames"
-    })
+  .state("app.friends", {
+    url: "/friends" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/friends/view-friends.html",
+        controller: "ViewFriendsController as viewFriends"
+      }
+    }
+  })
 
-    .state("createGame", {
-    	url: "/game/create" ,
+
+  .state("app.games", {
+    url: "/games" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/games/view-games.html",
+        controller: "ViewGamesController as viewGames"
+      }
+    }
+  })
+
+  .state("app.createGame", {
+   url: "/game/create" ,
+   views: {
+    "content@": {
     	templateUrl: "/components/games/create-game.html",
     	controller: "CreateGameController as createGame"
-    })
+    }
+  }
+})
 
-    .state("queue", {
-    	url: "/queue",
+  .state("app.queue", {
+   url: "/queue",
+   views: {
+    "content@": {
       templateUrl: "/components/queue/queue.html"
-    })
-        .state("queue.preferences", {
-          templateUrl: "/components/queue/queue-preferences.html",
-          controller: "PreferencesController as preferences"
-        })
+    }
+  }
+})
+  .state("app.queue.preferences", {
+    views: {
+      "content@": {
+        templateUrl: "/components/queue/queue-preferences.html",
+        controller: "PreferencesController as preferences"
+      }
+    }
+  })
 
-        .state("queue.content", {
-          templateUrl: "/components/queue/queue-content.html",
-        })
-            .state("queue.content.sports", {
-                url: "/queue/preferences/sports" ,
-                templateUrl: "/components/queue/queue-sports.html",
-                controller: "QueueSportController as sports"
-            })
+  .state("app.queue.content", {
+    views: {
+      "content@": {
+        templateUrl: "/components/queue/queue-content.html"
+      }
+    }
+  })
+  .state("app.queue.content.sports", {
+    url: "/queue/preferences/sports" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/queue/queue-sports.html",
+        controller: "QueueSportController as sports"
+      }
+    }
+  })
 
-            .state("queue.content.location", {
-                url: "/queue/preferences/location" ,
-                templateUrl: "/components/queue/queue-location.html",
-                controller: "QueueLocationController as location"
-            })
+  .state("app.queue.content.location", {
+    url: "/queue/preferences/location" ,
+    views: {
+      "content@": {
+        templateUrl: "/components/queue/queue-location.html",
+        controller: "QueueLocationController as location"
+      }
+    }
+  })
 
-    .state("viewGame", {
-    	url: "/game/:gameId" ,
+  .state("app.viewGame", {
+   url: "/game/:gameId" ,
+   views: {
+    "content@": {
     	templateUrl: "/components/game/view-game.html",
     	controller: "ViewGameController as viewGame"
-    })
+    }
+  }
+})
 
-    .state("searchPlayer", {
-    	url: "/user/search/:query" ,
+  .state("app.searchPlayer", {
+   url: "/user/search/:query" ,
+   views: {
+    "content@": {
     	templateUrl: "/components/search/search-player.html",
     	controller: "SearchPlayerController as searchPlayer"
-    })
+    }
+  }
+})
 
-    .state("user", {
-    	url: "/user/:userId" ,
+  .state("app.user", {
+   url: "/user/:userId" ,
+   views: {
+    "content@": {
     	templateUrl: "/components/profile/view-profile.html",
     	controller: "ViewProfileController as viewProfile"
-    })
+    }
+  }
+})
 
-    .state("settings", {
-    	url: "/settings" ,
+  .state("app.settings", {
+   url: "/settings" ,
+   views: {
+    "content@": {
     	templateUrl: "/components/settings/settings.html",
     	controller: "SettingsController as settings"
-    })
+    }
+  }
+})
 });
 
 
