@@ -12,7 +12,7 @@ var authenticator = require('./authentication'); // Authentication Handler
  * /friends
  * Returns the list of friends of the requesting user
  */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
 	  res.send('respond with a resource');
 });
 
