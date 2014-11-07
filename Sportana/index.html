@@ -1,0 +1,114 @@
+<html ng-app="app">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1">
+
+  <!-- EXTERNAL -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.11/angular-ui-router.min.js"></script>
+
+  <!-- BOOTSTRAP -->
+  <script src="/assets/libs/UI-Bootstrap/ui-bootstrap-tpls-0.11.2.min.js"></script>
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- IMPORTING ANGULAR APP MODULE + ROUTER -->
+  <script src="/app.module.js"></script>
+  <script src="/app.routes.js"></script>
+  <!-- <script src="/assets/libs/angular-ui-router.min.js"></script> -->
+
+
+  <script src="/shared/sidebar/sidebar.controller.js"></script>
+  <script src="/services/data.service.js"></script>
+  <script src="/services/queue-preferences.service.js"></script>
+
+  <!-- COMPONENTS -->
+  <script src="/components/queue/queue-sport.controller.js"></script>
+  <script src="/components/queue/queue-location.controller.js"></script>
+  <script src="/components/queue/queue-preferences.controller.js"></script>
+  <script src="/components/search/search-player.controller.js"></script>
+  <script src="/components/profile/view-profile.controller.js"></script>
+  <script src="/components/home/home.controller.js"></script>
+  <script src="/components/settings/settings.controller.js"></script>
+  <script src="/components/games/create-game.controller.js"></script>
+  <script src="/components/games/view-game.controller.js"></script>
+  <script src="/components/games/view-games.controller.js"></script>
+  <script src="/components/friends/view-friends.controller.js"></script>
+
+  <!-- CSS -->
+  <link href="/assets/css/style.css" rel="stylesheet">
+
+  <!-- Default Link Paths -->
+  <base href="/">
+
+</head>
+
+<body>
+
+  <div>
+
+
+    <div class="container-fluid">
+
+      <div class="row row-offcanvas row-offcanvas-left">
+
+        <!-- @SIDEBAR Size -->
+        <div class="col-sm-3 col-md-3 sidebar-offcanvas sidebar" id="sidebar" ng-controller="SidebarController">
+
+          <image id="logo" src="/assets/img/SportanaWhite-08.png" width="auto" alt="Sportana"></image>
+
+          <ul class="nav nav-sidebar" >
+            <li ng-class="{ active: isActive('/')}"><a href="/">Home</a></li>
+            <li ng-class="{ active: isActive('/friends')}" ><a href="/friends">View Friends</a></li>
+            <li ng-class="{ active: isActive('/user/search/query')}"><a href="/user/search/query">Search Player</a></li>
+            <li ng-class="{ active: isActive('/user/userId')}"><a href="/user/userId">View Profile</a></li>
+            <li ng-class="{ active: isActive('/settings')}"><a href="/settings">Settings</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">Game<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-class="{ active: isActive('/game/gameId')}"><a href="/game/gameId">View Game</a></li>
+                <li ng-class="{ active: isActive('/game/create')}"><a href="/game/create">Create Game</a></li>
+                <li ng-class="{ active: isActive('/game/join')}"><a href="/game/join">Join Game</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="nav nav-sidebar">
+            <li><a ng-click="setTab('none')" ui-sref="home">Dashboard</a></li>
+            <li><a ng-click="setTab('none')" ui-sref="user({userId: 'rmullens'})">Profile</a></li>
+            <li><a ng-click="setTab('games')">Games</a></li>
+          <ul ng-show="isShown('games')">
+            <li><a ui-sref="queue">Join Game</a></li>
+            <li><a ui-sref="games">My Games</a>
+          </ul>
+            <li><a ui-sref="friends">Friends</a></li>
+          </ul>
+
+        </div>
+
+        <!-- @CONTENT_VIEW Size -->
+        <div class="col-sm-9 col-sm-offset-3 col-md-offset-3 main">
+
+        <!-- @SEARCH_BAR Size -->
+        <div id="searchBar" class="navbar navbar-default navbar-fixed-top container col-sm-offset-3 col-md-offset-3" ng-controller="SearchbarController as searchCtrl" role="navigation">
+
+        <button type="button" class="col-xs-2 btn btn-md btn-link" id="toggleMenuBtn" data-toggle="offcanvas"><span class="glyphicon glyphicon-align-justify"></span></button>
+
+
+          <form class="navbar-form navbar-left" role="search" ng-submit="submitSearch()">
+
+            <div class="form-group col-xs-10">
+              <input id="search" ng-model="searchQuery" type="text" class="form-control" placeholder="Search for Players">
+            </div>
+          </form>
+
+        </div>
+
+        <!-- @PARTIALS are injected here -->
+        <div class="container-fluid injected" ui-view></div>
+      </div>
+    </div>
+  </div>
+</body>

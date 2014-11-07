@@ -12,7 +12,7 @@ function getLogin(callback, login, password) {
     	var SQLQuery = "SELECT Users.password FROM Users " +
                      "WHERE Users.login = $1";
     	client.query({ text : SQLQuery,
-                     values [login]},
+                     values : [login]},
         function (err, result) {
         // Ends the "transaction":
         done();
@@ -42,7 +42,7 @@ function getUserByAuth(id, callback) {
     	var SQLQuery = "SELECT Users.login FROM Users " +
                      "WHERE Users.auth = $1";
       	client.query({ text : SQLQuery,
-                     values [id]},
+                     values : [id]},
         function (err, result) {
         // Ends the "transaction":
         done();
@@ -72,7 +72,7 @@ function getUserProfile(login, callback) {
 			var SQLQuery = "SELECT * FROM Users " +
             "WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
-            values [login]},
+            values : [login]},
             function(err, result){
             	done();
             	client.end();

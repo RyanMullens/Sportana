@@ -1,0 +1,8 @@
+<div id="preferences">
+
+<h1>Preferencess</h1>
+	<h2>Selected Sports</h2>
+		<button class="btn" ng-click="preferences.finish()">Next</button>
+		<div ng-repeat="sport in sports.getSports()" ng-class="{selected: sports.isSelected(sport)}" ng-click="sports.toggle(sport)">
+
+</div>

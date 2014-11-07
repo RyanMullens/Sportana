@@ -1,0 +1,24 @@
+<div id="sportSelection">
+
+	<div id="instructions">
+		Select your preferred sports.
+		<button class="btn" ng-show="sports.hasSelectedSports()" ng-click="sports.finish()">Next</button>
+	</div>
+
+	<div id="sportPicker">
+    	<div class="sportPanel" ng-repeat="sport in sports.getSports()" ng-class="{selected: sports.isSelected(sport)}" ng-click="sports.toggle(sport)">
+    		<img class="sportIcon" ng-src="{{sport.icon}}"/>
+    		<br>{{sport.name}}<br>
+    		<span class="description">
+	    		{{sport.description}}
+    		</span>
+	   </div>
+	</div>
+
+	<div id="selectedSports">
+
+		<!-- TODO : Replace remove with toggle? -->
+		<button class="btn" ng-repeat="sport in sports.getSelectedSports()" ng-click="sports.removeSport(sport)">{{sport.name}}  X</button>
+	</div>
+
+</div>

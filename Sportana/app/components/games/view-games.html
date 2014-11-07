@@ -1,0 +1,11 @@
+<h1 class="page-header">View Games</h1>
+<div id="viewGames">
+	<div class="row invitations">
+		<div class="row invitation">
+		</div>
+	</div>
+	<div class="games" ng-show="viewGames.hasGames()">
+		<div class="game" ng-repeat="game in viewGames.getGames()" >
+			{{game.sport}} <img ng-src='{{game.sportImg}}' /> Players Joined: {{game.playersJoined}} Players Invited: {{game.playersInvited}} Date: {{game.date}} Time: {{game.time}} Location: {{game.location}} <a class="button" ui-sref="viewGame({gameId: game.id})">View Game</a>
+		</div>
+	</div>

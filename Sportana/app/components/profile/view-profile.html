@@ -1,0 +1,40 @@
+<h1 class="page-header">View Profile</h1>
+<body>
+	<p>
+		<div>
+			Name: {{ view.getFullName() }}
+			<br>
+			Username: {{ viewProfile.getUsername() }}
+			<br>
+			City: {{ viewProfile.getCity() }}
+			<br>
+			Age: {{ viewProfile.getAge() }}
+			<br>
+			Rated: {{ viewProfile.isRated() }}
+			<br>
+			Self: {{ viewProfile.isSelf() }}
+
+			<div id='Ratings'>
+					Friendliness: {{viewProfile.getRatings().friendliness}}
+					<br>
+					Timeliness: {{viewProfile.getRatings().timeliness}}
+					<br>
+					Skill: {{viewProfile.getRatings().skill}}
+					<br>
+					<br>
+			</div>
+
+			<div id='SportsContainer'>
+				<div ng-repeat="sport in viewProfile.getFavoriteSports()" class='Sport'>
+					{{sport.sportName}}
+					<img ng-src="{{sport.sportImage}}"/>
+
+					<br>
+					<br>
+					}
+				</div>
+			</div>
+
+		</div>
+	</p>
+</body>
