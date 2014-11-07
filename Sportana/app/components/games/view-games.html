@@ -1,11 +1,23 @@
 <h1 class="page-header">View Games</h1>
 <div id="viewGames">
-	<div class="row invitations">
-		<div class="row invitation">
+	<div class="row notifications" ng-show="viewGames.hasNotifications">
+		<div class="row notification" ng-repeat="notification in viewGames.getNotifications()">
+			<div class="row">
+				<span class="col-md-4">{{notification.sport}}: <img class="sport" ng-src='{{notification.sportImg}}' /></span>
+				<span class="col-md-4"><a class="button" ui-sref="viewGame({gameId: notification.id})">View Game</a></span>
+				<span class="col-md-4">Date: {{notification.date}} Time: {{notification.time}}</span>
+			</div>
+			<div class="row">
+			<span class="col-md-3">Players Going: {{notification.playersJoined}}</span>
+			<span class="col-md-3">Players Invited: {{notification.playersInvited}}</span>
+			<span class="col-md-3">Invited By: <a ui-sref="user({userId: notification.invitedBy})"></a></span>
+			<span class="col-md-3"><button type="button" ng-click="viewGames.acceptGame(notification, true)" class="btn btn-success">Accept</button><button type="button" ng-click="viewGames.acceptGame(notification, false)" class="btn btn-danger">Decline</button></span>
+			</div>
 		</div>
 	</div>
 	<div class="games" ng-show="viewGames.hasGames()">
+		<div class=""></div>
 		<div class="game" ng-repeat="game in viewGames.getGames()" >
-			{{game.sport}} <img ng-src='{{game.sportImg}}' /> Players Joined: {{game.playersJoined}} Players Invited: {{game.playersInvited}} Date: {{game.date}} Time: {{game.time}} Location: {{game.location}} <a class="button" ui-sref="viewGame({gameId: game.id})">View Game</a>
+			{{game.sport}} <img class="sport" ng-src='{{game.sportImg}}' /> Players Joined: {{game.playersJoined}} Players Invited: {{game.playersInvited}} Date: {{game.date}} Time: {{game.time}} Location: {{game.location}} <a class="button" ui-sref="viewGame({gameId: game.id})">View Game</a>
 		</div>
 	</div>
