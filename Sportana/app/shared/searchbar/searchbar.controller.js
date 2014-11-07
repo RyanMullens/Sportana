@@ -1,4 +1,4 @@
-app.controller("SearchbarController", function($scope, $state)
+app.controller("SearchbarController", function($scope, $state, sidebarService)
 {
 	this.searchQuery = '';
 
@@ -7,6 +7,12 @@ app.controller("SearchbarController", function($scope, $state)
 		//alert("TEST: " + this.searchQuery);
 		//console.log("TEST: " + this.searchQuery);
 		$state.go('app.searchPlayer', {query: encodeURIComponent(this.searchQuery)});
+	}
+
+	$scope.toggleMenu = function()
+	{
+		console.log("TOGGLE! :D");
+		sidebarService.toggleMenuShown()	
 	}
 
 	//$scope.escape

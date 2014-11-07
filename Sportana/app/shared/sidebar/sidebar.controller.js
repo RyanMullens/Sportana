@@ -1,9 +1,11 @@
 //This is where all the controllers will go for now... They will be refactored and split up into their own
 //files for each page as we go though.
 
-app.controller("SidebarController", function($scope, $location)
+app.controller("SidebarController", function($scope, $location, sidebarService)
 {
 	this.currentTab = 'home';
+	this.showMenu = false;
+
 
 	$scope.isActive = function (viewLocation) {
 		return viewLocation === $location.path();
@@ -14,11 +16,17 @@ app.controller("SidebarController", function($scope, $location)
 		this.currentTab = newTab;
 	}
 
-	$scope.isShown = function(tab)
+	$scope.isTabShown = function(tab)
 	{
 		return this.currentTab == tab;
 	}
+
+	$scope.isMenuActive = function()
+	{
+		return sidebarService.getMenuShown();
+	}
 });
+
 
 /*app.controller("ViewFriendsController", function($http){
 	$http.get('/api/friends').success(function(data, status, headers, config) {

@@ -1,16 +1,16 @@
 <div class="col-sm-3 col-md-3 sidebar-offcanvas sidebar" id="sidebar">
 
-          <image id="logo" src="/assets/img/SportanaWhite-08.png" width="auto" alt="Sportana"></image>
+  <image id="logo" src="/assets/img/SportanaWhite-08.png" width="auto" alt="Sportana"></image>
 
-          <ul class="nav nav-sidebar">
-            <li><a ng-click="setTab('none')" ui-sref="app.home">Dashboard</a></li>
-            <li><a ng-click="setTab('none')" ui-sref="app.user({userId: 'rmullens'})">Profile</a></li>
-            <li><a ng-click="setTab('games')">Games</a></li>
-          <ul ng-show="isShown('games')">
-            <li><a ui-sref="app.queue">Join Game</a></li>
-            <li><a ui-sref="app.games">My Games</a>
-          </ul>
-            <li><a ui-sref="app.friends">Friends</a></li>
-          </ul>
+  <ul class="nav nav-sidebar">
+    <li><a ng-click="setTab('none')" ui-sref="app.home">Dashboard</a></li>
+    <li><a ng-click="setTab('none')" ui-sref="app.user({userId: 'rmullens'})">Profile</a></li>
+    <li><a ng-click="setTab('games')">Games</a></li>
+    <ul ng-show="isTabShown('games')">
+      <li><a ui-sref="app.queue">Join Game</a></li>
+      <li><a ui-sref="app.games">My Games</a>
+      </ul>
+      <li><a ui-sref="app.friends">Friends</a></li>
+    </ul>
 
-        </div>
+  </div>

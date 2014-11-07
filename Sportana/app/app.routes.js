@@ -156,11 +156,3 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   }
 })
 });
-
-
-// TODO : Does this really belong here?
-$(document).ready(function () {
-  $('[data-toggle="offcanvas"]').click(function () {
-    $('.row-offcanvas').toggleClass('active')
-  });
-});
