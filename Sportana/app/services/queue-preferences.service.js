@@ -1,6 +1,6 @@
 // Created by: @bread on 10/25
 // TODO : Use nested services (eg. Scheduling should be a separate service)
-app.service('queueService', function() {
+app.service('QueueService', function() {
 
   // The object the stores all current queue preferences
   // Send/Restore from DB when leaving/entering preferences page
@@ -58,7 +58,7 @@ app.service('queueService', function() {
 
   // OTHER
   var setIntensity = function(intensity){
-  		var DEFAULT = "CASUAL"; 
+  		var DEFAULT = "CASUAL";
       preferences.intensity = (intensity) ? intensity : DEFAULT;
   }
   var getIntensity = function(){
