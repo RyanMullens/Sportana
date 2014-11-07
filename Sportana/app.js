@@ -5,14 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-/*var friends = require('./routes/viewFriends');
-var user = require('./routes/user');
-var settings = require('./routes/settings');
-var game = require('./routes/viewGame');
-var join = require('./routes/joinGame');
-var create = require('./routes/createGame');*/
-var apis = require('./routes/api');
+// Routes
+var friends = require('./routes/friends');
+var login = require('./routes/login');
+var users = require('./routes/users');
+var requests = require('./routes/requests');
 
 var app = express();
 
@@ -28,18 +25,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'app')));
 
-//All apis
-// app.use('/api/', apis);
 
-/*app.use('/friends', friends);
-app.use('/user', user);
-app.use('/settings', settings);
-app.use('/game/:gameId', game);
-app.use('/game/join', join);
-app.use('/game/create', create);*/
+app.use('/friends', friends);
+app.use('/login', login);
+app.use('/users', users);
+app.use('/requests', requests);
 
-//Everything else? For now
-app.use('*', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
