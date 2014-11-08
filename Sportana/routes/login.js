@@ -9,13 +9,14 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 var authenticator = require('./authentication'); // Authentication Handler
 
 /* POST logs in user */
+// .../api/login
 router.post('', function(req, res) {
 
 	var email = req.body.email;
 	var password = req.body.password;
 	var arr = email.split("@");
 	var username = arr[0]; // Username is part before the @
-	
+	//response is authentication token
    authenticator.authenticate(username, password, function(err, authenticationToken) {
     	  var response = {};
     	  if (err) {
