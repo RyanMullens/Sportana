@@ -82,8 +82,8 @@ exports.getUserProfile = function (login, callback) {
             		callback(err);
             	}
             	else {
-            		console.log("Database returned: \n" + result.rows);
-            		return JSON.stringify(result.rows);
+            		console.log("Database returned: \n" + result.rows[0]);
+            		callback(undefined, result.rows[0]);
             	}
              });
 		}
@@ -118,13 +118,13 @@ exports.putUserAuth = function(login, auth, callback) {
  * getFriendsList
  * Returns the list of friends of the given username
  *
- * “friends” : [{
- * 		“login”: 			login
- * 		“profilePhoto”:  	string // url of photo
- * 		“firstName”:		string
- * 		“lastName”:			string
- * 		“age”:				int
- * 		“city”:				string
+ * â€œfriendsâ€� : [{
+ * 		â€œloginâ€�: 			login
+ * 		â€œprofilePhotoâ€�:  	string // url of photo
+ * 		â€œfirstNameâ€�:		string
+ * 		â€œlastNameâ€�:			string
+ * 		â€œageâ€�:				int
+ * 		â€œcityâ€�:				string
  * }]
  *
  *****************************************************
@@ -192,6 +192,57 @@ exports.removeFriend = function(username, friendLogin, callback) {
 	});
 };
 
+exports.createUser = function(UserObject, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(err)
+		}
+		else {
+			//check if user exists
+			var SQLQuery = "SELECT * FROM Users " +
+            "WHERE Users.login = $1";
+			client.query({ text : SQLQuery,
+            values : [UserObject.login]},
+            function(err, result){
+            	done();
+            	client.end();
+            	if(err){
+            		callback(err);
+            	}
+            	else {
+            		if(result.rows == "" || results.rows == null){
+            		console.log("Database did not find User with login: " + UserObject.login + ". Creating new User.");
+					var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstname, lastname, dateOfBirth, city) VALUES (" +
+							"$1, $2, $3, $4, $5, $6, $7)";
+					client.query({ text : SQLQuery,
+		            values : [UserObject.login,
+		            UserObject.emailSuffix,
+		            UserObject.password,
+		            UserObject.firstname,
+		            UserObject.lastname,
+		            UserObject.dateOfBirth,
+		            UserObject.city]
+					},
+		            function(err, result){
+		            	done();
+		            	client.end();
+		            	if(err){
+		            		callback(err);
+		            	}
+		            	else {
+		            		console.log("Database insert succeeded");
+		            		//return JSON.stringify(result.rows);
+		            		callback(undefined, result.rows);
+		            	}
+		            });
+            	}
+            }
+		}
+	);
+	}
+	});
+}
+
 exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
   pg.connect(connString, function(err, client, done) {
       if(err) {
@@ -215,6 +266,3 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
     }
   });
 };
-
-
-
