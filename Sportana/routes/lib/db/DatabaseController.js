@@ -18,13 +18,13 @@ exports.getLogin = function(login, password, callback) {
         done();
         // Disconnects from the database:
         client.end();
+        // This cleans up connected clients to the database and allows subsequent requests to the database
+        pg.end();
         if (err) {
           callback(err, false);
         }
         else {
-        console.log("Password in db: " + result.rows["password"]);
-        console.log("Password given: " + password);
-          if (result.rows["password"] === password) {
+          if (result.rows[0].password === password) {
             callback(undefined, true);
           } else {
             callback(undefined, false);
@@ -90,27 +90,25 @@ exports.getUserProfile = function (login, callback) {
 	});
 };
 
-exports.putUserAuth = function(user, auth, callback) {
+exports.putUserAuth = function(login, auth, callback) {
 	pg.connect(connString, function(err, client, done) {
-		if(err) {
-			callback(err, false)
+	    if(err) {
+			callback(false);
 		}
 		else {
-			var SQLQuery = "UPDATE Users SET auth=$1 WHERE Users.login = $2";
-			client.query({ text : SQLQuery,
-            			   values : [auth, login]},
-             function(err, result){
-            	done();
-            	client.end();
+			var SQLQuery = "UPDATE Users SET auth=$1 WHERE login = $2";
+			client.query(SQLQuery, [auth, login], function(err, result) {
+             	done();
             	if(err){
-            		callback(err, false);
+            		console.log("Error section 2: " + err);
+					callback(false);
             	}
             	else {
-            		callback(undefined, true);
+					callback(true);
             	}
+				client.end();
              });
 		}
 	});
-
 };
 

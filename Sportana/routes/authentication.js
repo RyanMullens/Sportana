@@ -3,25 +3,35 @@ var base64url = require('base64url'); // for base 64 encoding
 
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
+var AUTHENTICATION_TOKEN_SIZE = 64;
+
+
 var makeAuthToken = function(size) {
     return base64url(crypto.randomBytes(size));
 };
+function loop(cursor) {
+  getFriends(cursor, function(cursor) {
+    if (cursor != 0) loop(cursor);
+    else return;
+  });
+}
+
 
 var serializeUser = function(username, callback) {
-console.log("Serializing user");
-  var auth = "";
-  var uniqueAuthLoop = true;
-  while (uniqueAuthLoop) {
-  	auth = makeAuthToken(128);
-  	dbc.putUserAuth(user, auth, function(err, success) {
-  		if (err || (success === false)) {
-  			// repeat loop
-  		} else {
-  			uniqueAuthLoop = false;
-  		}
-  	});
- }
-  callback(undefined, auth);
+  var auth = makeAuthToken(AUTHENTICATION_TOKEN_SIZE);
+  serializeUserHelper(username, auth, function(success) {
+  	if (success !== true) {
+  		serializeUser(username, callback);
+  	} else {
+  		callback(undefined, auth);
+  	}
+  });
+};
+
+var serializeUserHelper = function(username, auth, callback) {
+  dbc.putUserAuth(username, auth, function(status) {
+  	callback(status);
+  });
 };
 
 exports.deserializeUser = function(id, done) {
@@ -31,10 +41,9 @@ exports.deserializeUser = function(id, done) {
 };
 
 exports.authenticate = function(username, password, callback) {
-	dbc.getLogin(username, password, function(err, status) {
+		dbc.getLogin(username, password, function(err, status) {
 		if (err) {
 			callback(err, "");
-			console.log("Error was returned from getLogin");
 		}
 		if (status === true) {
 			serializeUser(username, callback);
@@ -42,4 +51,4 @@ exports.authenticate = function(username, password, callback) {
 			callback("Error with credentials", "");
 		}
 	});
-}
+};
