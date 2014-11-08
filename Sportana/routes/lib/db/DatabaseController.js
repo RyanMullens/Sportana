@@ -192,3 +192,29 @@ exports.removeFriend = function(username, friendLogin, callback) {
 	});
 };
 
+exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
+  pg.connect(connString, function(err, client, done) {
+      if(err) {
+      callback(err);
+    }
+    else {
+      var SQLQuery = "INSERT INTO Game(creator , gameDate, gameStart, gameEnd, sport , location , maxPlayers, minPlayers, reservedSpots, minAge, maxAge , isPublic) values "+
+      "($1 , $2,$3 , $4,$5 , $6,$7 , $8, $9 ,$10 , $11, $12)";
+      client.query(SQLQuery, [email, sportID, startTime, endTime, gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+            pg.end();
+              if(err){
+          callback(err);
+              }
+              else {
+          callback(undefined);
+              }
+             });
+    }
+  });
+};
+
+
+
