@@ -1,5 +1,5 @@
 var pg = require('pg');
-var ageHelper = require('../helpers/ageHelper');
+var timeHelper = require('../helpers/timeHelper');
 
 //connectionString = process.env.DATABASE_URL || allows for deployed app db connection
 var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
@@ -118,13 +118,12 @@ exports.putUserAuth = function(login, auth, callback) {
  * getFriendsList
  * Returns the list of friends of the given username
  *
- * â€œfriendsâ€� : [{
- * 		â€œloginâ€�: 			login
- * 		â€œprofilePhotoâ€�:  	string // url of photo
- * 		â€œfirstNameâ€�:		string
- * 		â€œlastNameâ€�:			string
- * 		â€œageâ€�:				int
- * 		â€œcityâ€�:				string
+ * friends : [{
+ * 		login: 			login
+ * 		profilePhoto:  	string // url of photo
+ * 		firstName:		string
+ * 		age:			int
+ * 		city:			string
  * }]
  *
  *****************************************************
@@ -158,7 +157,7 @@ exports.getFriendsList = function(username, callback) {
   					friend.firstName = result.rows[i].firstname;
   					friend.lastName = result.rows[i].lastname;
   					friend.city = result.rows[i].city;
-  					friend.age = ageHelper.makeAgeFromBirthday(result.rows[i].birthday);
+  					friend.age = timeHelper.makeAgeFromBirthday(result.rows[i].birthday);
   					friends.push(friend);
 		  		}
           		callback(undefined, friends);
@@ -266,3 +265,42 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
     }
   });
 };
+
+exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameID, callback) {
+	var type;
+	if (reqType === "friend") {
+		type = 0;
+	} else if (reqType === "game") {
+		type = 1;
+	} else if (reqType === "queue") {
+		type = 2;
+	} else if (reqType === "reminder") {
+		type = 3;
+	} else {
+		callback("Unsupported type of notification sent");
+	}
+	var now = timeHelper.getCurrentDateAndTime();
+	pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO Notifications(userTo, userFrom, type, timeSent, creator, gameID) VALUES "+
+    	  "($1, $2, $3, $4, $5, $6)";
+    	  client.query(SQLQuery, [friendLogin, username, type, now, gameCreator, gameID], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
+	
+	
+};	

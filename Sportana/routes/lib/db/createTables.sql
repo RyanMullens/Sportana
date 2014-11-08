@@ -243,7 +243,9 @@ CREATE OR REPLACE FUNCTION update_notificationID()
 		END IF;	   
 	   		RETURN NEW;
 	END;
-	$$ language 'plpgsql';		
+	$$ language 'plpgsql';	  	
+	
+	-- ADJUST NUM_PARTICIPANTS IN GAME ON insert or delete on Participants
 
 CREATE TRIGGER auto_increment_gameID
 	BEFORE INSERT ON Game
