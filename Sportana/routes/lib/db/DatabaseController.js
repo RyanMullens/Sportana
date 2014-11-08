@@ -1,4 +1,5 @@
 var pg = require('pg');
+var ageHelper = require('../helpers/ageHelper');
 
 //connectionString = process.env.DATABASE_URL || allows for deployed app db connection
 var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
@@ -50,15 +51,13 @@ exports.getUserByAuth = function(id, callback) {
         done();
         // Disconnects from the database:
         client.end();
+        // This cleans up connected clients to the database and allows subsequent requests to the database
+        pg.end();
         if (err) {
           callback(err);
         }
         else {
-          if (result.rows["login"] === password) {
-            callback(undefined, result.rows["login"]);
-          } else {
-            callback(undefined, undefined);
-          }
+            callback(undefined, result.rows[0].login);
         }
       });
     }
@@ -78,6 +77,7 @@ exports.getUserProfile = function (login, callback) {
              function(err, result){
             	done();
             	client.end();
+            	pg.end();
             	if(err){
             		callback(err);
             	}
@@ -99,6 +99,9 @@ exports.putUserAuth = function(login, auth, callback) {
 			var SQLQuery = "UPDATE Users SET auth=$1 WHERE login = $2";
 			client.query(SQLQuery, [auth, login], function(err, result) {
              	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
             	if(err){
             		console.log("Error section 2: " + err);
 					callback(false);
@@ -106,9 +109,63 @@ exports.putUserAuth = function(login, auth, callback) {
             	else {
 					callback(true);
             	}
-				client.end();
              });
 		}
 	});
 };
 
+/**
+ *****************************************************
+ * getFriendsList
+ * Returns the list of friends of the given username
+ *
+ * “friends” : [{
+ * 		“login”: 			login
+ * 		“profilePhoto”:  	string // url of photo
+ * 		“firstName”:		string
+ * 		“lastName”:			string
+ * 		“age”:				int
+ * 		“city”:				string
+ * }]
+ *
+ *****************************************************
+ */
+exports.getFriendsList = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Users.login, Users.firstName, Users.lastName, Users.profilePicture, Users.birthday, Users.city " +
+    					"FROM Users INNER JOIN Friends ON (Friends.userB=Users.login) WHERE (Friends.userA=$1) ORDER BY Users.firstName ASC";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var friends = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var friend = {};
+  					friend.login = result.rows[i].login;
+  					friend.profilePhoto = result.rows[i].profilepicture;
+  					friend.firstName = result.rows[i].firstname;
+  					friend.lastName = result.rows[i].lastname;
+  					friend.city = result.rows[i].city;
+  					friend.age = ageHelper.makeAgeFromBirthday(result.rows[i].birthday);
+  					friends.push(friend);
+		  		}
+          		callback(undefined, friends);
+        	}
+      });
+    }
+  });
+
+};

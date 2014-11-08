@@ -34,9 +34,9 @@ var serializeUserHelper = function(username, auth, callback) {
   });
 };
 
-exports.deserializeUser = function(id, done) {
+exports.deserializeUser = function(id, callback) {
   dbc.getUserByAuth(id, function(err, username) {
-    done(err, username);
+    callback(err, username);
   });
 };
 
