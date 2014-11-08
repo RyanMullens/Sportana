@@ -10,7 +10,7 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var authenticator = require('./authentication'); // Authentication Handler
 
-router.put('/games', function(req, res) {
+router.put('', function(req, res) {
 
 	var sportID = req.body.sportID;
 	var gameDate = req.body.gameDate;
