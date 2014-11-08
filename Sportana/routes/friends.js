@@ -54,7 +54,28 @@ router.get('/', function (req, res) {
 
 router.delete('/:friendID', function (req, res) {
 	var friendLogin = req.params.friendID;
-	res.send('respond with a resource');
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.removeFriend(username, friendLogin, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 });
 
 module.exports = router;

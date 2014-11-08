@@ -103,7 +103,6 @@ exports.putUserAuth = function(login, auth, callback) {
              	// This cleans up connected clients to the database and allows subsequent requests to the database
         		pg.end();
             	if(err){
-            		console.log("Error section 2: " + err);
 					callback(false);
             	}
             	else {
@@ -167,5 +166,29 @@ exports.getFriendsList = function(username, callback) {
       });
     }
   });
-
 };
+
+
+exports.removeFriend = function(username, friendLogin, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "DELETE FROM Friends WHERE ((userA=$1) AND (userB=$2)) OR ((userB=$3) AND (userA=$4))";
+			client.query(SQLQuery, [username, friendLogin, username, friendLogin], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+					callback(undefined);
+            	}
+             });
+		}
+	});
+};
+
