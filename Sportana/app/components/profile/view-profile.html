@@ -8,55 +8,50 @@
 				<div class = "profileInfoHolder col-md-9">
 					<div class="profileNameHolder row" >
 						<div class="profileName" >
-							{{viewProfile.getFullName()}}
+							{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}
 						</div>
 					</div>
 
-					<div class="row">
+					<div class="profileCity row">
 						{{ viewProfile.getCity() }}
 					</div>
 
-					<div class="row">
-						{{ viewProfile.getAge() }}
-					</div>	
-
 					<div class="ratingsHolder row">
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<div class="row">
 								<div class="barGraphBarHolder">
 									<div class="barGraphBar" style="height: {{100/5 * viewProfile.getFriendliness()}}%;">
-										
+										<div class="barGraphBarValue">{{ viewProfile.getFriendliness() }}</div>
 									</div>
 								</div>
-								{{ viewProfile.getFriendliness() }}
 							</div>
-							<div class="row">
+							<div class="barGraphLabel row">
 								Friendliness
 							</div>
 						</div>
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<div class="row">
 								<div class="barGraphBarHolder">
 									<div class="barGraphBar" style="height: {{100/5 * viewProfile.getTimeliness()}}%;">
 										
+										<div class="barGraphBarValue">{{ viewProfile.getTimeliness() }}</div>
 									</div>
+
 								</div>
-								{{ viewProfile.getTimeliness() }}
 							</div>
-							<div class="row">
+							<div class="barGraphLabel row">
 								Timeliness
 							</div>
 						</div>
-						<div class="col-xs-3">
+						<div class="col-xs-2">
 							<div class="row">
 								<div class="barGraphBarHolder">
 									<div class="barGraphBar" style="height: {{100/5 * viewProfile.getSkill()}}%;">
-										
+										<div class="barGraphBarValue">{{ viewProfile.getSkill() }}</div>
 									</div>
 								</div>
-								{{ viewProfile.getSkill() }}
 							</div>
-							<div class="row">
+							<div class="barGraphLabel row">
 								Skill
 							</div>
 						</div>
