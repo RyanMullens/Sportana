@@ -1,10 +1,10 @@
-<div class="col-sm-3 col-md-3 sidebar-offcanvas sidebar" id="sidebar">
+<div class="col-sm-3 col-md-3 sidebar-offcanvas sidebar" ng-class="{active:isMenuActive()}" id="sidebar">
 
   <image id="logo" src="/assets/img/SportanaWhite-08.png" width="auto" alt="Sportana"></image>
 
   <ul class="nav nav-sidebar">
     <li><a ng-click="setTab('none')" ui-sref="app.home">Dashboard</a></li>
-    <li><a ng-click="setTab('none')" ui-sref="app.user({userId: 'rmullens'})">Profile</a></li>
+    <li><a ng-click="setTab('none')" ui-sref="app.user({userId: 'myoda'})">Profile</a></li>
     <li><a ng-click="setTab('games')">Games</a></li>
     <ul ng-show="isTabShown('games')">
       <li><a ui-sref="app.queue">Join Game</a></li>

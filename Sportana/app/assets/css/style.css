@@ -101,6 +101,63 @@ body {
 
 /****  END VIEWGAMES ****/
 
+/**** START VIEW PROFILE ****/
+
+.profile{
+  margin: 10px;
+  background-color: rgb(200,200,200);
+}
+
+.profileName{
+    font-size: 42px;
+} 
+
+.profileInfoHolder{
+
+
+}
+
+.profileNameHolder{
+
+}
+
+.profileImage{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 80%;
+}
+
+.profileImageHolder{
+  
+}
+
+.ratingsHolder
+{
+  
+}
+
+.barGraphBarHolder
+{
+  background-color:#ffffff; 
+  height:100px; 
+  width:50px;
+  position:relative;
+}
+
+.barGraphBar
+{
+  background-color:#bb2222; 
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/**** END VIEW PROFILE ****/
+
+
+
+
 @media (max-width: 767px) {
 	.navbar-form
 	{
