@@ -45,6 +45,14 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope){
 		{
 			console.log(data);
     		$scope.user = data;
+
+    		$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
+							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
+							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
+							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
+							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
+							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];
+
 		})
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
