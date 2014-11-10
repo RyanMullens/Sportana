@@ -8,6 +8,28 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var authenticator = require('./authentication'); // Authentication Handler
 
+/**
+ *****************************************************
+ * GET	/requests
+ * REQUEST:
+ * {
+ *  "id"            : int
+ *  "userFrom" 	    : string
+ *  "userFromImage" : string // url
+ *  "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
+ *  "date"          : date // yyyy-mm-dd format
+ *  "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
+ *  "gameCreator"   : string // for types 1, 2, and 3
+ *  "gameID"        : int // for types 1, 2, and 3
+ * }	
+ *
+ * RESPONSE:
+ * {
+ * 	“message” : string    // empty on success
+ * 	“success” : boolean
+ * }
+ *****************************************************
+ */
 router.get('', function (req, res) {
 	
 });
@@ -17,9 +39,9 @@ router.get('', function (req, res) {
  * PUT	/requests/game
  * REQUEST:
  * {
- * 	“userToID” : string
+ * 	“userToID”    : string
  *	“gameCreator” : string
- *	“gameID” : int
+ *	“gameID”      : int
  * }	
  *
  * RESPONSE:

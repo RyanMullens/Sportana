@@ -8,8 +8,23 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var authenticator = require('./authentication'); // Authentication Handler
 
-/* POST logs in user */
-// .../api/login
+/**
+ *****************************************************
+ * POST	/login
+ * REQUEST:
+ * {
+ * 	“email"    : string
+ *  "password" : string
+ * }	
+ *
+ * RESPONSE:
+ * {
+ * 	“message”             : string    // empty on success
+ * 	“success”             : boolean
+ *  "authenticationToken" : string // users authentication token
+ * }
+ *****************************************************
+ */
 router.post('', function(req, res) {
 
 	var email = req.body.email;

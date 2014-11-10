@@ -13,16 +13,23 @@ var authenticator = require('./authentication'); // Authentication Handler
  * GET /friends
  * Returns the list of friends of the requesting user
  *
- * “friends” : [{
- * 		“login”: 			login
- * 		“profilePhoto”:  	string // url of photo
- * 		“firstName”:		string
- * 		“lastName”:			string
- * 		“age”:				int
- * 		“city”:				string
- * }]
- * “message” : string    // empty on success
- * “success” : boolean
+ * REQUEST:
+ * {
+ * }	
+ *
+ * RESPONSE:
+ * {
+ *  “friends” : [{
+ * 	 	“login”        :	login
+ * 	 	“profilePhoto” :  	string // url of photo
+ * 		“firstName”    :	string
+ * 		“lastName”     :	string
+ * 		“age”          :	int
+ * 		“city”         :	string
+ *  }]
+ *  “message” : string    // empty on success
+ *  “success” : boolean
+ * }
  *
  *****************************************************
  */
@@ -52,6 +59,22 @@ router.get('/', function (req, res) {
 	});
 });
 
+/**
+ *****************************************************
+ * DELETE /friends/{friendID}
+ *
+ * REQUEST:
+ * {
+ * }	
+ *
+ * RESPONSE:
+ * {
+ *  “message” : string    // empty on success
+ *  “success” : boolean
+ * }
+ *
+ *****************************************************
+ */
 router.delete('/:friendID', function (req, res) {
 	var friendLogin = req.params.friendID;
 	var auth = req.get('SportanaAuthentication');
