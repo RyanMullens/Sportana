@@ -70,8 +70,10 @@ exports.getUserProfile = function (login, callback) {
 			callback(err)
 		}
 		else {
-			var SQLQuery = "SELECT * FROM Users " +
-            "WHERE Users.login = $1";
+			var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname," +
+					"Users.city, Users.birthday, Users.friendliness, Users.timeliness, Users.skilllevel, FavoriteSports.sport " +
+					"FROM Users NATURAL JOIN FavoriteSports " +
+					"WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
             			   values : [login]},
              function(err, result){
@@ -82,7 +84,8 @@ exports.getUserProfile = function (login, callback) {
             		callback(err);
             	}
             	else {
-            		console.log("Database returned: \n" + result.rows[0]);
+            		result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
+            		console.log("Database returned: \n" + result.rows[0]["birthday"]);
             		callback(undefined, result.rows[0]);
             	}
              });
