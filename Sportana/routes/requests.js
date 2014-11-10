@@ -98,9 +98,78 @@ router.put('/friend', function(req, res) {
 	});
 });
 
-// NOTE: This will also remove the request from the database as it has been seen/responded to
+/**
+ *****************************************************
+ * PUT	/requests/{requestID}
+ * REQUEST:
+ * {
+ * 	“confirmed”: boolean
+ * }	
+ *
+ * RESPONSE:
+ * {
+ * 	“message” : string    // empty on success
+ * 	“success” : boolean
+ * }
+ *
+ * NOTE: This will also remove the request from the database
+ *		 as it has been seen/responded to.
+ *
+ *****************************************************
+ */
 router.post('/:requestID', function(req, res) {
-	
+	var auth = req.get('SportanaAuthentication');
+	var confirmed = req.body.confirmed;
+	var requestID = req.params.requestID;
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			if (confirmed === 'true') {
+				dbc.acceptRequest(username, requestID, function(err) {
+					if (err) {
+						response.message = err;
+						response.success = false;
+						res.write(JSON.stringify(response));
+          				res.end();
+					} else {
+						dbc.removeRequest(username, requestID, function(err) {
+							if (err) {
+								response.message = err;
+								response.success = false;
+							} else {
+								response.message = "";
+								response.success = true;
+							}
+								res.write(JSON.stringify(response));
+          						res.end();
+						});
+					}
+				});
+			} else if (confirmed === 'false') {
+				dbc.removeRequest(username, requestID, function(err) {
+					if (err) {
+						response.message = err;
+						response.success = false;
+					} else {
+						response.message = "";
+						response.success = true;
+					}
+					res.write(JSON.stringify(response));
+          			res.end();
+				});
+			} else {
+					response.message = "Value for key 'confirmed' was not given as a boolean";
+					response.success = false;
+					res.write(JSON.stringify(response));
+          			res.end();
+			}
+		}
+	});
 });
 
 module.exports = router;

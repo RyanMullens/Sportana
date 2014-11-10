@@ -167,6 +167,39 @@ exports.getFriendsList = function(username, callback) {
   });
 };
 
+var addFriend = function(username, friendUsername, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "INSERT INTO Friends(userA, userB) VALUES ($1, $2)";
+			client.query(SQLQuery, [username, friendUsername], function(err, result) {
+             	done();
+            	if(err){
+            		client.end();
+             		// This cleans up connected clients to the database and allows subsequent requests to the database
+        			pg.end();
+					callback(err);
+            	}
+            	else {	
+   	          		client.query(SQLQuery, [friendUsername, username], function(err, result) {
+             			done();
+             			client.end();
+             			// This cleans up connected clients to the database and allows subsequent requests to the database
+        				pg.end();
+            			if(err){
+							callback(err);
+            			}
+            			else {
+							callback(undefined);
+            			}
+             		});
+            	}
+             });
+		}
+	});
+};
 
 exports.removeFriend = function(username, friendLogin, callback) {
 	pg.connect(connString, function(err, client, done) {
@@ -300,7 +333,78 @@ exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameI
               }
          });
     }
-  });
-	
-	
+  });	
 };	
+
+
+exports.acceptRequest = function(username, requestID, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "SELECT userFrom, type, creator, gameID FROM Notifications " +
+					       "WHERE (userTO=$1) AND (nid=$2)";
+			client.query(SQLQuery, [username, requestID], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+            	console.log(result);
+					var from = result.rows[0].userfrom;
+					var type = result.rows[0].type;
+					var gameCreator = result.rows[0].creator;
+					var gameID = result.rows[0].gameid;
+					if (type === 0) { // Friend
+						addFriend(username, from, callback);
+					} else if (type === 1) { // Game
+						joinGame(username, gameCreator, gameID, callback);
+					} else if (type === 2) { // Queue
+						joinQueue(username, gameCreator, gameID, callback);
+					} else if (type === 3) { // Game reminder
+						callback("You do not need to reply to game reminders");
+					} else { // Not defined
+						callback("Type of notification not recognized");
+					}
+            	}
+             });
+		}
+	});
+};
+
+exports.removeRequest = function(username, requestID, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (nid=$2)";
+			client.query(SQLQuery, [username, requestID], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+					callback(undefined);
+            	}
+             });
+		}
+	});
+};
+
+exports.joinGame = function(username, gameCreator, gameID, callback) {
+	callback("Not yet implemented");
+};
+
+exports.joinQueue = function(username, gameCreator, gameID, callback) {
+	callback("Not yet implemented");
+};
+
+
