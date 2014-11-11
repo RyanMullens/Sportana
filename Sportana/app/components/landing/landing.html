@@ -1,22 +1,10 @@
-
-<div ng-controller="SignupController as signup">
-
-  <div class="sign-in" ng-switch on="tab">
-
-    <form name="loginForm" id="signupForm" ng-show="!tab || tab === 1" ng-submit="signupForm.$valid" novalidate>
-      <input class="form-control" type="email" placeholder="Email" required></input>
-      <input class="form-control" type="password" Placeholder="Password" required></input>
-      <input class="btn btn-lg btn-primary" type="submit" value="Log in"></input>
-      <button href ng-click="tab = 2" type="button" class="btn btn-link">Create Account</button>
-    </form>
-
-    <form name="signupForm" id="signupForm" ng-show="tab === 2" ng-submit="signupForm.$valid && signup.createUser()" novalidate>
-      <input class="form-control" type="email" ng-model="signup.user.email" placeholder="Email" required></input>
-      <input class="form-control" type="name" ng-model="signup.user.name" placeholder="Full Name" required></input>
-      <input class="form-control" type="password" ng-model="signup.user.password" Placeholder="Password" required></input>
-      <input class="btn btn-lg btn-primary" type="submit" value="Sign Up"></input>
-      <button href ng-click="tab = 1" type="button" class="btn btn-link">Log In</button>
-    </form>
-
-  </div>
-</div>
+<form name="loginForm" ng-controller="Login"
+      ng-submit="login(credentials)" novalidate>
+  <label for="email">Email:</label>
+  <input type="text" id="email"
+         ng-model="credentials.email">
+  <label for="password">Password:</label>
+  <input type="password" id="password"
+         ng-model="credentials.password">
+  <button type="submit">Login</button>
+</form>

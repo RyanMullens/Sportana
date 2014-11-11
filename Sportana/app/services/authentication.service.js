@@ -56,6 +56,10 @@ app.factory("Authentication", function($http, $q, $window) {
 
   init();
 
-  return { login: login };
+  return {
+    login: login,
+    logout: logout,
+    isAuthenticated: isAuthenticated
+  };
 
 });

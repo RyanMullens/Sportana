@@ -15,11 +15,11 @@ router.post('', function(req, res) {
 	var password = req.body.password;
 	var arr = email.split("@");
 	var username = arr[0]; // Username is part before the @
-	
+
    authenticator.authenticate(username, password, function(err, authenticationToken) {
     	  var response = {};
     	  if (err) {
-    	    response.message = err;	
+    	    response.message = err;
     	    response.authenticationToken = "";
     	  } else {
     	  	response.message = "";
