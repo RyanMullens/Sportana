@@ -13,25 +13,51 @@ var authenticator = require('./authentication'); // Authentication Handler
  * GET	/requests
  * REQUEST:
  * {
- *  "id"            : int
- *  "userFrom" 	    : string
- *  "userFromImage" : string // url
- *  "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
- *  "date"          : date // yyyy-mm-dd format
- *  "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
- *  "gameCreator"   : string // for types 1, 2, and 3
- *  "gameID"        : int // for types 1, 2, and 3
- * }	
+ * }
  *
  * RESPONSE:
  * {
- * 	“message” : string    // empty on success
- * 	“success” : boolean
+ * 	“message”  : string    // empty on success
+ * 	“success”  : boolean
+ *  "requests" :
+ *   [{
+ *    "id"            : int
+ *    "userFrom" 	  : string // users login
+ *    "userFromName"  : string // users name
+ *    "userFromImage" : string // url
+ *    "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
+ *    "date"          : date // yyyy-mm-dd format
+ *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
+ *    "gameCreator"   : string // for types 1, 2, and 3
+ *    "gameID"        : int // for types 1, 2, and 3
+ *   }]	
  * }
  *****************************************************
  */
 router.get('', function (req, res) {
-	
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getRequests(username, function(err, requests) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.requests = requests;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 });
 
 /**

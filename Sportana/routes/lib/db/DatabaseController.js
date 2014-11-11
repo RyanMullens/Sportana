@@ -410,4 +410,68 @@ exports.joinQueue = function(username, gameCreator, gameID, callback) {
 	callback("Not yet implemented");
 };
 
-
+/**
+ *****************************************************
+ * getRequests
+ *
+ * Get the requests for the given user
+ *
+ *
+ * Returns:
+ * requests:
+ *   [{
+ *    "id"            : int
+ *    "userFrom" 	  : string // users login
+ *    "userFromName"  : string // users name
+ *    "userFromImage" : string // url
+ *    "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
+ *    "date"          : date // yyyy-mm-dd format
+ *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
+ *    "gameCreator"   : string // for types 1, 2, and 3
+ *    "gameID"        : int // for types 1, 2, and 3
+ *   }]	
+ *****************************************************
+ */
+exports.getRequests = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, Notifications.timeSent, " +
+    	"Notifications.creator, Notifications.gameID, Users.firstName, Users.lastName, Users.profilePicture " +
+    	"FROM Notifications INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+    	"WHERE (Notifications.userTo = $1) ORDER BY Notifications.timeSent DESC";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var requests = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var request = {};
+  					request.id = result.rows[i].nid;
+  					request.userFrom = result.rows[i].userfrom;
+  					request.userFromName = result.rows[i].firstname + " " + result.rows[i].lastname;
+  					request.userFromImage = result.rows[i].profilepicture;
+  					request.type = result.rows[i].type;
+  					request.date = timeHelper.makeDateFromDateAndTime(result.rows[i].timesent);
+  					request.time = timeHelper.makeTimeFromDateAndTime(result.rows[i].timesent);
+  					request.gameCreator = result.rows[i].creator;
+  					request.gameID = result.rows[i].gameid;
+  					requests.push(request);
+		  		}
+          		callback(undefined, requests);
+        	}
+      });
+    }
+  });
+};
