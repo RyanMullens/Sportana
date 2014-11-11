@@ -101,6 +101,171 @@ body {
 
 /****  END VIEWGAMES ****/
 
+/**** START VIEW PROFILE ****/
+
+.profile{
+  margin: 10px;
+  padding: 20px;
+}
+
+@media (max-width: 767px) {
+
+  .profile{
+    margin: 0px;
+    padding: 0px;
+  }
+
+}
+
+
+
+.profileInfoHolder{
+
+
+}
+
+.profileNameHolder{
+
+}
+
+.profileImage{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 50%;
+}
+
+.profileImageHolder{
+  
+}
+
+.profileName{
+    font-size: 42px;
+} 
+
+.profileCity{
+  font-size: 25px;
+  margin-top: -15px;
+}
+
+@media (max-width: 767px) {
+
+  .profileName{
+      text-align: center;
+  } 
+
+  .profileCity{
+      text-align: center;
+  }
+
+}
+
+.profileCategoryTitle
+{
+  margin-top: 60px;
+  font-size: 32px;
+  text-align: center;
+  vertical-align: center;
+}
+
+
+
+
+
+.ratingsHolder
+{
+  margin-top: 25px;
+}
+
+.barGraphBarHolder
+{
+  background-color:#ffffff; 
+  height:100px; 
+  width:50px;
+  position:relative;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.barGraphBarValue
+{
+    font-size: 20px;
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+}
+
+.barGraphLabel
+{
+  text-align: center;
+  font-size: 16px;
+}
+
+.barGraphBar
+{
+  background-color:#bb2222; 
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.profileSportContainer
+{
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .profileSportContainer
+  {
+    width: auto;
+  }
+}
+
+.profileSportHolder
+{
+  display:block;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap; 
+
+  height:150px;
+}
+
+.profileSportList
+{
+  width:1000px;
+}
+
+.profileSport
+{
+  width:125px;
+  float: left;
+}
+
+.profileSport img
+{
+  width:80%;
+  display:block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profileSport .sportName
+{
+  width:100%;
+  text-align: center;
+}
+
+/**** END VIEW PROFILE ****/
+
+
+
+
 @media (max-width: 767px) {
 	.navbar-form
 	{
@@ -129,19 +294,26 @@ body {
   width: 100%;
 }
 
+.searchbarSearchForm{
+  box-shadow: none;
+}
+
 .container-fluid {
   padding-right: 7px;
   padding-left: 5px;
 }
 
-
 #search {
-  width: 400px;
   text-align: center;
   margin 0 0;
   white-space:normal;
 }
 
+@media (min-width: 768px) {
+  #search {
+    width: 400px;
+  }
+}
 
 /* Main -- The region of the screen excluding the sidebar and search bar */
 .main {

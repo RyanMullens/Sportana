@@ -1,40 +1,91 @@
-<h1 class="page-header">View Profile</h1>
 <body>
 	<p>
 		<div>
-			Name: {{ view.getFullName() }}
-			<br>
-			Username: {{ viewProfile.getUsername() }}
-			<br>
-			City: {{ viewProfile.getCity() }}
-			<br>
-			Age: {{ viewProfile.getAge() }}
-			<br>
-			Rated: {{ viewProfile.isRated() }}
-			<br>
-			Self: {{ viewProfile.isSelf() }}
+			<div class="profile row">
+				<div class="row">
+					<div class="profileImageHolder col-md-3">
+						<img class="profileImage" ng-src="{{viewProfile.getProfilePicture()}}"></img>
+					</div>	
+					<div class = "profileInfoHolder col-md-9">
+						<div class="profileNameHolder row" >
+							<div class="profileName" >
+								{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}
+							</div>
+						</div>
 
-			<div id='Ratings'>
-					Friendliness: {{viewProfile.getRatings().friendliness}}
-					<br>
-					Timeliness: {{viewProfile.getRatings().timeliness}}
-					<br>
-					Skill: {{viewProfile.getRatings().skill}}
-					<br>
-					<br>
-			</div>
+						<div class="profileCity row">
+							{{ viewProfile.getCity() }}
+						</div>
 
-			<div id='SportsContainer'>
-				<div ng-repeat="sport in viewProfile.getFavoriteSports()" class='Sport'>
-					{{sport.sportName}}
-					<img ng-src="{{sport.sportImage}}"/>
+							
+					</div>	
+				</div>
 
-					<br>
-					<br>
-					}
+				<hr>
+
+				<div class="profileRatingContainer row">
+					<div class="profileCategoryTitle col-md-4">Rating</div>
+					<div class='col-md-8'>
+
+						<div class="ratingsHolder row">
+							<div class="col-xs-4">
+								<div class="row">
+									<div class="barGraphBarHolder">
+										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getFriendliness()}}%;">
+											<div class="barGraphBarValue">{{ viewProfile.getFriendliness() }}</div>
+										</div>
+									</div>
+								</div>
+								<div class="barGraphLabel row">
+									Friendliness
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="row">
+									<div class="barGraphBarHolder">
+										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getTimeliness()}}%;">
+
+											<div class="barGraphBarValue">{{ viewProfile.getTimeliness() }}</div>
+										</div>
+
+									</div>
+								</div>
+								<div class="barGraphLabel row">
+									Timeliness
+								</div>
+							</div>
+							<div class="col-xs-4">
+								<div class="row">
+									<div class="barGraphBarHolder">
+										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getSkill()}}%;">
+											<div class="barGraphBarValue">{{ viewProfile.getSkill() }}</div>
+										</div>
+									</div>
+								</div>
+								<div class="barGraphLabel row">
+									Skill
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="profileSportContainer row">
+					<div class="profileCategoryTitle col-md-4">Favorite Sports</div>
+					<div class='profileSportHolder col-md-8'>
+						<div class="profileSportList">
+							<div ng-repeat="sport in viewProfile.getFavoriteSports()" class='profileSport'>
+								<img ng-src="{{sport.sportImage}}"></img>
+								<div class="sportName">{{sport.sportName}}</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-
 		</div>
 	</p>
 </body>

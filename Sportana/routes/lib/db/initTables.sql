@@ -71,8 +71,8 @@ INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 ('ckent' , 'myoda' , 3 , 'mscott' , 1);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 ('bwayne' , 'jbond' , 1 , 'ckent' , 1);
-INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('jbond' , 'bwayne' , 0 , 'mscott' , 1);
+INSERT INTO Notifications(userTo , userFrom , type) values
+('jbond' , 'bwayne' , 0);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 ('myoda' , 'bwayne' , 2 , 'mscott' , 1);
 

@@ -115,13 +115,13 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Notifications(
 userTo VARCHAR(50),
-userFrom VARCHAR(50),
+userFrom VARCHAR(50) NOT NULL,
 nid INT,
 type INT, -- 0: friend, 1: game, 2: queue, 3: game reminder
 timeSent TIMESTAMP,
 creator VARCHAR(50),
 gameID INT,
-PRIMARY KEY (userTo, userFrom, nid),
+PRIMARY KEY (userTo, nid),
 FOREIGN KEY (userTo)
 REFERENCES Users(login)
 ON DELETE NO ACTION
@@ -243,7 +243,9 @@ CREATE OR REPLACE FUNCTION update_notificationID()
 		END IF;	   
 	   		RETURN NEW;
 	END;
-	$$ language 'plpgsql';		
+	$$ language 'plpgsql';	  	
+	
+	-- ADJUST NUM_PARTICIPANTS IN GAME ON insert or delete on Participants
 
 CREATE TRIGGER auto_increment_gameID
 	BEFORE INSERT ON Game

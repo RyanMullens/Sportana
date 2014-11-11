@@ -12,6 +12,7 @@ var friends = require('./routes/friends');
 var login = require('./routes/login');
 var users = require('./routes/users');
 var requests = require('./routes/requests');
+var games = require('./routes/games');
 
 var app = express();
 
@@ -31,6 +32,8 @@ app.use('/api/friends', friends);
 app.use('/api/login', login);
 app.use('/api/users', users);
 app.use('/api/requests', requests);
+app.use('/api/games', games);
+
 app.use('*', index);
 
 
