@@ -21,12 +21,12 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
       }
     }
   })
-  .state("app.landing", {
-    url: "/landing" ,
+  .state("app.login", {
+    url: "/login" ,
     views: {
       "content@": {
-        templateUrl: "/components/landing/landing.html",
-        controller: "HomeController as home"
+        templateUrl: "/components/landing/login.html",
+        controller: "Login"
       }
     }
   })

@@ -1,6 +1,11 @@
-<form name="loginForm" ng-controller="Login"
-      ng-submit="login(credentials)" novalidate>
-  <label for="email">Email:</label>
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+<form name="loginForm"
+      action="sink.html" target="sink" method="post"
+      ng-controller="Login"
+      ng-submit="login(credentials)"
+      novalidate form-autofill-fix>
+  <label for="username">Email:</label>
   <input type="text" id="email"
          ng-model="credentials.email">
   <label for="password">Password:</label>

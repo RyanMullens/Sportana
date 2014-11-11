@@ -1,65 +1,34 @@
-app.factory("Authentication", function($http, $q, $window) {
+app.factory('AuthenticationService', function ($http, Session) {
 
-  var authToken;
+  var authenticationService = {};
 
-  function login(email, password) {
+  authenticationService.login = function (credentials) {
 
-    var deferred = $q.defer();
+    return;
 
-    $http.post("/api/login", {
-      email: email,
-      password: password
-    }).then(function(result) {
-
-      authToken = result.authenticationToken;
-      $window.sessionStorage["authToken"] = JSON.stringify(authToken);
-      deferred.resolve(authToken);
-
-    }, function(error) {
-      deferred.reject(error);
-    });
-
-    return deferred.promise;
-  }
-
-  function logout() {
-
-    var deferred = $q.defer();
-
-    $window.sessionStorage["authToken"] = null;
-    authToken = null;
-
-    deferred.resolve(true);
-    deferred.reject(undefined);
-
-    return deferred.promise;
-  }
-
-  function isAuthenticated() {
-
-    var deferred = $q.defer();
-
-    authToken.then(function(result) {
-      deferred.resolve(true);
-    }, function(error) {
-      deferred.reject(error);
-    });
-
-    return deferred.promise;
-  }
-
-  function init() {
-    if ($window.sessionStorage["authToken"]) {
-      authToken = JSON.parse($window.sessionStorage["authToken"]);
-    }
-  }
-
-  init();
-
-  return {
-    login: login,
-    logout: logout,
-    isAuthenticated: isAuthenticated
+    // UNCOMMENT WHEN BACKEND IS READY
+    // return $http
+    //   .post('/api/login', credentials)
+    //   .then(function (res) {
+    //     if(res.success) {
+    //       Session.create(res.authenticationToken);
+    //       // TODO : Return user's name and auth?  Not sure if anything needs to be returned...
+    //       return res.authenticationToken;
+    //     } else {
+    //       return {error: res.message};
+    //     }
+    //   });
   };
 
-});
+  authenticationService.logout = function () {
+    Session.destroy();
+  };
+
+  authenticationService.isAuthenticated = function () {
+    return true;
+    // UNCOMMENT WHEN SESSIONS ARE BEING SET
+    // return !!Session.authenticationToken;
+  };
+
+  return authenticationService;
+})
