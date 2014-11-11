@@ -30,8 +30,9 @@ router.put('/', function(req, res) {
 			dateOfBirth: req.body.dateOfBirth, city: req.body.city
 			};
 	console.log("\n" + "userobject: " + JSON.parse(JSON.stringify(userobject)) + "\n");
-	var data = dbc.createUser(userObject);
-	res.send(JSON.stringify(data));
+	dbc.createUser(userObject, function(err, data){
+		res.send(JSON.stringify(data));
+	});
 });
 
 /* POST rates users */

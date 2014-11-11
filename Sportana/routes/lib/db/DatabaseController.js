@@ -246,11 +246,11 @@ exports.removeFriend = function(username, friendLogin, callback) {
 exports.createUser = function(UserObject, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
-			callback(err)
+			callback(undefined, {message: "error"})
 		}
 		else {
 			//check if user exists
-			var SQLQuery = "SELECT * FROM Users " +
+			var SQLQuery = "SELECT Users.login FROM Users " +
             "WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
             values : [UserObject.login]},
@@ -258,10 +258,10 @@ exports.createUser = function(UserObject, callback) {
             	done();
             	client.end();
             	if(err){
-            		callback(err);
+        			callback(undefined, {message: "error"})
             	}
             	else {
-            		if(result.rows == "" || results.rows == null){
+            		if(result.rows[0]["login"] == "" || results.rows[0]["login"] == null){
             		console.log("Database did not find User with login: " + UserObject.login + ". Creating new User.");
 					var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstname, lastname, dateOfBirth, city) VALUES (" +
 							"$1, $2, $3, $4, $5, $6, $7)";
@@ -278,7 +278,7 @@ exports.createUser = function(UserObject, callback) {
 		            	done();
 		            	client.end();
 		            	if(err){
-		            		callback(err);
+		        			callback(undefined, {message: "error"})
 		            	}
 		            	else {
 		            		console.log("Database insert succeeded");
