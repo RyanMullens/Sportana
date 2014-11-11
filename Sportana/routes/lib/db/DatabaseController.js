@@ -70,9 +70,11 @@ exports.getUserProfile = function (login, callback) {
 			callback(err)
 		}
 		else {
-			var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname," +
-					"Users.city, Users.birthday, Users.friendliness, Users.timeliness, Users.skilllevel, FavoriteSports.sport " +
-					"FROM Users NATURAL JOIN FavoriteSports " +
+			var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
+					"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
+					"FROM Users " +
+					"LEFT JOIN Ratings ON Ratings.rater = Users.login " +
+					"LEFT JOIN FavoriteSports ON FavoriteSports.login = Users.login " +
 					"WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
             			   values : [login]},
@@ -84,9 +86,23 @@ exports.getUserProfile = function (login, callback) {
             		callback(err);
             	}
             	else {
-            		result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-            		console.log("Database returned: \n" + result.rows[0]["birthday"]);
-            		callback(undefined, result.rows[0]);
+            		if(result.rows[0]["login"] != null){
+            			console.log(result.rows[0]["login"]);
+            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
+            			console.log("Database returned: \n" + result.rows[0]["birthday"]);
+            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
+            				result.rows[0]["friendliness"] = 0;
+            				result.rows[0]["timeliness"] = 0;
+            				result.rows[0]["skilllevel"] = 0;
+            			}
+            			if(result.rows[0]["sport"] == null)
+            				result.rows[0]["sport"] = "Unselected";
+            			callback(undefined, result.rows[0]);
+            		}
+            		else{
+            			console.log("user does not exist");
+            			callback(undefined, "user does not exist");
+            		}
             	}
              });
 		}
