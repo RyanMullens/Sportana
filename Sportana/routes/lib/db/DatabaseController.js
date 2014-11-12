@@ -70,7 +70,8 @@ exports.getUserProfile = function (login, callback) {
 			callback(undefined, {message: "error"});
 		}
 		else {
-			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
+			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
+			console.log(sqlStatement + " = " + login + "\n");
 				client.query({ text : sqlStatement,
 							   values : [login]},
 					function(err, result){
@@ -81,8 +82,8 @@ exports.getUserProfile = function (login, callback) {
 						callback(undefined, {message: "error"});
 						}
 					else{
-					  if(result.rows[0]["login"] === login){
-						console.log(result.rows[0]["login"]);
+					  if(result.rows[0] !== undefined){
+						//console.log(result.rows[0].login);
 						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
 								"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
 								"FROM Users " +
