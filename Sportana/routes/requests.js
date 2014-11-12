@@ -148,7 +148,7 @@ router.put('/friend', function(req, res) {
 
 /**
  *****************************************************
- * PUT	/requests/{requestID}
+ * POST	/requests/{requestID}
  * REQUEST:
  * {
  * 	“confirmed”: boolean
