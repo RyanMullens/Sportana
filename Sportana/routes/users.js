@@ -38,15 +38,21 @@ router.put('/', function(req, res) {
 /* POST rates users */
 // API says this is a PUT, I think either would be fine - POST might make more sense if we can change ratings at some point
 router.post('/ratings', function(req, res) {
-	var auth = req.body.auth;
-	var login = req.body.login;
-	var ratingID = req.body.ratingID;
+	//var auth = req.body.auth;
+	var rater = req.body.login;
+	var userRated = req.body.userRated;
 	var friendliness = req.body.friendliness;
 	var timeliness = req.body.timeliness;
-	var skill = req.body.skill;
-	
-	res.write("not finished yet");
-	res.end();
+	var skilllevel = req.body.skilllevel;
+	if(rater != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
+		var userObject = {
+				rater: login, userRated: userRated,
+				friendliness: friendliness, timeliness: timeliness, skilllevel: skilllevel
+				};
+	}
+	dbc.rateUser(userObject, function(err, data){
+		res.send(JSON.stringify(data));
+	});
 });
 
 router.put('/password-reset', function (req, res) {

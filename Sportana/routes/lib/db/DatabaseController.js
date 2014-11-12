@@ -72,44 +72,61 @@ exports.getUserByAuth = function(id, callback) {
 exports.getUserProfile = function (login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
-			callback(err)
+			callback(undefined, {message: "error"});
 		}
 		else {
-			var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
-					"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
-					"FROM Users " +
-					"LEFT JOIN Ratings ON Ratings.rater = Users.login " +
-					"LEFT JOIN FavoriteSports ON FavoriteSports.login = Users.login " +
-					"WHERE Users.login = $1";
-			client.query({ text : SQLQuery,
-            			   values : [login]},
-             function(err, result){
-            	done();
-            	client.end();
-            	pg.end();
-            	if(err){
-            		callback(err);
-            	}
-            	else {
-            		if(result.rows[0]["login"] != null){
-            			console.log(result.rows[0]["login"]);
-            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-            			console.log("Database returned: \n" + result.rows[0]["birthday"]);
-            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
-            				result.rows[0]["friendliness"] = 0;
-            				result.rows[0]["timeliness"] = 0;
-            				result.rows[0]["skilllevel"] = 0;
-            			}
-            			if(result.rows[0]["sport"] == null)
-            				result.rows[0]["sport"] = "Unselected";
-            			callback(undefined, result.rows[0]);
-            		}
-            		else{
-            			console.log("user does not exist");
-            			callback(undefined, "user does not exist");
-            		}
-            	}
-             });
+			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
+			console.log(sqlStatement + " = " + login + "\n");
+				client.query({ text : sqlStatement,
+							   values : [login]},
+					function(err, result){
+					done();
+					//client.end();
+					//pg.end();
+					if(err){
+						callback(undefined, {message: "error"});
+						}
+					else{
+					  if(result.rows[0] !== undefined){
+						//console.log(result.rows[0].login);
+						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
+								"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
+								"FROM Users " +
+								"LEFT JOIN Ratings ON Ratings.userRated = Users.login " +
+								"LEFT JOIN FavoriteSports ON FavoriteSports.login = Users.login " +
+								"WHERE Users.login = $1";
+						client.query({ text : SQLQuery,
+			            			   values : [login]},
+			             function(err, result){
+			            	done();
+			            	client.end();
+			            	pg.end();
+			            	if(err){
+								callback(undefined, {message: "error"});
+			            	}
+			            	else {
+			            		if(result.rows[0]["login"] === login){
+			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
+			            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
+			            				result.rows[0]["friendliness"] = 0;
+			            				result.rows[0]["timeliness"] = 0;
+			            				result.rows[0]["skilllevel"] = 0;
+			            			}
+			            			if(result.rows[0]["sport"] == null)
+			            				result.rows[0]["sport"] = "Unselected";
+			            			callback(undefined, result.rows[0]);
+			            		}
+			            		else{
+			            			console.log("user does not exist");
+			    					callback(undefined, {message: "error"});
+			            		}
+			            	}
+			            });
+						}
+				else{
+					callback(undefined, {message: "error"});
+				}
+			}});
 		}
 	});
 };
@@ -251,53 +268,49 @@ exports.removeFriend = function(username, friendLogin, callback) {
 exports.createUser = function(UserObject, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
-			callback(undefined, {message: "error"})
+			callback(undefined, {message: "error"});
 		}
 		else {
-			//check if user exists
-			var SQLQuery = "SELECT Users.login FROM Users " +
-            "WHERE Users.login = $1";
-			client.query({ text : SQLQuery,
-            values : [UserObject.login]},
-            function(err, result){
-            	done();
-            	client.end();
-            	if(err){
-        			callback(undefined, {message: "error"})
-            	}
-            	else {
-            		if(result.rows[0]["login"] == "" || results.rows[0]["login"] == null){
-            		console.log("Database did not find User with login: " + UserObject.login + ". Creating new User.");
-					var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstname, lastname, dateOfBirth, city) VALUES (" +
+			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
+				client.query({ text : sqlStatement,
+							   values : [UserObject.login]},
+					function(err, result){
+					done();
+					if(err){
+						callback(undefined, {message: "error"});
+						}
+					else{
+						if(result.rows[0]["login"] === UserObject.login){
+							var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstname, lastname, dateOfBirth, city) VALUES (" +
 							"$1, $2, $3, $4, $5, $6, $7)";
-					client.query({ text : SQLQuery,
-		            values : [UserObject.login,
-		            UserObject.emailSuffix,
-		            UserObject.password,
-		            UserObject.firstname,
-		            UserObject.lastname,
-		            UserObject.dateOfBirth,
-		            UserObject.city]
-					},
-		            function(err, result){
-		            	done();
-		            	client.end();
-		            	if(err){
-		        			callback(undefined, {message: "error"})
-		            	}
-		            	else {
-		            		console.log("Database insert succeeded");
-		            		//return JSON.stringify(result.rows);
-		            		callback(undefined, result.rows);
-		            	}
-		            });
-            	}
-            }
+							client.query({ text : SQLQuery,
+				            values : [UserObject.login,
+				            UserObject.emailSuffix,
+				            UserObject.password,
+				            UserObject.firstname,
+				            UserObject.lastname,
+				            UserObject.dateOfBirth,
+				            UserObject.city]
+							},
+			             function(err, result){
+			            	done();
+			            	client.end();
+			            	pg.end();
+			            	if(err){
+								callback(undefined, {message: "error"});
+			            	}
+			            	else {
+			            		callback(undefined, {message: "success"});
+			            	}
+			            });
+						}
+				else{
+					callback(undefined, {message: "error"});
+				}
+			}});
 		}
-	);
-	}
 	});
-}
+};
 
 exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
   pg.connect(connString, function(err, client, done) {
@@ -495,4 +508,43 @@ exports.getRequests = function(username, callback) {
       });
     }
   });
+};
+
+exports.rateUser = function(UserObject, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
+				client.query({ text : sqlStatement,
+							   values : [UserObject.login]},
+					function(err, result){
+					done();
+					if(err){
+						callback(undefined, {message: "error"});
+						}
+					else{
+						if(result.rows[0]["login"] === login){
+						var SQLQuery = "INSERT INTO Ratings(userRated, rater, friendliness, timeliness, skilllevel) VALUES ($1, $2, $3, $4, $5)";
+						client.query({ text : SQLQuery,
+			            			   values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
+			             function(err, result){
+			            	done();
+			            	client.end();
+			            	pg.end();
+			            	if(err){
+								callback(undefined, {message: "error"});
+			            	}
+			            	else {
+			            		callback(undefined, {message: "success"});
+			            	}
+			            });
+						}
+				else{
+					callback(undefined, {message: "error"});
+				}
+			}});
+		}
+	});
 };
