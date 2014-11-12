@@ -36,9 +36,9 @@ ON UPDATE CASCADE
 CREATE TABLE IF NOT EXISTS Ratings(
 userRated VARCHAR(50),
 rater VARCHAR(50),
-friendliness INT,
-timeliness INT,
-skillLevel INT,
+friendliness REAL,
+timeliness REAL,
+skillLevel REAL,
 PRIMARY KEY (userRated, rater),
 FOREIGN KEY (userRated)
 REFERENCES Users(login)
@@ -245,7 +245,68 @@ CREATE OR REPLACE FUNCTION update_notificationID()
 	END;
 	$$ language 'plpgsql';	  	
 	
-	-- ADJUST NUM_PARTICIPANTS IN GAME ON insert or delete on Participants
+CREATE OR REPLACE FUNCTION update_notifications()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		UPDATE Users
+		SET numNotifications = numNotifications + 1
+		WHERE (login = NEW.userTo);
+		RETURN NEW;
+	END;
+	$$ language 'plpgsql';		
+
+CREATE OR REPLACE FUNCTION update_friendliness_timeliness_skillLevel()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		UPDATE Users
+		SET friendliness=(SELECT AVG(friendliness) FROM Ratings WHERE (userRated = NEW.userRated)),
+		timeliness=(SELECT AVG(timeliness) FROM Ratings WHERE (userRated = NEW.userRated)),
+		skillLevel=(SELECT AVG(skillLevel) FROM Ratings WHERE (userRated = NEW.userRated))
+		WHERE (Users.login=NEW.userRated);
+		RETURN NEW;
+	END;
+	$$ language 'plpgsql';
+	
+
+CREATE OR REPLACE FUNCTION update_number_participants()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		UPDATE Game
+		SET numParticipants = numParticipants + 1
+		WHERE (creator = NEW.creator) AND (gameID = NEW.gameID);
+		RETURN NEW;
+	END;
+	$$ language 'plpgsql';	
+			
+CREATE OR REPLACE FUNCTION update_unread_posts()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		UPDATE Participant
+		SET numUnreadNotifications = numUnreadNotifications + 1
+		WHERE (creator = NEW.gameCreator) AND (gameID = NEW.gameID);
+		RETURN NEW;
+	END;
+	$$ language 'plpgsql';	
+	
+CREATE TRIGGER update_notifications
+	BEFORE INSERT ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_notifications();  
+
+CREATE TRIGGER update_friendliness_timeliness_skillLevel
+	AFTER INSERT ON Ratings
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_friendliness_timeliness_skillLevel();  
+
+CREATE TRIGGER update_unread_posts
+	BEFORE INSERT ON GameWallPost
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_unread_posts();  
+
+CREATE TRIGGER update_number_participants
+	BEFORE INSERT ON Participant
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_number_participants();  
 
 CREATE TRIGGER auto_increment_gameID
 	BEFORE INSERT ON Game
