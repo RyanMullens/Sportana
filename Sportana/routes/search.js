@@ -12,9 +12,6 @@ var authenticator = require('./authentication'); // Authentication Handler
  *					 &ageMin={min}
  *					 &ageMax={max}
  *					 &competitive={isCompetitive}
- * REQUEST:
- * {
- * }
  *
  * RESPONSE:
  * {
@@ -42,28 +39,48 @@ router.get('/games', function(req, res) {
 /**
  *****************************************************
  * GET	/search/users?name={currentSearchText}
- * REQUEST:
- * {
- * }
  *
  * RESPONSE:
  * {
  * 	“message”  : string    // empty on success
  * 	“success”  : boolean
- *  "results" :
+ *  "results"  :
  *   [{
+ *		"login"   : string
+ *		"name"    : string
+ *		"picture" : string
+ *		"city"    : string
  *   }]
  * }
  *****************************************************
  */
 router.get('/users', function(req, res) {
-	var name = req.query.name;
-	var response = {};
-	
-	response.success = false;
-	response.message = 'Not yet implemented';
-	res.write(JSON.stringify(response));
-    res.end();
+	var name = req.query.name.split(" ");
+	var firstName = name[0];
+	var lastName = name[1];
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.searchUsers(firstName, lastName, function(err, users) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.results = users;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 });
 
 module.exports = router;

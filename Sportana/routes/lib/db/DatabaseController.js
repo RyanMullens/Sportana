@@ -560,3 +560,59 @@ exports.rateUser = function(UserObject, callback) {
 		}
 	});
 };
+
+
+exports.searchUsers = function(firstName, lastName, callback) {
+  if (!firstName && !lastName) {
+  	callback('No search parameters given', undefined);
+  }
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Users.login, Users.firstName, Users.lastName, Users.profilePicture, Users.birthday, Users.city " +
+    				   "FROM Users ";
+    	var searchValues = [];
+    	if (firstName) {
+    		SQLQuery += "WHERE lower(Users.firstName) = lower($1)";
+    		searchValues.push(firstName);
+    	}
+    	if (lastName) {
+    		if (!firstName) {
+    			SQLQuery += "WHERE lower(Users.lastName) = lower($1)";
+    		} else {
+	    		SQLQuery += " AND lower(Users.lastName) = lower($2)";
+	    	}
+	    	searchValues.push(lastName);
+    	}
+    	client.query({ text : SQLQuery,
+                     values : searchValues},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var users = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var user = {};
+  					user.login = result.rows[i].login;
+  					user.profilePhoto = result.rows[i].profilepicture;
+  					user.firstName = result.rows[i].firstname;
+  					user.lastName = result.rows[i].lastname;
+  					user.city = result.rows[i].city;
+  					user.age = timeHelper.makeAgeFromBirthday(result.rows[i].birthday);
+  					users.push(user);
+		  		}
+          		callback(undefined, users);
+        	}
+      });
+    }
+  });
+};
