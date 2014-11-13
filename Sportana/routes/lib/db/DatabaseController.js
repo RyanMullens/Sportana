@@ -90,15 +90,23 @@ exports.getUserProfile = function (login, callback) {
 						}
 					else{
 					  if(result.rows[0] !== undefined){
-						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
-								"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
-								"FavoriteSports.sport " +
-								"FROM Users " +
-								"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
-								"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
-								"WHERE Users.login = $1 " +
-								"GROUP BY Users.login, FavoriteSports.sport";
-
+//							var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
+//							"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
+//							"FavoriteSports.sport " +
+//							"FROM Users " +
+//							"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
+//							"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+//							"WHERE Users.login = $1 " +
+//							"GROUP BY Users.login, FavoriteSports.sport";
+					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
+						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
+						"FavoriteSports.sport " +
+						"FROM Users " +
+						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
+						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+						"WHERE Users.login = $1";// +
+						//"GROUP BY Users.login, FavoriteSports.sport";
+					  
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){
