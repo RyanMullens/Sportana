@@ -100,12 +100,14 @@ exports.getUserProfile = function (login, callback) {
 //							"GROUP BY Users.login, FavoriteSports.sport";
 					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
 						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
-						"FavoriteSports.sport " +
+						"FavoriteSports.sport, Sport.imageURL " +
+						//multiple rows of (login, sport) .... search by login . use JOIN and also return sports images....
 						"FROM Users " +
 						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
 						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+						"RIGHT JOIN Sport ON FavoriteSports.sport = Sport.sport " + 
 						"WHERE Users.login = $1";// +
-						//"GROUP BY Users.login, FavoriteSports.sport";
+						"GROUP BY Users.login, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport, Sport.imageURL";
 					  
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
@@ -113,6 +115,8 @@ exports.getUserProfile = function (login, callback) {
 			            	done();
 			            	client.end();
 			            	pg.end();
+			            	console.log(result.rows[0]);
+			            	console.log(result.rows[1]);
 			            	if(err){
 								callback(undefined, {message: "error"});
 			            	}
@@ -126,6 +130,12 @@ exports.getUserProfile = function (login, callback) {
 			            			}
 			            			if(result.rows[0]["sport"] == null)
 			            				result.rows[0]["sport"] = "Unselected";
+			            			if(result.rows.length > 1){ //has more than one favorite sport
+			            				for(i = 1; i < result.rows.length; i++){
+			            					result.rows[0]["sport"] += "," + result.rows[i]["sport"];
+			            					result.rows[0]["imageurl"] += "," + result.rows[i]["imageurl"];
+			            				}
+			            			}
 			            			callback(undefined, result.rows[0]);
 			            		}
 			            		else{
