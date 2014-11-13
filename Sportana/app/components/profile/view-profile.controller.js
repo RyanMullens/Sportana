@@ -39,8 +39,8 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope){
 
 	$scope.user.rated = false;*/
 
-
-	$http.get('/api/users/' + $stateParams.userId)
+	// $http.get('/api/users/' + $stateParams.userId)
+	$http.get('/api/users/' + '$stateParams.userId')
 		.success(function(data, status, headers, config)
 		{
 			console.log(data);

@@ -185,7 +185,7 @@ var addFriend = function(username, friendUsername, callback) {
         			pg.end();
 					callback(err);
             	}
-            	else {	
+            	else {
    	          		client.query(SQLQuery, [friendUsername, username], function(err, result) {
              			done();
              			client.end();
@@ -336,8 +336,8 @@ exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameI
               }
          });
     }
-  });	
-};	
+  });
+};
 
 
 exports.acceptRequest = function(username, requestID, callback) {
@@ -429,7 +429,7 @@ exports.joinQueue = function(username, gameCreator, gameID, callback) {
  *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
  *    "gameCreator"   : string // for types 1, 2, and 3
  *    "gameID"        : int // for types 1, 2, and 3
- *   }]	
+ *   }]
  *****************************************************
  */
 exports.getRequests = function(username, callback) {

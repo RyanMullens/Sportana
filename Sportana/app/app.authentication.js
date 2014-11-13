@@ -10,26 +10,41 @@ app.constant('AUTH_EVENTS', {
 app.run(function ($rootScope, $state, AUTH_EVENTS, AuthenticationService) {
 
   // Check authentication status on every transition
-  $rootScope.$on('$stateChangeStart', function (event, next) {
-    if (!AuthenticationService.isAuthenticated()) {
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+    if (toState.name != "app.login" && !AuthenticationService.isAuthenticated()) {
       event.preventDefault();
       $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
     }
   });
 
+  // Redirect to the dashboard when a user successfully logs in
   $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, args) {
-    event.preventDefault();
-    $state.go('app.home');
+    $state.go('app.user');
   });
 
   $rootScope.$on(AUTH_EVENTS.loginFailed, function (event, args) {
-    event.preventDefault();
-    $state.go('app.login');
+    console.log('Login Failed')
+    // Provide any logic for failed login.
   });
 
+  // Redirect the user to login if they are not authenticated
   $rootScope.$on(AUTH_EVENTS.notAuthenticated, function (event, args) {
     event.preventDefault();
     $state.go('app.login');
   });
 
-})
+});
+
+app.config(function ($httpProvider) {
+    $httpProvider.interceptors.push('httpInterceptor');
+});
+
+app.factory('httpInterceptor', ['$rootScope', 'Session', function($rootScope, Session) {
+    return {
+        request: function($config) {
+            $config.headers['SportanaAuthentication'] = Session.getAuthToken();
+            return $config;
+        }
+    };
+}]);

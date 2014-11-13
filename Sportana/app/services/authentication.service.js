@@ -1,33 +1,37 @@
-app.factory('AuthenticationService', function ($http, Session) {
+app.factory('AuthenticationService', function ($http, Session, CurrentUser) {
 
   var authenticationService = {};
 
   authenticationService.login = function (credentials) {
 
-    return;
+    return $http
+      .post('/api/login', credentials)
+      .then(function (res) {
+        if(res.data.message == "") {
+          Session.create(res.data.authenticationToken);
 
-    // UNCOMMENT WHEN BACKEND IS READY
-    // return $http
-    //   .post('/api/login', credentials)
-    //   .then(function (res) {
-    //     if(res.success) {
-    //       Session.create(res.authenticationToken);
-    //       // TODO : Return user's name and auth?  Not sure if anything needs to be returned...
-    //       return res.authenticationToken;
-    //     } else {
-    //       return {error: res.message};
-    //     }
-    //   });
+          user = {
+            id: res.data.login,
+            firstName: res.data.firstName,
+            lastName: res.data.lastName,
+            numNotifications: res.data.numNotifications
+          }
+
+          CurrentUser.setUser(user);
+          return user;
+        } else {
+          return {error: res.data.message};
+        }
+      });
   };
 
   authenticationService.logout = function () {
     Session.destroy();
+    CurrentUser.setUser(null);
   };
 
   authenticationService.isAuthenticated = function () {
-    return true;
-    // UNCOMMENT WHEN SESSIONS ARE BEING SET
-    // return !!Session.authenticationToken;
+    return !!Session.authenticationToken;
   };
 
   return authenticationService;
