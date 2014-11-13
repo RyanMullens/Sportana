@@ -1,43 +1,7 @@
 app.controller("ViewProfileController", function($http, $stateParams, $scope){
 
 
-	/*
-	{
-		“user”: 				string (users login)
-		“profilePhoto”:  		url (string)
-		“firstName”:			string
-		“lastName”:			string
-		“dateOfBirth”:			string (mm-dd-yyyy)
-		“city”:				string
-		“favoriteSports”: [{
-			“sportName”:		string
-			“sportImage”:		 url (string)
-		}]
-
-		“rating”: {
-			“friendliness”:		int (1-5)
-			“timeliness”:		int (1-5)
-			“skill”:			int (1-5)
-		}
-			“rated”:		boolean
-	}
-	*/
-
 	$scope.user = {};
-	/*$scope.user.login = "rmullens";
-	$scope.user.firstname = "Ryan";
-	$scope.user.lastname = "Mullens";
-	$scope.user.dateOfBirth = "02-27-1994";
-	$scope.user.city = "Holliston"
-	$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];
-	$scope.user.rating = {"friendliness":5,
-				   "timeliness":4,
-				   "skill": 3};
-
-	$scope.user.rated = false;*/
 
 
 	$http.get('/api/users/' + $stateParams.userId)
@@ -78,7 +42,7 @@ this.getCity = function()
 
 this.getAge = function()
 {
-	return 25;//return this.user.age;
+	return $scope.user.birthday;
 }
 
 this.getProfilePicture = function()
