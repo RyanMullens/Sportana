@@ -19,12 +19,27 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 
     		console.log(JSON.stringify(data));
 
-    		$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
+    		$scope.user.favoriteSports = [];
+
+    		var sports = data.sport.split(",");
+    		var imgs = data.imageurl.split(",");
+
+    		var i = 0;
+    		for(i =0;i<sports.length;i++)
+    		{
+    			console.log(sports[i]);
+    			console.log(imgs[i]);
+
+    			$scope.user.favoriteSports.push({sportName:sports[i], sportImage:imgs[i]});
+    		}
+
+
+    		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];
+							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];*/
 
 		})
 		.error(function(data, status, headers, config) {
@@ -104,6 +119,7 @@ this.isFriend = function()
 this.editProfile = function()
 {
 	alert("Edit Profile");
+	$scope.user.firstname = "Potato";
 }
 
 this.addFriend = function()
