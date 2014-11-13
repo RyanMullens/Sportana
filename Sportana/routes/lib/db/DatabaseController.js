@@ -79,7 +79,6 @@ exports.getUserProfile = function (login, callback) {
 		}
 		else {
 			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
-			console.log(sqlStatement + " = " + login + "\n");
 				client.query({ text : sqlStatement,
 							   values : [login]},
 					function(err, result){
@@ -91,13 +90,15 @@ exports.getUserProfile = function (login, callback) {
 						}
 					else{
 					  if(result.rows[0] !== undefined){
-						//console.log(result.rows[0].login);
-						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
-								"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
+						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
+								"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
+								"FavoriteSports.sport " +
 								"FROM Users " +
-								"LEFT JOIN Ratings ON Ratings.userRated = Users.login " +
-								"LEFT JOIN FavoriteSports ON FavoriteSports.login = Users.login " +
-								"WHERE Users.login = $1";
+								"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
+								"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+								"WHERE Users.login = $1 " +
+								"GROUP BY Users.login, FavoriteSports.sport";
+						
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){
