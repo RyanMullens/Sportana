@@ -4,6 +4,7 @@ app.controller("ViewFriendsController", function($scope, $http){
 
 	$http.get('/api/friends').success(function(data, status, headers, config) {
 		$scope.friends = data.friends;
+		console.log(data);
 	}).
 
 	error(function(data, status, headers, config) {

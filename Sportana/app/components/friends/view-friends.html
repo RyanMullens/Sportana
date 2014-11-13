@@ -1,9 +1,10 @@
 <h1 class="page-header">View Friends</h1>
 <div id="friends">
 	<div class="row friend" ng-repeat="friend in friends">
-		<img ng-src="{{friend.profilePhoto}}" class="img-round"/>
-		{{friend.firstName}} {{friend.lastName}}
-		Age: {{friend.age}}
-		City: {{friend.city}}
+		<img class="col-md-4" ng-src="{{friend.profilePhoto}}" class="img-round"/>
+		<div class="col-md-3">{{friend.firstName}} {{friend.lastName}}</div>
+		<div class="col-md-3">Age: {{friend.age}}<br>
+		City: {{friend.city}}</div>
+		<div class="col-md-2"><a class="btn btn-primary" ui-sref="app.user({userId: friend.login})">View Profile</a></div>
 	</div>
 </div>

@@ -47,7 +47,6 @@ app.controller("ViewGamesController", function($http, $scope){
 			
 		}
 		notifications.splice(notifications.indexOf(notification),1);
-		console.log(notifications);
 	};
 
 	this.hasNotifications = function(){
