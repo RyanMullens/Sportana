@@ -107,20 +107,27 @@ exports.deserializeUser = function(id, callback) {
  * Input:
  *  username : the user log in
  *  password : the password of the user
- *  callback : function(error, authentication)
+ *  callback : function(error, user)
  *			   passes back an error explanation in error if
- *			   an error occurs and passes back the authentication
- *				token in authentication if successful
+ *			   an error occurs and passes back the user with authentication,
+ *			   login, firstName, lastName, and numNotifications
  *
  *****************************************************
  */
 exports.authenticate = function(username, password, callback) {
-		dbc.getLogin(username, password, function(err, status) {
+		dbc.getLogin(username, password, function(err, user, status) {
 		if (err) {
 			callback(err, "");
 		}
 		if (status === true) {
-			serializeUser(username, callback);
+			serializeUser(username, function(err, auth) {
+				user.authenticationToken = auth;
+				if (err) {
+					callback(err, undefined);
+				} else {
+					callback(undefined, user);
+				}
+			});
 		} else {
 			callback("Error with credentials", "");
 		}
