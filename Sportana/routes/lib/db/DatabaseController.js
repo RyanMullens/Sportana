@@ -10,7 +10,7 @@ exports.getLogin = function(login, password, callback) {
       callback(err);
     }
     else {
-    	var SQLQuery = "SELECT Users.password FROM Users " +
+    	var SQLQuery = "SELECT Users.password, Users.firstName, Users.lastName, Users.numNotifications FROM Users " +
                      "WHERE Users.login = $1";
     	client.query({ text : SQLQuery,
                      values : [login]},
@@ -22,13 +22,18 @@ exports.getLogin = function(login, password, callback) {
         // This cleans up connected clients to the database and allows subsequent requests to the database
         pg.end();
         if (err) {
-          callback(err, false);
+          callback(err, undefined, false);
         }
         else {
           if (result.rows[0].password === password) {
-            callback(undefined, true);
+          	var theUser = {};
+          	theUser.login = login;
+          	theUser.firstName = result.rows[0].firstname;
+          	theUser.lastName = result.rows[0].lastname;
+          	theUser.numNotifications = result.rows[0].numnotifications;
+            callback(undefined, theUser, true);
           } else {
-            callback(undefined, false);
+            callback(undefined, undefined, false);
           }
         }
       });
@@ -56,6 +61,9 @@ exports.getUserByAuth = function(id, callback) {
         if (err) {
           callback(err);
         }
+        else if (!result.rows[0]) {
+        	callback("User not found");
+        }
         else {
             callback(undefined, result.rows[0].login);
         }
@@ -71,7 +79,6 @@ exports.getUserProfile = function (login, callback) {
 		}
 		else {
 			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
-			console.log(sqlStatement + " = " + login + "\n");
 				client.query({ text : sqlStatement,
 							   values : [login]},
 					function(err, result){
@@ -83,13 +90,15 @@ exports.getUserProfile = function (login, callback) {
 						}
 					else{
 					  if(result.rows[0] !== undefined){
-						//console.log(result.rows[0].login);
-						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, " +
-								"Users.city, Users.birthday, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport " +
+						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
+								"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
+								"FavoriteSports.sport " +
 								"FROM Users " +
-								"LEFT JOIN Ratings ON Ratings.userRated = Users.login " +
-								"LEFT JOIN FavoriteSports ON FavoriteSports.login = Users.login " +
-								"WHERE Users.login = $1";
+								"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
+								"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+								"WHERE Users.login = $1 " +
+								"GROUP BY Users.login, FavoriteSports.sport";
+
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){
@@ -218,7 +227,7 @@ var addFriend = function(username, friendUsername, callback) {
         			pg.end();
 					callback(err);
             	}
-            	else {	
+            	else {
    	          		client.query(SQLQuery, [friendUsername, username], function(err, result) {
              			done();
              			client.end();
@@ -365,8 +374,8 @@ exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameI
               }
          });
     }
-  });	
-};	
+  });
+};
 
 
 exports.acceptRequest = function(username, requestID, callback) {
@@ -458,7 +467,7 @@ exports.joinQueue = function(username, gameCreator, gameID, callback) {
  *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
  *    "gameCreator"   : string // for types 1, 2, and 3
  *    "gameID"        : int // for types 1, 2, and 3
- *   }]	
+ *   }]
  *****************************************************
  */
 exports.getRequests = function(username, callback) {

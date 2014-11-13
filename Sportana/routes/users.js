@@ -23,7 +23,7 @@ router.put('/', function(req, res) {
 	var email = req.body.email.split("@");
 	var login = email[0];
 	var emailSuffix = email[1];
-	
+
 	var userObject = {
 			login: login, emailSuffix: emailSuffix,
 			firstname: req.body.firstname, lastname: req.body.lastname,
@@ -59,7 +59,7 @@ router.put('/password-reset', function (req, res) {
 	var email = req.body.email.split("@");
 	var login = email[0];
 	var emailSuffix = email[1];
-	
+
 	res.send("not finished yet");
 	//call function
 });
@@ -68,11 +68,11 @@ router.put('/password-reset', function (req, res) {
 router.post('/profile', function (req, res) {
 	var auth = req.body.auth;
 	var login = req.body.login;
-	
+
 	res.send("not finished yet");
 	//unknown what we will do with this.
 	//post to your profile? post what?
-	
+
 });
 
 router.post('/account/password', function (req, res) {
@@ -84,5 +84,3 @@ router.post('/account/status', function (req, res) {
 });
 
 module.exports = router;
-
-

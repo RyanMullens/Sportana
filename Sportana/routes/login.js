@@ -19,9 +19,13 @@ var authenticator = require('./authentication'); // Authentication Handler
  *
  * RESPONSE:
  * {
- * 	“message”             : string    // empty on success
+ * 	“message”             : string // empty on success
  * 	“success”             : boolean
  *  "authenticationToken" : string // users authentication token
+ * 	“login”               : string
+ * 	“firstName”           : string
+ *  "lastName" 	          : string
+ *  "numNotifications"    : int
  * }
  *****************************************************
  */
@@ -33,16 +37,19 @@ router.post('', function(req, res) {
 	var username = arr[0]; // Username is part before the @
 
 	//response is authentication token
-   authenticator.authenticate(username, password, function(err, authenticationToken) {
+   authenticator.authenticate(username, password, function(err, user) {
     	  var response = {};
     	  if (err) {
     	    response.message = err;
     	    response.authenticationToken = "";
     	  } else {
     	  	response.message = "";
-    	  	response.authenticationToken = authenticationToken;
+    	  	response.authenticationToken = user.authenticationToken;
+    	  	response.login = user.login;
+    	  	response.firstName = user.firstName;
+    	  	response.lastName = user.lastName;
+    	  	response.numNotifications = user.numNotifications;
     	  }
-    	  console.log(authenticationToken);
     	  var json = JSON.stringify(response);
           res.write(json);
           res.end();

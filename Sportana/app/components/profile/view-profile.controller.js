@@ -1,10 +1,16 @@
-app.controller("ViewProfileController", function($http, $stateParams, $scope){
+app.controller("ViewProfileController", function($http, $stateParams, $scope, CurrentUser){
 
 
 	$scope.user = {};
 
+	// $http.get('/api/users/' + $stateParams.userId)
 
-	$http.get('/api/users/' + $stateParams.userId)
+	userId = $stateParams.userId;
+	if(!userId) {
+		userId = CurrentUser.getUser().id;
+	}
+
+	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)
 		{
 			console.log(data);

@@ -1,6 +1,6 @@
 <h1 class="page-header">View Friends</h1>
 <div id="friends">
-	<div class="row friend" ng-repeat="friend in friends" ng-src="/user/{{friend.id}}">
+	<div class="row friend" ng-repeat="friend in friends">
 		<img ng-src="{{friend.profilePhoto}}" class="img-round"/>
 		{{friend.firstName}} {{friend.lastName}}
 		Age: {{friend.age}}

@@ -1,11 +1,10 @@
 //This is where all the controllers will go for now... They will be refactored and split up into their own
 //files for each page as we go though.
 
-app.controller("SidebarController", function($scope, $location, sidebarService)
+app.controller("SidebarController", function($scope, $location, sidebarService, Session, CurrentUser)
 {
 	this.currentTab = 'home';
 	this.showMenu = false;
-
 
 	$scope.isActive = function (viewLocation) {
 		return viewLocation === $location.path();

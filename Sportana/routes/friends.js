@@ -15,7 +15,7 @@ var authenticator = require('./authentication'); // Authentication Handler
  *
  * REQUEST:
  * {
- * }	
+ * }
  *
  * RESPONSE:
  * {
@@ -65,7 +65,7 @@ router.get('/', function (req, res) {
  *
  * REQUEST:
  * {
- * }	
+ * }
  *
  * RESPONSE:
  * {
