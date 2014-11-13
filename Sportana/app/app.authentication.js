@@ -20,7 +20,7 @@ app.run(function ($rootScope, $state, AUTH_EVENTS, AuthenticationService, Curren
 
   // Redirect to the dashboard when a user successfully logs in
   $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, args) {
-    $state.go('app.user', { userId : CurrentUser.getUser().id});
+    $state.go('app.user');
   });
 
   $rootScope.$on(AUTH_EVENTS.loginFailed, function (event, args) {

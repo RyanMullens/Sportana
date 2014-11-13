@@ -39,12 +39,12 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope, Cu
 
 	$scope.user.rated = false;*/
 
-	// $http.get('/api/users/' + $stateParams.userId)
-
 	userId = $stateParams.userId;
 	if(!userId) {
 		userId = CurrentUser.getUser().id;
 	}
+
+	console.log("HELLO");
 
 	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)

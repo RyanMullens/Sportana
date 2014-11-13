@@ -1,12 +1,7 @@
-app.service('Session', function ($window) {
+app.service('Session', function ($window, $cookies) {
 
   this.isAuthenticated = function () {
-    token = $window.sessionStorage["authToken"];
-    if(token) {
-      return JSON.parse(token) != null;
-    } else {
-      return false;
-    }
+    return $window.sessionStorage["authToken"] || $cookies["authToken"];
   }
 
   this.getAuthToken = function () {
@@ -15,19 +10,21 @@ app.service('Session', function ($window) {
     if(token) {
       return JSON.parse(token);
     } else {
-      return null;
+      return ($cookies["authToken"]) ? JSON.parse($cookies["authToken"]) : null;
     }
   };
 
   // Creates a session and stores the auth Token
   this.create = function (authenticationToken) {
     $window.sessionStorage["authToken"] = JSON.stringify(authenticationToken);
+    $cookies["authToken"] = JSON.stringify(authenticationToken); // TODO : Only store the cookie if 'RememberMe' ?
   };
 
   // Destroy the session by deleting the auth Token
   this.destroy = function () {
-    $window.sessionStorage["authToken"] = null;
+    delete $window.sessionStorage["authToken"];
+    delete $cookies["authToken"];
   };
 
   return this;
-})
+});

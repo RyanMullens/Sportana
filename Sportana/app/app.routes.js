@@ -1,5 +1,3 @@
-var app = angular.module('app', ['ui.bootstrap','ngRoute','ui.router']);
-
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   $locationProvider.html5Mode(true);
