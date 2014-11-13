@@ -6,7 +6,7 @@
 					<div class="profileImageHolder col-md-3">
 						<img class="profileImage" ng-src="{{viewProfile.getProfilePicture()}}"></img>
 					</div>	
-					<div class = "profileInfoHolder col-md-9">
+					<div class = "profileInfoHolder col-md-6">
 						<div class="profileNameHolder row" >
 							<div class="profileName" >
 								{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}
@@ -16,9 +16,25 @@
 						<div class="profileCity row">
 							{{ viewProfile.getCity() }}
 						</div>
-
-							
 					</div>	
+					<div class="profileButtonHolder col-md-3">
+						<button ng-show="viewProfile.isSelf()" ng-click="viewProfile.editProfile()" class="profileSpecialButton btn btn-primary">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
+							&nbsp;&nbsp;Edit Profile
+						</button> 
+
+						<button ng-show="!viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+							&nbsp;Add Friend
+						</button>
+
+						<button ng-show="viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
+							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+							&nbsp;Remove Friend
+						</button>  
+					</div>
 				</div>
 
 				<hr>

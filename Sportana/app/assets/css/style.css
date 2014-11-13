@@ -168,8 +168,20 @@ body {
   vertical-align: center;
 }
 
+.profileButtonHolder
+{
+  text-align: center;
+}
 
 
+@media (max-width: 767px) {
+.profileSpecialButton
+  {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+}
 
 
 .ratingsHolder

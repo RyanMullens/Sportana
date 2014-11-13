@@ -1,4 +1,4 @@
-app.controller("ViewProfileController", function($http, $stateParams, $scope, CurrentUser){
+app.controller("ViewProfileController", function($http, $state, $stateParams, $scope, CurrentUser){
 
 
 	$scope.user = {};
@@ -7,7 +7,8 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope, Cu
 
 	userId = $stateParams.userId;
 	if(!userId) {
-		userId = CurrentUser.getUser().id;
+		//Temp hack... sorry. This may loop indefinetly. Especially if not logged in
+		userId = $state.go('app.user', {userId:  CurrentUser.getUser().id});//CurrentUser.getUser().id;
 	}
 
 	$http.get('/api/users/' + userId)
@@ -15,6 +16,8 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope, Cu
 		{
 			console.log(data);
     		$scope.user = data;
+
+    		console.log(JSON.stringify(data));
 
     		$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
@@ -27,8 +30,6 @@ app.controller("ViewProfileController", function($http, $stateParams, $scope, Cu
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
 		});
-
-
 
 
 this.getFullName = function()
@@ -86,7 +87,36 @@ this.isRated = function()
 
 this.isSelf = function()
 {
-	return true; // this.user.self?
+	return CurrentUser.isUser(userId);
 }
+
+this.isFriend = function()
+{
+	return false;
+}
+
+
+
+
+
+
+//Actions
+this.editProfile = function()
+{
+	alert("Edit Profile");
+}
+
+this.addFriend = function()
+{
+	alert("Add Friend");
+}
+
+this.removeFriend = function()
+{
+	alert("Remove Friend");
+}
+
+
+
 
 });
