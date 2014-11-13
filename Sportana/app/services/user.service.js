@@ -1,7 +1,12 @@
 app.service('CurrentUser', function ($window) {
 
  this.getUser = function () {
-   return JSON.parse($window.sessionStorage["user"]);
+   user = $window.sessionStorage["user"];
+   if(user) {
+     return JSON.parse(user);
+   } else {
+     return null;
+   }
  };
 
  // Creates a session and stores the auth Token
