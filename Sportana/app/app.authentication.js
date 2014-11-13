@@ -7,7 +7,7 @@ app.constant('AUTH_EVENTS', {
   notAuthorized: 'auth-not-authorized'
 });
 
-app.run(function ($rootScope, $state, AUTH_EVENTS, AuthenticationService) {
+app.run(function ($rootScope, $state, AUTH_EVENTS, AuthenticationService, CurrentUser) {
 
   // Check authentication status on every transition
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -20,7 +20,7 @@ app.run(function ($rootScope, $state, AUTH_EVENTS, AuthenticationService) {
 
   // Redirect to the dashboard when a user successfully logs in
   $rootScope.$on(AUTH_EVENTS.loginSuccess, function (event, args) {
-    $state.go('app.user');
+    $state.go('app.user', { userId : CurrentUser.getUser().id});
   });
 
   $rootScope.$on(AUTH_EVENTS.loginFailed, function (event, args) {

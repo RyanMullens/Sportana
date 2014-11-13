@@ -98,7 +98,7 @@ exports.getUserProfile = function (login, callback) {
 								"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
 								"WHERE Users.login = $1 " +
 								"GROUP BY Users.login, FavoriteSports.sport";
-						
+
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){

@@ -5,12 +5,7 @@ app.controller("SidebarController", function($scope, $location, sidebarService, 
 {
 	this.currentTab = 'home';
 	this.showMenu = false;
-	this.userId = CurrentUser.getUser().id;
 
-
-	$scope.userId = function () {
-		return this.userId;
-	};
 	$scope.isActive = function (viewLocation) {
 		return viewLocation === $location.path();
 	};

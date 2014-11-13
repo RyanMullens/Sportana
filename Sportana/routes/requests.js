@@ -30,7 +30,7 @@ var authenticator = require('./authentication'); // Authentication Handler
  *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
  *    "gameCreator"   : string // for types 1, 2, and 3
  *    "gameID"        : int // for types 1, 2, and 3
- *   }]	
+ *   }]
  * }
  *****************************************************
  */
@@ -68,7 +68,7 @@ router.get('', function (req, res) {
  * 	“userToID”    : string
  *	“gameCreator” : string
  *	“gameID”      : int
- * }	
+ * }
  *
  * RESPONSE:
  * {
@@ -111,7 +111,7 @@ router.put('/game', function(req, res) {
  * REQUEST:
  * {
  * 	“userToID” : string
- * }	
+ * }
  *
  * RESPONSE:
  * {
@@ -152,7 +152,7 @@ router.put('/friend', function(req, res) {
  * REQUEST:
  * {
  * 	“confirmed”: boolean
- * }	
+ * }
  *
  * RESPONSE:
  * {
@@ -221,4 +221,3 @@ router.post('/:requestID', function(req, res) {
 });
 
 module.exports = router;
-

@@ -27,11 +27,11 @@ app.factory('AuthenticationService', function ($http, Session, CurrentUser) {
 
   authenticationService.logout = function () {
     Session.destroy();
-    CurrentUser.setUser(null);
+    CurrentUser.destroyUser();
   };
 
   authenticationService.isAuthenticated = function () {
-    return !!Session.authenticationToken;
+    return !!Session.isAuthenticated();
   };
 
   return authenticationService;

@@ -9,6 +9,7 @@ app.controller('Login', function (AUTH_EVENTS, AuthenticationService, $state, $s
 
     AuthenticationService.login(credentials).then(function (user) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+      $rootScope.currentUserId = user.id;
     }, function () {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
