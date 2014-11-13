@@ -9,7 +9,7 @@ app.factory('AuthenticationService', function ($http, Session, CurrentUser) {
       .then(function (res) {
         if(res.data.message == "") {
           Session.create(res.data.authenticationToken);
-
+          console.log("WHAT");
           user = {
             id: res.data.login,
             firstName: res.data.firstName,

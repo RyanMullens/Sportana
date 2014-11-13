@@ -3,13 +3,13 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 
 	$scope.user = {};
 
-	// $http.get('/api/users/' + $stateParams.userId)
-
 	userId = $stateParams.userId;
 	if(!userId) {
 		//Temp hack... sorry. This may loop indefinetly. Especially if not logged in
 		userId = $state.go('app.user', {userId:  CurrentUser.getUser().id});//CurrentUser.getUser().id;
 	}
+
+	console.log("HELLO");
 
 	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)
