@@ -65,7 +65,6 @@ exports.getUserByAuth = function(id, callback) {
         	callback("User not found");
         }
         else {
-        	console.log(result);
             callback(undefined, result.rows[0].login);
         }
       });
