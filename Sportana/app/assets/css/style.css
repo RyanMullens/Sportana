@@ -297,6 +297,56 @@ body {
 /**** END VIEW PROFILE ****/
 
 
+/**** START SEARCH PAGE ****/
+
+.searchResultQueryTitleHolder
+{
+  text-align: center;
+}
+
+.searchResultQueryTitle
+{
+  font-size: 30pt;
+
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.searchResultQuery
+{
+  padding: 10px;
+
+  background-color: #CCCCCC;
+  border-radius: 10px;
+
+}
+
+.searchResult
+{
+  background-color: #CCCCCC;
+  margin-bottom: 20px;
+}
+
+.searchResultName
+{
+  font-size: 30pt;
+}
+
+.searchResultCity
+{
+  font-size: 20pt;
+}
+
+.searchResultImg
+{
+  width: 100%;
+}
+
+/**** END SEARCH PAGE ****/
+
+
+
+
 
 
 @media (max-width: 767px) {

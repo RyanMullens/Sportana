@@ -1,22 +1,21 @@
-<h1 class="page-header">Search Players!</h1>
 
-<p>Searching for players {{searchPlayer.query}}</p>
-
+<div class="row searchResultQueryTitleHolder">
+	<div class="searchResultQueryTitle"> Searching for players <span class="searchResultQuery">{{searchPlayer.query}}</span></div>
+</div>
 <div id="searchResults">
-	
-	<div ng-repeat="result in searchPlayer.results" class="searchResult">
-	
-		Name: {{ result.firstName + " " + result.lastName }}
-			<br>
-			City: {{ result.city }}
-			<br>
-			Age: {{ result.age }}
-			<br>
+	<div class="row searchResult" ng-repeat="result in searchPlayer.results" class="searchResult">
+		<div class="col-xs-3 col-md-2">
+			<img class="searchResultImg" ng-src="{{result.profileImg}}"/>
+		</div>
+
+		<div class="col-xs-9 col-md-10">
+			<div class="row searchResultName">
+				{{ result.firstName + " " + result.lastName  + ", " +  result.age }}
+			</div>
+			<div class="row searchResultCity">
+				{{ result.city }}
+			</div>
 			<a ui-sref="app.user({userId: result.user})">Link</a>
-			<br>
-			<hr>		
-
-
+		</div>
 	</div>
-
 </div>
