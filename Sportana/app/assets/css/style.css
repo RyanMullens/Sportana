@@ -17,6 +17,17 @@ body {
 
 /****  START SIDEBAR ****/
 
+@media (max-width: 767px) {
+  .sidebarOpen
+  {
+    left: 0px !important;
+    top: 50px  !important;
+    position: fixed  !important;
+    z-index: 10000  !important;
+    height: 100%  !important;
+  }
+}
+
 .sidebar {
   background-color: #808386;
   font-size: 15pt;
@@ -160,12 +171,21 @@ body {
 
 }
 
+
+
 .profileCategoryTitle
 {
   margin-top: 60px;
   font-size: 32px;
   text-align: center;
   vertical-align: center;
+}
+
+@media (max-width: 767px) {
+  .profileCategoryTitle
+  {
+      margin-top: 10px;
+  }
 }
 
 .profileButtonHolder
@@ -247,6 +267,7 @@ body {
 
   height:150px;
 }
+
 
 .profileSportList
 {
