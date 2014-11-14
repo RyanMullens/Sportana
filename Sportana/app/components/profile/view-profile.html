@@ -1,7 +1,7 @@
 <body>
 	<p>
 		<div>
-			<div class="profile row">
+			<div ng-show="viewProfile.isLoaded()" class="profile row">
 				<div class="row">
 					<div class="profileImageHolder col-md-3">
 						<img class="profileImage" ng-src="{{viewProfile.getProfilePicture()}}"></img>

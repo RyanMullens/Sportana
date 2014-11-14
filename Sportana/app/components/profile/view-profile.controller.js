@@ -3,6 +3,9 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	$scope.user = {};
 	$scope.editUser = {};
 
+	this.editing = false;
+	$scope.loaded = false;
+
 	userId = $stateParams.userId;
 	if(!userId) {
 		//Temp hack... sorry. This may loop indefinetly. Especially if not logged in
@@ -16,7 +19,7 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 			console.log(data);
     		
     		$scope.user = data;
-
+    		$scope.loaded = true;
     		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
@@ -30,8 +33,10 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 		});
 
 
-this.editing = false;
-
+this.isLoaded = function()
+{
+	return $scope.loaded;
+}
 
 this.getLastName = function()
 {
@@ -174,7 +179,7 @@ this.addFriend = function()
 {
 	alert("Add Friend " + userId);
 
-	$http.put('/api/requests/friend', {userToID:userId} )
+	$http.put('/api/requests/friend', {userTo:userId} )
 	
 	.success(function(data, status, headers, config)
 	{
@@ -186,8 +191,6 @@ this.removeFriend = function()
 {
 	alert("Remove Friend");
 }
-
-
 
 
 });

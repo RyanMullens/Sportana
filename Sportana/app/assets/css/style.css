@@ -321,10 +321,16 @@ body {
 
 }
 
+#searchResults
+{
+    text-align: center;
+}
+
 .searchResult
 {
-  background-color: #CCCCCC;
   margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .searchResultName
