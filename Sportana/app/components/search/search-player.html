@@ -1,21 +1,22 @@
 
 <div class="row searchResultQueryTitleHolder">
-	<div class="searchResultQueryTitle"> Searching for players <span class="searchResultQuery">{{searchPlayer.query}}</span></div>
+	<div class="searchResultQueryTitle"> Searching for players <span class="searchResultQuery">{{query}}</span></div>
 </div>
 <div id="searchResults">
-	<div class="row searchResult" ng-repeat="result in searchPlayer.results" class="searchResult">
+	{{searchPlayer.results.length}}
+
+	<div class="row searchResult btn btn-default" ng-repeat="result in results" ng-click="goToUser(result.login)" >
 		<div class="col-xs-3 col-md-2">
-			<img class="searchResultImg" ng-src="{{result.profileImg}}"/>
+			<img class="searchResultImg" ng-src="{{result.profilePhoto}}"/>
 		</div>
 
-		<div class="col-xs-9 col-md-10">
+		<div class="col-xs-8 col-md-9">
 			<div class="row searchResultName">
 				{{ result.firstName + " " + result.lastName  + ", " +  result.age }}
 			</div>
 			<div class="row searchResultCity">
 				{{ result.city }}
 			</div>
-			<a ui-sref="app.user({userId: result.user})">Link</a>
 		</div>
 	</div>
 </div>
