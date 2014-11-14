@@ -1,4 +1,4 @@
-app.controller("SearchbarController", function($scope, $state, sidebarService)
+app.controller("SearchbarController", function($scope, $state, sidebarService, AuthenticationService)
 {
 	this.searchQuery = '';
 
@@ -12,8 +12,13 @@ app.controller("SearchbarController", function($scope, $state, sidebarService)
 	$scope.toggleMenu = function()
 	{
 		console.log("TOGGLE! :D");
-		sidebarService.toggleMenuShown()	
+		sidebarService.toggleMenuShown()
 	}
+
+	$scope.logout = function () {
+		AuthenticationService.logout();
+		$state.go('login');
+	};
 
 	//$scope.escape
 
