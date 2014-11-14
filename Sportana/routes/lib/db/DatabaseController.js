@@ -90,23 +90,14 @@ exports.getUserProfile = function (login, callback) {
 						}
 					else{
 					  if(result.rows[0] !== undefined){
-//							var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
-//							"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
-//							"FavoriteSports.sport " +
-//							"FROM Users " +
-//							"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
-//							"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
-//							"WHERE Users.login = $1 " +
-//							"GROUP BY Users.login, FavoriteSports.sport";
 					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
 						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
 						"FavoriteSports.sport, Sport.imageURL " +
-						//multiple rows of (login, sport) .... search by login . use JOIN and also return sports images....
 						"FROM Users " +
 						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
 						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
-						"RIGHT JOIN Sport ON FavoriteSports.sport = Sport.sport " + 
-						"WHERE Users.login = $1";// +
+						"LEFT JOIN Sport ON FavoriteSports.sport = Sport.sport " + 
+						"WHERE Users.login = $1 " + 
 						"GROUP BY Users.login, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport, Sport.imageURL";
 					  
 						client.query({ text : SQLQuery,
@@ -115,12 +106,13 @@ exports.getUserProfile = function (login, callback) {
 			            	done();
 			            	client.end();
 			            	pg.end();
-			            	console.log(result.rows[0]);
-			            	console.log(result.rows[1]);
 			            	if(err){
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
+			            		console.log("hi");
+			            		console.log(result.rows[0]);
+	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
 			            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
@@ -128,14 +120,27 @@ exports.getUserProfile = function (login, callback) {
 			            				result.rows[0]["timeliness"] = 0;
 			            				result.rows[0]["skilllevel"] = 0;
 			            			}
-			            			if(result.rows[0]["sport"] == null)
-			            				result.rows[0]["sport"] = "Unselected";
-			            			if(result.rows.length > 1){ //has more than one favorite sport
-			            				for(i = 1; i < result.rows.length; i++){
-			            					result.rows[0]["sport"] += "," + result.rows[i]["sport"];
-			            					result.rows[0]["imageurl"] += "," + result.rows[i]["imageurl"];
+			            			if(result.rows.length > 1){
+			            				console.log("hello");
+			            				for(i = 0; i < result.rows.length; i++){
+			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
+					            			delete result.rows[i]["sport"];
+					            			delete result.rows[i]["imageurl"];
 			            				}
 			            			}
+			            			else if(result.rows.length == 0){
+			            				console.log("hey");
+			            				sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+			            			else{ //null
+			            				console.log("howdy");
+			            				sportsArray.push({sportsName: null, sportImage: null});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+		            				result.rows[0]["sportsArray"] = sportsArray;
 			            			callback(undefined, result.rows[0]);
 			            		}
 			            		else{
