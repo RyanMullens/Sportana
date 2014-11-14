@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var pg = require('pg');
-var connString = "postgres://readb1:Account7568803@localhost:5432/sportana";
+var connString = "postgres://student:student@localhost:5432/sportana";
 
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 

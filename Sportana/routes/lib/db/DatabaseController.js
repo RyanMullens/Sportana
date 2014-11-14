@@ -2,7 +2,7 @@ var pg = require('pg');
 var timeHelper = require('../helpers/timeHelper');
 
 //connectionString = process.env.DATABASE_URL || allows for deployed app db connection
-var connString = process.env.DATABASE_URL || 'postgres://readb1:Account7568803@localhost/sportana';
+var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
 
 exports.getLogin = function(login, password, callback) {
   pg.connect(connString, function (err, client, done) {
@@ -96,10 +96,10 @@ exports.getUserProfile = function (login, callback) {
 						"FROM Users " +
 						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
 						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
-						"LEFT JOIN Sport ON FavoriteSports.sport = Sport.sport " + 
-						"WHERE Users.login = $1 " + 
+						"LEFT JOIN Sport ON FavoriteSports.sport = Sport.sport " +
+						"WHERE Users.login = $1 " +
 						"GROUP BY Users.login, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport, Sport.imageURL";
-					  
+
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){

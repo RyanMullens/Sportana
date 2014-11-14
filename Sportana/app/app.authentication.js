@@ -12,13 +12,13 @@ app.run(function ($rootScope, $state, $location, AUTH_EVENTS, AuthenticationServ
   // Check authentication status on every transition
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 
-    if (toState.name != "login" && !AuthenticationService.isAuthenticated()) {
-      event.preventDefault();
-      $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-      return;
-    } else if (toState.name === "login" && AuthenticationService.isAuthenticated()) {
+
+    if(toState.data && toState.data["noAuth"] && AuthenticationService.isAuthenticated()) {
       event.preventDefault();
       $state.go('app.user');
+    } else if((!toState.data || !toState.data["noAuth"]) && !AuthenticationService.isAuthenticated()) {
+      event.preventDefault();
+      $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
     }
   });
 

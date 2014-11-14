@@ -26,6 +26,9 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         templateUrl: "/components/landing/login.html",
         controller: "Login"
       }
+    },
+    data: {
+      "noAuth": true
     }
   })
   .state("signup", {
@@ -36,6 +39,9 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         templateUrl: "/components/landing/signup.html",
         controller: "Signup"
       }
+    },
+    data: {
+      "noAuth": true
     }
   })
 

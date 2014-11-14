@@ -1,0 +1,30 @@
+<form name="signupForm"
+      method="post"
+      ng-submit="signup(credentials)"
+      novalidate form-autofill-fix>
+  <label for="fname">First Name:</label>
+  <input type="text" id="fname"
+         ng-model="credentials.fname">
+
+ <label for="lname">Last Name:</label>
+ <input type="text" id="lname"
+        ng-model="credentials.lname">
+
+  <label for="username">Email:</label>
+  <input type="text" id="email"
+         ng-model="credentials.email">
+
+  <label for="password">Password:</label>
+  <input type="text" id="password"
+         ng-model="credentials.password">
+
+ <label for="city">Current City:</label>
+ <input type="text" id="city"
+        ng-model="credentials.city">
+
+  <label for="dob">Birthday:</label>
+  <input type="date" id="date"
+         ng-model="credentials.dob">
+
+  <button type="submit">Signup</button>
+</form>
