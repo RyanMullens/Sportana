@@ -119,12 +119,20 @@ this.isFriend = function()
 this.editProfile = function()
 {
 	alert("Edit Profile");
-	$scope.user.firstname = "Potato";
+	$scope.user.firstname = "Edited";
+	$scope.user.lastname = "User... lol";
 }
 
 this.addFriend = function()
 {
-	alert("Add Friend");
+	alert("Add Friend " + userId);
+
+	$http.put('/api/requests/friend', {userToID:userId} )
+	
+	.success(function(data, status, headers, config)
+	{
+		console.log(JSON.stringify(data));
+	});
 }
 
 this.removeFriend = function()
