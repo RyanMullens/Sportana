@@ -90,15 +90,16 @@ exports.getUserProfile = function (login, callback) {
 						}
 					else{
 					  if(result.rows[0] !== undefined){
-						var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
-								"round(avg(ratings.friendliness)) as friendliness, round(avg(ratings.timeliness)) as timeliness, round(avg(ratings.skilllevel)) as skilllevel, " +
-								"FavoriteSports.sport " +
-								"FROM Users " +
-								"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
-								"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
-								"WHERE Users.login = $1 " +
-								"GROUP BY Users.login, FavoriteSports.sport";
-
+					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
+						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
+						"FavoriteSports.sport, Sport.imageURL " +
+						"FROM Users " +
+						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
+						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
+						"LEFT JOIN Sport ON FavoriteSports.sport = Sport.sport " + 
+						"WHERE Users.login = $1 " + 
+						"GROUP BY Users.login, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport, Sport.imageURL";
+					  
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
 			             function(err, result){
@@ -109,6 +110,9 @@ exports.getUserProfile = function (login, callback) {
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
+			            		console.log("hi");
+			            		console.log(result.rows[0]);
+	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
 			            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
@@ -116,8 +120,27 @@ exports.getUserProfile = function (login, callback) {
 			            				result.rows[0]["timeliness"] = 0;
 			            				result.rows[0]["skilllevel"] = 0;
 			            			}
-			            			if(result.rows[0]["sport"] == null)
-			            				result.rows[0]["sport"] = "Unselected";
+			            			if(result.rows.length > 1){
+			            				console.log("hello");
+			            				for(i = 0; i < result.rows.length; i++){
+			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
+					            			delete result.rows[i]["sport"];
+					            			delete result.rows[i]["imageurl"];
+			            				}
+			            			}
+			            			else if(result.rows.length == 0){
+			            				console.log("hey");
+			            				sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+			            			else{ //null
+			            				console.log("howdy");
+			            				sportsArray.push({sportsName: null, sportImage: null});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+		            				result.rows[0]["sportsArray"] = sportsArray;
 			            			callback(undefined, result.rows[0]);
 			            		}
 			            		else{
@@ -551,4 +574,60 @@ exports.rateUser = function(UserObject, callback) {
 			}});
 		}
 	});
+};
+
+
+exports.searchUsers = function(firstName, lastName, callback) {
+  if (!firstName && !lastName) {
+  	callback('No search parameters given', undefined);
+  }
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Users.login, Users.firstName, Users.lastName, Users.profilePicture, Users.birthday, Users.city " +
+    				   "FROM Users ";
+    	var searchValues = [];
+    	if (firstName) {
+    		SQLQuery += "WHERE lower(Users.firstName) = lower($1)";
+    		searchValues.push(firstName);
+    	}
+    	if (lastName) {
+    		if (!firstName) {
+    			SQLQuery += "WHERE lower(Users.lastName) = lower($1)";
+    		} else {
+	    		SQLQuery += " AND lower(Users.lastName) = lower($2)";
+	    	}
+	    	searchValues.push(lastName);
+    	}
+    	client.query({ text : SQLQuery,
+                     values : searchValues},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var users = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var user = {};
+  					user.login = result.rows[i].login;
+  					user.profilePhoto = result.rows[i].profilepicture;
+  					user.firstName = result.rows[i].firstname;
+  					user.lastName = result.rows[i].lastname;
+  					user.city = result.rows[i].city;
+  					user.age = timeHelper.makeAgeFromBirthday(result.rows[i].birthday);
+  					users.push(user);
+		  		}
+          		callback(undefined, users);
+        	}
+      });
+    }
+  });
 };

@@ -1,7 +1,7 @@
 app.controller("ViewProfileController", function($http, $state, $stateParams, $scope, CurrentUser){
 
-
 	$scope.user = {};
+	$scope.editUser = {};
 
 	userId = $stateParams.userId;
 	if(!userId) {
@@ -9,28 +9,39 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 		userId = $state.go('app.user', {userId:  CurrentUser.getUser().id});//CurrentUser.getUser().id;
 	}
 
-	console.log("HELLO");
-
 	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)
 		{
+			//Debug object in console
 			console.log(data);
+    		
     		$scope.user = data;
 
-    		console.log(JSON.stringify(data));
-
-    		$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
+    		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];
+							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];*/
 
 		})
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
 		});
 
+
+this.editing = false;
+
+
+this.getLastName = function()
+{
+	return $scope.user.lastname;
+}
+
+this.getFirstName = function()
+{
+	return $scope.user.firstname;
+}
 
 this.getFullName = function()
 {
@@ -59,7 +70,7 @@ this.getProfilePicture = function()
 
 this.getFavoriteSports = function()
 {
-	return $scope.user.favoriteSports;
+	return $scope.user.sportsArray;
 }
 
 /*this.getRatings = function()
@@ -95,20 +106,80 @@ this.isFriend = function()
 	return false;
 }
 
+this.isEditing = function()
+{
+	return this.editing;
+}
 
 
+this.cloneUser = function(user)
+{
+	var newUser = Object.create(user);
 
+	newUser.sportsArray = user.sportsArray.slice(0);
+	return newUser;
+}
+
+this.getCurrentSports = function()
+{
+	if(this.isEditing())
+	{
+		return $scope.editUser.sportsArray;
+	}
+	else{
+		return $scope.user.sportsArray;
+	}
+}
 
 
 //Actions
 this.editProfile = function()
 {
-	alert("Edit Profile");
+	console.log("Edit Profile");
+
+	$scope.editUser = this.cloneUser($scope.user);
+
+	this.editing = true;
 }
+
+this.saveProfile = function()
+{
+	console.log("Saved Profile!");
+
+	$scope.user = $scope.editUser;
+
+	this.editing = false;
+}
+
+this.cancelProfile = function()
+{
+	console.log("Cancel Profile!");
+
+	$scope.editUser = null;
+
+	this.editing = false;
+}
+
+this.addSport = function()
+{
+	console.log("Add Sport!");
+
+	var testSportObj = {sportImage: "/assets/img/sports/baseball.png", sportsName: "Table Tennis"};
+
+	$scope.editUser.sportsArray.unshift(testSportObj);
+}
+
 
 this.addFriend = function()
 {
-	alert("Add Friend");
+	alert("Add Friend " + userId);
+
+	$http.put('/api/requests/friend', {userToID:userId} )
+	
+	.success(function(data, status, headers, config)
+	{
+		console.log(JSON.stringify(data));
+	});
 }
 
 this.removeFriend = function()

@@ -85,6 +85,7 @@ reservedSpots INT,
 minAge INT,
 maxAge INT,
 isPublic BOOLEAN,
+isCompetitive BOOLEAN,
 PRIMARY KEY (creator, gameID),
 FOREIGN KEY (creator)
 REFERENCES Users(login)

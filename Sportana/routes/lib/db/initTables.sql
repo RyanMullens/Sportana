@@ -36,27 +36,33 @@ INSERT INTO Ratings(userRated , rater , friendliness , timeliness, skillLevel) v
 ('myoda' , 'ckent' , 2 , 3 , 4);
 
 INSERT INTO Sport(sport , imageURL) values
-('soccer' , 'http://stuffyoudontwant.com/wp-content/uploads/2011/10/soccer-ball.jpg');
+('Soccer' , '/assets/img/sports/soccer.png');
 INSERT INTO Sport(sport , imageURL) values
-('basketball' , 'http://kindersay.com/files/images/basketball.png');
+('Baseball' , '/assets/img/sports/baseball.png');
 INSERT INTO Sport(sport , imageURL) values
-('football' , 'http://nelsonrural.nbed.nb.ca/sites/nelsonrural.nbed.nb.ca/files/football1.png');
+('Football' , '/assets/img/sports/football.png');
 INSERT INTO Sport(sport , imageURL) values
-('billiards' , 'http://www.glennsfireplaceandspa.com/components/com_fpslideshow/images/billiards_slide.jpg');
+('Basketball' , '/assets/img/sports/basketball.png');
 
 INSERT INTO FavoriteSports(login , sport) values
-('myoda' , 'basketball');
+('myoda' , 'Soccer');
 INSERT INTO FavoriteSports(login , sport) values
-('mscott' , 'soccer');
+('myoda' , 'Baseball');
 INSERT INTO FavoriteSports(login , sport) values
-('ckent' , 'billiards');
+('myoda' , 'Football');
+INSERT INTO FavoriteSports(login , sport) values
+('myoda' , 'Basketball');
+INSERT INTO FavoriteSports(login , sport) values
+('mscott' , 'Soccer');
+INSERT INTO FavoriteSports(login , sport) values
+('ckent' , 'Football');
 
-INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
-('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true);
-INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
-('ckent' , '2014-09-20' , '08:00:00' , '09:00:00' , 'soccer' , 'umass', 0 , 30 , 10 , 6 , 10 , 30 , true);
-INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic) values
-('jbond' , '2014-10-21' , '13:00:00' , '15:00:00' , 'football' , 'Mcguirk', 0 , 50 , 20 , 15 , 15 , 35 , true);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
+('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true, false);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isCompetitive) values
+('ckent' , '2014-09-20' , '08:00:00' , '09:00:00' , 'soccer' , 'umass', 0 , 30 , 10 , 6 , 10 , 30 , true, true);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isCompetitive) values
+('jbond' , '2014-10-21' , '13:00:00' , '15:00:00' , 'football' , 'Mcguirk', 0 , 50 , 20 , 15 , 15 , 35 , true, false);
 
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
 ('bwayne' , 'mscott' , 1 , 0 , 0);
