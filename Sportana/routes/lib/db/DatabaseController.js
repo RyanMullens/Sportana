@@ -300,44 +300,55 @@ exports.createUser = function(UserObject, callback) {
 		if(err) {
 			callback(undefined, {message: "error"});
 		}
-		else {
+	  else
+    {
 			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
-				client.query({ text : sqlStatement,
-							   values : [UserObject.login]},
-					function(err, result){
-					done();
-					if(err){
-						callback(undefined, {message: "error"});
-						}
-					else{
-						if(result.rows[0]["login"] === UserObject.login){
-							var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstname, lastname, dateOfBirth, city) VALUES (" +
-							"$1, $2, $3, $4, $5, $6, $7)";
-							client.query({ text : SQLQuery,
-				            values : [UserObject.login,
-				            UserObject.emailSuffix,
-				            UserObject.password,
-				            UserObject.firstname,
-				            UserObject.lastname,
-				            UserObject.dateOfBirth,
-				            UserObject.city]
-							},
-			             function(err, result){
-			            	done();
-			            	client.end();
-			            	pg.end();
-			            	if(err){
-								callback(undefined, {message: "error"});
-			            	}
-			            	else {
-			            		callback(undefined, {message: "success"});
-			            	}
-			            });
-						}
-				else{
-					callback(undefined, {message: "error"});
-				}
-			}});
+			client.query({ text : sqlStatement,
+					         values : [UserObject.login] },
+
+            function(err, result) {
+	             done();
+			         if(err){
+			           callback(undefined, {message: "error"});
+				       }
+               else if (!result.rows[0])
+               {
+                 // TODO : INSERT HERE -- No user exists with that name, so go ahead and create it
+
+                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, birthday, city, auth) VALUES (" +
+                   "$1, $2, $3, $4, $5, $6, $7, $8)";
+
+                 client.query({
+                       text : SQLQuery,
+                       values : [
+                         UserObject.login,
+                         UserObject.emailSuffix,
+                         UserObject.password,
+                         UserObject.firstname,
+                         UserObject.lastname,
+                         UserObject.dateOfBirth,
+                         UserObject.city,
+                         'abcdefgffewqrr']
+                 }, function(err, result){
+                   done();
+                   client.end();
+                   pg.end();
+                   if(err){
+                     callback(undefined, {message: "database INSERT error"});
+                   }
+                   else
+                   {
+                     callback(undefined, {message: "success"});
+                   }
+                 });
+             }
+             else
+             {
+               // TODO : Return an error since that username is already taken
+
+               callback(undefined, {message: "User already exists"});
+             }
+			});
 		}
 	});
 };
