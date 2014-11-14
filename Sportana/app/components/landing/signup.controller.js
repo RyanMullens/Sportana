@@ -1,12 +1,12 @@
-app.controller("Signup", function($http)
-{
+app.controller('Signup', function ($http, AUTH_EVENTS, AuthenticationService, $scope) {
+
 	$scope.credentials = {
 		email: '',
 		password: '',
-		fname: '',
-		lname: '',
+		firstname: '',
+		lastname: '',
 		city: '',
-		dob: '1992-09-20'
+		dateOfBirth: '1992-09-20'
 	};
 
 	$scope.signup = function (credentials) {
@@ -16,11 +16,14 @@ app.controller("Signup", function($http)
 			.then(function (res) {
 				if(res.data.message == "success") {
 					AuthenticationService.login(credentials).then(function (user) {
-					$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-				}, function () {
-					$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-				});
+						$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+					}, function () {
+						$rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+					});
+				} else {
+					console.log(res.data.message);
+					// Clear form and display errors
+				}
 			});
 	};
-
 });

@@ -1,6 +1,7 @@
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   // UNCOMMENTING LEADS TO INFINITE DIGEST LOOP BUG.
+  // WITH COMMENTED: Causes strange URL appending... Fuck.
   // $locationProvider.html5Mode(true);
 
   $urlRouterProvider

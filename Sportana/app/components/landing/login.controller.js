@@ -13,4 +13,4 @@ app.controller('Login', function (AUTH_EVENTS, AuthenticationService, $state, $s
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
   };
-})
+});
