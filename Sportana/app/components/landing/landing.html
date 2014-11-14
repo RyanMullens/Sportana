@@ -1,15 +1,2 @@
-<iframe src="sink.html" name="sink" style="display:none"></iframe>
-
-<form name="loginForm"
-      action="sink.html" target="sink" method="post"
-      ng-controller="Login"
-      ng-submit="login(credentials)"
-      novalidate form-autofill-fix>
-  <label for="username">Email:</label>
-  <input type="text" id="email"
-         ng-model="credentials.email">
-  <label for="password">Password:</label>
-  <input type="password" id="password"
-         ng-model="credentials.password">
-  <button type="submit">Login</button>
-</form>
+<div ui-view="credentials"></div>
+<!-- This view is separated in case we decide to have other information present on the landing/signup page -->

@@ -2,7 +2,7 @@ var pg = require('pg');
 var timeHelper = require('../helpers/timeHelper');
 
 //connectionString = process.env.DATABASE_URL || allows for deployed app db connection
-var connString = process.env.DATABASE_URL || 'postgres://student:student@localhost/sportana';
+var connString = process.env.DATABASE_URL || 'postgres://readb1:Account7568803@localhost/sportana';
 
 exports.getLogin = function(login, password, callback) {
   pg.connect(connString, function (err, client, done) {

@@ -1,38 +1,74 @@
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
-  $locationProvider.html5Mode(true);
-  $urlRouterProvider.otherwise('/');
+  // UNCOMMENTING LEADS TO INFINITE DIGEST LOOP BUG.
+  // $locationProvider.html5Mode(true);
+
+  $urlRouterProvider
+    .when('', '/login')
+    .when('/', '/login')
+    .otherwise('/');
+
   $stateProvider
 
-  .state("app",
-  {
-    url: "",
+  .state("landing", {
     abstract: true,
     views: {
-      "sidebar@": {
-        templateUrl: "/shared/sidebar/sidebar.html",
-        controller: "SidebarController as sidebar"
-      },
-      "searchbar@": {
-        templateUrl: "/shared/searchbar/searchbar.html",
-        controller: "SearchbarController as searchbar"
+      "root@": {
+        templateUrl: "/components/landing/landing.html"
       }
     }
   })
-  .state("app.login", {
+  .state("login", {
     url: "/login" ,
+    parent: "landing",
     views: {
-      "content@": {
+      "credentials@landing": {
         templateUrl: "/components/landing/login.html",
         controller: "Login"
       }
     }
   })
+  .state("signup", {
+    url: "/signup" ,
+    parent: "landing",
+    views: {
+      "credentials@landing": {
+        templateUrl: "/components/landing/signup.html",
+        controller: "Signup"
+      }
+    }
+  })
+
+  // This is the ROOT of authenticated user's application.
+  .state("main", {
+    abstract: true,
+    views: {
+      "root@": {
+        templateUrl: "/shared/app.html",
+      }
+    }
+  })
+
+  .state("app",
+  {
+    parent: "main",
+    abstract: true,
+    views: {
+      "sidebar@main": {
+        templateUrl: "/shared/sidebar/sidebar.html",
+        controller: "SidebarController as sidebar"
+      },
+      "searchbar@main": {
+        templateUrl: "/shared/searchbar/searchbar.html",
+        controller: "SearchbarController as searchbar"
+      }
+    }
+  })
 
   .state("app.home", {
-   url: "/" ,
+   url: "/dashboard" ,
    views: {
-    "content@": {
+    "content@main": {
       templateUrl: "/components/home/home.html",
       controller: "HomeController as home"
     }
@@ -42,7 +78,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.friends", {
     url: "/friends" ,
     views: {
-      "content@": {
+      "content@main": {
         templateUrl: "/components/friends/view-friends.html",
         controller: "ViewFriendsController as viewFriends"
       }
@@ -53,7 +89,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.games", {
     url: "/games" ,
     views: {
-      "content@": {
+      "content@main": {
         templateUrl: "/components/games/view-games.html",
         controller: "ViewGamesController as viewGames"
       }
@@ -63,7 +99,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.createGame", {
    url: "/game/create" ,
    views: {
-    "content@": {
+    "content@main": {
     	templateUrl: "/components/games/create-game.html",
     	controller: "CreateGameController as createGame"
     }
@@ -73,14 +109,14 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.queue", {
    url: "/queue",
    views: {
-    "content@": {
+    "content@main": {
       templateUrl: "/components/queue/queue.html"
     }
   }
 })
   .state("app.queue.preferences", {
     views: {
-      "content@": {
+      "content@main": {
         templateUrl: "/components/queue/queue-preferences.html",
         controller: "PreferencesController as preferences"
       }
@@ -89,7 +125,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
   .state("app.queue.content", {
     views: {
-      "content@": {
+      "content@main": {
         templateUrl: "/components/queue/queue-content.html"
       }
     }
@@ -97,7 +133,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.queue.content.sports", {
     url: "/queue/preferences/sports" ,
     views: {
-      "content@": {
+      "content@main": {
         templateUrl: "/components/queue/queue-sports.html",
         controller: "QueueSportController as sports"
       }
@@ -107,7 +143,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.queue.content.location", {
     url: "/queue/preferences/location" ,
     views: {
-      "content@": {
+      "content@mainmain": {
         templateUrl: "/components/queue/queue-location.html",
         controller: "QueueLocationController as location"
       }
@@ -117,7 +153,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.viewGame", {
    url: "/game/:gameId" ,
    views: {
-    "content@": {
+    "content@main": {
     	templateUrl: "/components/game/view-game.html",
     	controller: "ViewGameController as viewGame"
     }
@@ -127,7 +163,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.searchPlayer", {
    url: "/user/search/:query" ,
    views: {
-    "content@": {
+    "content@main": {
     	templateUrl: "/components/search/search-player.html",
     	controller: "SearchPlayerController as searchPlayer"
     }
@@ -137,7 +173,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.user", {
    url: "/user/:userId" ,
    views: {
-    "content@": {
+    "content@main": {
     	templateUrl: "/components/profile/view-profile.html",
     	controller: "ViewProfileController as viewProfile"
     }
@@ -147,7 +183,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   .state("app.settings", {
    url: "/settings" ,
    views: {
-    "content@": {
+    "content@main": {
     	templateUrl: "/components/settings/settings.html",
     	controller: "SettingsController as settings"
     }
