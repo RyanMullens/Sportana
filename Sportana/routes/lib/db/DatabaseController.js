@@ -24,6 +24,9 @@ exports.getLogin = function(login, password, callback) {
         if (err) {
           callback(err, undefined, false);
         }
+        else if (!result.rows[0]) {
+          callback("User not found");
+        }
         else {
           if (result.rows[0].password === password) {
           	var theUser = {};
