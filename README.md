@@ -16,7 +16,7 @@ We provide a functional specification that details how Sportana will be used. Th
 
 # Design Specification
 
-A low level design specification is provided that details the architecture of our system, the libraries that compose our infrastructure, and the intercommunication between atomic components in our system.  A high level overview discusses the general structure of Sportana, while further discussion of each critical element in the system describes code implementation and implmentation challeneges.
+A low level design specification is provided that details the architecture of our system, the libraries that compose our infrastructure, and the intercommunication between atomic components in our system.  A high level overview discusses the general structure of Sportana, while further discussion of each critical element in the system describes code implementation and implmentation challeneges.  PDF slides can be found in /docs/low-level-design/dspec.pdf.  That directory also contains the formal .md document, dspec.md.
 
 # Team Members
 
