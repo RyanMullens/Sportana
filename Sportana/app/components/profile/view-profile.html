@@ -112,6 +112,7 @@
 
 				<hr>
 
+
 				<div class="profileSportContainer row">
 					<div class="profileCategoryTitle col-md-4">Favorite Sports</div>
 					<div class='profileSportHolder col-md-8'>
@@ -123,8 +124,15 @@
 							</div>
 
 							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
-								<img ng-src="{{sport.sportImage}}"></img>
-								<div class="sportName">{{sport.sportsName}}</div>
+
+				<script type="text/javascript">
+					$(document).ready(function(){
+    					$('[data-toggle="tooltip"]').tooltip();   
+					});
+				</script>
+
+								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
+								
 							</div>
 						</div>
 					</div>
