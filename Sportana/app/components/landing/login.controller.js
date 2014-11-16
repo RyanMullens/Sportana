@@ -9,8 +9,8 @@ app.controller('Login', function (AUTH_EVENTS, AuthenticationService, $state, $s
 
     AuthenticationService.login(credentials).then(function (user) {
       $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-    }, function () {
+    }, function (err) {
       $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
     });
   };
-})
+});

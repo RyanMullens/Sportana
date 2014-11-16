@@ -1,7 +1,7 @@
 <body>
 	<p>
 		<div>
-			<div class="profile row">
+			<div ng-show="viewProfile.isLoaded()" class="profile row">
 				<div class="row">
 					<div class="profileImageHolder col-md-3">
 						<img class="profileImage" ng-src="{{viewProfile.getProfilePicture()}}"></img>
@@ -9,16 +9,26 @@
 					<div class = "profileInfoHolder col-md-6">
 						<div class="profileNameHolder row" >
 							<div class="profileName" >
-								{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}
+								<div ng-hide="viewProfile.isEditing()">{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}</div>
+								<div ng-show="viewProfile.isEditing()">
+									<input type="text" ng-model="editUser.firstname"></input>
+									<input type="text" ng-model="editUser.lastname"></input>
+									, {{ viewProfile.getAge() }}
+								</div>
 							</div>
 						</div>
 
 						<div class="profileCity row">
-							{{ viewProfile.getCity() }}
+							<div ng-hide="viewProfile.isEditing()">
+								{{ viewProfile.getCity() }}
+							</div>
+							<div ng-show="viewProfile.isEditing()">
+								<input type="text" ng-model="editUser.city"></input>
+							</div>
 						</div>
 					</div>	
 					<div class="profileButtonHolder col-md-3">
-						<button ng-show="viewProfile.isSelf()" ng-click="viewProfile.editProfile()" class="profileSpecialButton btn btn-primary">
+						<button ng-show="viewProfile.isSelf() && !viewProfile.isEditing()" ng-click="viewProfile.editProfile()" class="profileSpecialButton btn btn-primary">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
 							&nbsp;&nbsp;Edit Profile
 						</button> 
@@ -33,7 +43,19 @@
 							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Remove Friend
-						</button>  
+						</button> 
+
+						<button ng-show="viewProfile.isSelf() && viewProfile.isEditing()" ng-click="viewProfile.saveProfile()" class="profileSpecialButton btn btn-success">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+							&nbsp;Save
+						</button> 
+
+						<button ng-show="viewProfile.isSelf() && viewProfile.isEditing()" ng-click="viewProfile.cancelProfile()" class="profileSpecialButton btn btn-danger">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							&nbsp;Cancel
+						</button> 
+
+
 					</div>
 				</div>
 
@@ -90,13 +112,27 @@
 
 				<hr>
 
+
 				<div class="profileSportContainer row">
 					<div class="profileCategoryTitle col-md-4">Favorite Sports</div>
 					<div class='profileSportHolder col-md-8'>
 						<div class="profileSportList">
-							<div ng-repeat="sport in viewProfile.getFavoriteSports()" class='profileSport'>
-								<img ng-src="{{sport.sportImage}}"></img>
-								<div class="sportName">{{sport.sportName}}</div>
+
+							<div ng-show="viewProfile.isEditing()" ng-click="viewProfile.addSport()" class='profileSport btn btn-success'>
+								<img ng-src="/assets/img/sports/add.png"></img>
+								<div class="sportName">Add Sport</div>
+							</div>
+
+							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
+
+				<script type="text/javascript">
+					$(document).ready(function(){
+    					$('[data-toggle="tooltip"]').tooltip();   
+					});
+				</script>
+
+								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
+								
 							</div>
 						</div>
 					</div>

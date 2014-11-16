@@ -31,7 +31,7 @@ body {
 .sidebar {
   background-color: #808386;
   font-size: 15pt;
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
 }
 
@@ -153,12 +153,12 @@ body {
 }
 
 .profileImageHolder{
-  
+
 }
 
 .profileName{
     font-size: 42px;
-} 
+}
 
 .profileCity{
   font-size: 25px;
@@ -169,7 +169,7 @@ body {
 
   .profileName{
       text-align: center;
-  } 
+  }
 
   .profileCity{
       text-align: center;
@@ -217,8 +217,8 @@ body {
 
 .barGraphBarHolder
 {
-  background-color:#ffffff; 
-  height:100px; 
+  background-color:#ffffff;
+  height:100px;
   width:50px;
   position:relative;
 
@@ -243,7 +243,7 @@ body {
 
 .barGraphBar
 {
-  background-color:#bb2222; 
+  background-color:#bb2222;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -269,7 +269,7 @@ body {
   margin-right: auto;
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap; 
+  white-space: nowrap;
 
   height:150px;
 }
@@ -327,10 +327,16 @@ body {
 
 }
 
+#searchResults
+{
+    text-align: center;
+}
+
 .searchResult
 {
-  background-color: #CCCCCC;
   margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .searchResultName
@@ -383,6 +389,12 @@ body {
   width: 100%;
 }
 
+#logout {
+  background-color: #808386;
+  color: #FFFFFF;
+  margin-right: 20px;
+}
+
 .searchbarSearchForm{
   box-shadow: none;
 }
@@ -406,7 +418,7 @@ body {
 
 /* Main -- The region of the screen excluding the sidebar and search bar */
 .main {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
   background-color: #F0F0F1;
   min-height: 100%;
@@ -454,16 +466,16 @@ body {
   padding-bottom: 5;
 }
 
-#sportPicker { 
+#sportPicker {
   width: auto;
   height: 400px;
   overflow-x: scroll;
   overflow-y: hidden;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
-.sportPanel { 
-  
+.sportPanel {
+
   font-size: 18pt;
   width: 200px;
   height: 100%;
@@ -476,7 +488,7 @@ body {
   white-space:normal;
   text-align: center;
   background-color: #FFFFFF;
-  position: relative 
+  position: relative
 }
 
 .sportPanel .description {
@@ -485,7 +497,7 @@ body {
   bottom: 15px;
   left: 15px;
   right: 15px;
-} 
+}
 
 .sportPanel .sportIcon {
   width: 100%;
@@ -495,10 +507,10 @@ body {
 #sportPicker .selected {
   background-color: #E1E2E4;
   border-right: 1px solid #FFFFFF ;
-} 
+}
 
 #selectedSports {
-  
+
   font-size: 20pt;
   margin: 50px auto;
   text-align: center;

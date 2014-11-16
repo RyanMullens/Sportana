@@ -24,6 +24,11 @@ app.controller("SidebarController", function($scope, $location, sidebarService, 
 	{
 		return sidebarService.getMenuShown();
 	}
+
+	$scope.getLoggedUser = function()
+	{
+		return CurrentUser.getUser().id;
+	}
 });
 
 

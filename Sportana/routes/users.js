@@ -29,7 +29,7 @@ router.put('/', function(req, res) {
 			firstname: req.body.firstname, lastname: req.body.lastname,
 			dateOfBirth: req.body.dateOfBirth, city: req.body.city
 			};
-	console.log("\n" + "userobject: " + JSON.parse(JSON.stringify(userobject)) + "\n");
+	console.log("\n" + "Attempting to creat user... " + JSON.stringify(userObject) + "\n");
 	dbc.createUser(userObject, function(err, data){
 		res.send(JSON.stringify(data));
 	});
