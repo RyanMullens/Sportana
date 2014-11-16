@@ -12,7 +12,7 @@
 			<div class="row">
 				<span class="col-md-3">Players Going: {{notification.playersJoined}}</span>
 				<span class="col-md-3">Players Invited: {{notification.playersInvited}}</span>
-				<span class="col-md-3">Invited By: <a ui-sref="app.user({userId: notification.invitedBy})"></a></span>
+				<span class="col-md-3">Invited By: <a ui-sref="app.user({userId: notification.invitedBy})">{{notification.invitedBy}}</a></span>
 				<span class="col-md-3"><button type="button" ng-click="viewGames.acceptGame(notification, true)" class="btn btn-success">Accept</button><button type="button" ng-click="viewGames.acceptGame(notification, false)" class="btn btn-danger">Decline</button></span>
 			</div>
 		</div>

@@ -15,10 +15,10 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	var notifications = [
 		{id: 9, sport: 'Football', sportImg: '/assets/img/icon_73766.png', 
-		invitedBy: 'Alec', playersJoined: 5, playersInvited: 4, 
+		invitedBy: 'jbond', playersJoined: 5, playersInvited: 4, 
 		date: 'October 30 2014', time: '5:30pm', location: 'Amherst'},
 		{id: 10, sport: 'Football', sportImg: '/assets/img/icon_73766.png',
-		invitedBy: 'Ryan', playersJoined: 5, playersInvited: 4, 
+		invitedBy: 'myoda', playersJoined: 5, playersInvited: 4, 
 		date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
 	];
 
