@@ -9,9 +9,27 @@ app.controller("ViewGameController", function($http)
 	{name: 'bwayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{name: 'ckent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}]};
 
+	var friends = [{id: 'jbond', firstname:'James', lastname:'Bond'},
+					{id: 'myoda', firstname:'Master', lastname:'Yoda'}];
+
 	this.getGame = function(){
 		return game;
 	};
+
+	app.directive('tooltip', function(){
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs){
+				$(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+			}
+		};
+	});
 });
 
 

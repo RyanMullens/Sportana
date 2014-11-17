@@ -17,8 +17,24 @@
 				<li>Players Desired: {{game.minplayers}} - {{game.maxplayers}}</li>
 			</ul>
 		</div>
+		<div class="row">
+			Current Players: ({{game.players.length}})
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
+				</button>
+				<div class="dropdown-menu">
+					234
+				</div>
+			</div>
+		</div>
 		<div class="row players">
-			<a ng-repeat="player in game.players track by $index" ui-sref="app.user({userId: notification.invitedBy})"><img class="player" ng-src="{{player.img}}"/></a>
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$('[data-toggle="tooltip"]').tooltip();   
+				});
+			</script>
+			<a ng-repeat="player in game.players track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
 		</div>
 	</div>
 	<div class="col-md-6">Game chat, websockets?</div>
