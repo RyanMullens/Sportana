@@ -9,7 +9,9 @@ body {
   overflow-x: hidden !important;
   padding-top: 50px;
 }
-
+.row{
+  margin:0;
+}
 /* Hide for mobile, show later */
 /*
 .sidebar {

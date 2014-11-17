@@ -1,41 +1,55 @@
 <div id="viewGame">
 	<h1 class="page-header" ng-init="game = viewGame.getGame()">Game Info</h1>
-	<div class="col-md-6">
-		<div class="row">
-			<h2><img class="sport" ng-src="{{game.sportimg}}" />{{game.sport}}</h2>
-		</div>
-		<div class="row date">
-			{{game.gamedate | date}}<br/>
-			{{game.gamestart}} - {{game.gameend}}
-		</div>
-		<div class="row location">
-			{{game.location}}
-		</div>
-		<div class="row">
-			<ul>
-				<li>Age Demographic: {{game.minage}} - {{game.maxage}}</li>
-				<li>Players Desired: {{game.minplayers}} - {{game.maxplayers}}</li>
-			</ul>
-		</div>
-		<div class="row">
-			Current Players: ({{game.players.length}})
-			<div class="btn-group">
-				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
-				</button>
-				<div class="dropdown-menu">
-					234
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<h2><img class="sport" ng-src="{{game.sportimg}}" />{{game.sport}}</h2>
+			</div>
+			<div class="row date">
+				{{game.gamedate | date}}<br/>
+				{{game.gamestart}} - {{game.gameend}}
+			</div>
+			<div class="row location">
+				{{game.location}}
+			</div>
+			<div class="row">
+				<ul>
+					<li>Age Demographic: {{game.minage}} - {{game.maxage}}</li>
+					<li>Players Desired: {{game.minplayers}} - {{game.maxplayers}}</li>
+				</ul>
+			</div>
+			<div class="row">
+				Current Players: ({{game.players.length}})
+				<div class="btn-group">
+					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
+					</button>
+					<div class="dropdown-menu">
+						<form>
+							<div ng-repeat="friend in viewGame.getFriends() track by $index" class="checkbox">
+							<label><input type="checkbox" value="{{friend.id}}">{{friend.firstname}} {{friend.lastname}}</label>
+							</div>							
+							<button type="button" class="btn btn-primary">
+								Invite
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
+			<div class="row players">
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$('[data-toggle="tooltip"]').tooltip();   
+					});
+				</script>
+				<a ng-repeat="player in game.players track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
+			</div>
 		</div>
-		<div class="row players">
-			<script type="text/javascript">
-				$(document).ready(function(){
-					$('[data-toggle="tooltip"]').tooltip();   
-				});
-			</script>
-			<a ng-repeat="player in game.players track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
-		</div>
+		<div class="col-md-6">Game chat, websockets?</div>
 	</div>
-	<div class="col-md-6">Game chat, websockets?</div>
+	<div class="row">
+		<button type="button" class="btn btn-warning">Leave Game</button>
+		<button type="button" class="btn btn-primary">Join</button>
+		<button type="button" class="btn btn-danger">Decline</button>
+	</div>
 </div>
