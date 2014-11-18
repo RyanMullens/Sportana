@@ -113,7 +113,6 @@ exports.getUserProfile = function (username, login, callback) {
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
-			            		console.log(result.rows[0]);
 	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
@@ -122,7 +121,7 @@ exports.getUserProfile = function (username, login, callback) {
 			            				result.rows[0]["timeliness"] = 0;
 			            				result.rows[0]["skilllevel"] = 0;
 			            			}
-			            			if(result.rows.length > 1){
+			            			if(result.rows.length > 0){
 			            				for(i = 0; i < result.rows.length; i++){
 			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 					            			delete result.rows[i]["sport"];
@@ -141,6 +140,7 @@ exports.getUserProfile = function (username, login, callback) {
 			            			}
 		            				result.rows[0]["sportsArray"] = sportsArray;
 		            				//check if friends finally
+		            				console.log("checking friends");
 		            				var SQLQuery = "SELECT Friends.userB from Friends where Friends.userA = $1";
 		    						client.query({ text : SQLQuery,
 		    			            			   values : [username]},
@@ -152,31 +152,34 @@ exports.getUserProfile = function (username, login, callback) {
 		    								callback(undefined, {message: "error"});
 		    			            	}
 		    			            	else {
-		    			            		if(friends.rows[0]){
-		    			            		if(friends.rows[0].length > 0){
-		    			            			console.log(friends.rows[0]["userb"]);
+		    			            		console.log("here");
+		    			            	if(friends.rows[0]){ //has at least one friend
+		    			            		if(friends.rows.length > 0){
+		    			            			console.log("amount of friends: " + friends.rows.length);
 		    			            			var i = 0; var j = true;
 		    			            			while(j){
-		    			            				console.log("entering while");
-		    			            				if(friends.rows[i]){
+		    			            				if(friends.rows[i]){ //if first friend, check
 			    			            				if(friends.rows[i]["userb"] == login){
-			    			            					console.log("they are friends");
+			    			            					console.log(friends.rows[i]["userb"]);
 			    			            					result.rows[0]["isFriend"] = true;
 			    			            					j = false;
 			    			            				}
 		    			            				}
 		    			            				else{
-		    			            					console.log("they are NOT friends");
+		    			            					console.log("no friends after checking all i");
 		    			            					result.rows[0]["isFriend"] = false;
 		    			            					j = false;
 		    			            				}
 		    			            				i++;
 		    			            			}
-				    			            	callback(undefined, result.rows[0]);
-		    			            		}
+		    			            			}
+		    			            		console.log(result.rows[0]);
+			    			            	callback(undefined, result.rows[0]);
 		    			            		}
 		    			            		else{ //no friends
+		    			            			console.log("no friends");
 		    			            			result.rows[0]["isFriend"] = false;
+		    			            			console.log(result.rows[0]);
 		    			            			callback(undefined, result.rows[0]);
 		    			            		}
 		    			            	}
@@ -196,6 +199,30 @@ exports.getUserProfile = function (username, login, callback) {
 		}
 	});
 };
+
+exports.editCity = function (username, city, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "UPDATE Users SET city=$1 WHERE login = $2";
+				client.query({ text : SQLQuery,
+							   values : [city, username]},
+					function(err, result){
+					done();
+					client.end();
+					pg.end();
+					if(err){
+						callback(undefined, {message: "could not update"});
+						}
+					else{
+						callback(undefined, {message: "success"});
+					}
+			});
+		}
+	});
+}
 
 exports.putUserAuth = function(login, auth, callback) {
 	pg.connect(connString, function(err, client, done) {

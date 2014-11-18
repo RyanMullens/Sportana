@@ -43,6 +43,25 @@ router.put('/', function(req, res) {
 	});
 });
 
+/* POST edit's city */
+router.post('/editCity', function(req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			var city = req.body.city;
+			dbc.editCity(username, city, function(err, data){
+				res.send(JSON.stringify(data));
+			});
+		}
+	});
+});
+
 /* POST rates users */
 // API says this is a PUT, I think either would be fine - POST might make more sense if we can change ratings at some point
 router.post('/ratings', function(req, res) {
