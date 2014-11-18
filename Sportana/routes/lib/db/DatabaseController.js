@@ -152,7 +152,8 @@ exports.getUserProfile = function (username, login, callback) {
 		    								callback(undefined, {message: "error"});
 		    			            	}
 		    			            	else {
-		    			            		if(friends.rows[0].length !== 0){
+		    			            		if(friends.rows[0]){
+		    			            		if(friends.rows[0].length > 0){
 		    			            			console.log(friends.rows[0]["userb"]);
 		    			            			var i = 0; var j = true;
 		    			            			while(j){
@@ -172,6 +173,11 @@ exports.getUserProfile = function (username, login, callback) {
 		    			            				i++;
 		    			            			}
 				    			            	callback(undefined, result.rows[0]);
+		    			            		}
+		    			            		}
+		    			            		else{ //no friends
+		    			            			result.rows[0]["isFriend"] = false;
+		    			            			callback(undefined, result.rows[0]);
 		    			            		}
 		    			            	}
 		    			            	});

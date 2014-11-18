@@ -11,7 +11,6 @@ var authenticator = require('./authentication'); // Authentication Handler
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
-	//var auth = "luinkel9la";
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};
 		if (err || (!username)) {
