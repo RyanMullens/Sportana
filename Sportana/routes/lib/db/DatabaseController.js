@@ -413,6 +413,51 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
   });
 };
 
+exports.getGameInfo = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+      var SQLQuery = "SELECT * From Game where (gameID = GAME.gameID)";//how do i get the gameID
+      client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+          // Ends the "transaction":
+          done();
+          // Disconnects from the database:
+          client.end();
+          // This cleans up connected clients to the database and allows subsequent requests to the database
+          pg.end();
+          if (err) {
+           callback(err, undefined);
+          }
+          else {
+
+                var gameInfo = {};
+            gameInfo.creator = result.creator;
+            gameInfo.gameID = result.gameID;
+            gameInfo.gameDate = result.gameDate;
+            gameInfo.gameStart = result.gameStart;
+            gameInfo.gameEnd = result.gameEnd;
+            gameInfo.sport = result.sport;
+            gameInfo.location = result.location;
+            gameInfo.minPlayers = result.minPlayers;
+            gameInfo.maxPlayers = result.maxPlayers;
+            gameInfo.reservedSpots = result.reservedSpots;
+            gameInfo.minAge = result.minAge;
+            gameInfo.maxAge = result.maxAge;
+            gameInfo.isPublic = result.isPublic;
+
+            gameInfo.push(gameInfo);
+
+              callback(undefined, gameInfo);
+          }
+      });
+    }
+  });
+};
+
 exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameID, callback) {
 	var type;
 	if (reqType === "friend") {
