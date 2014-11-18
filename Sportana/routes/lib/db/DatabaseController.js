@@ -614,7 +614,7 @@ exports.searchUsers = function(firstName, lastName, callback) {
     		SQLQuery += " OR lower(Users.lastName) = lower($2)";
     		searchValues.push(firstName);
     	}
-      
+
     	client.query({ text : SQLQuery,
                      values : searchValues},
         function (err, result) {

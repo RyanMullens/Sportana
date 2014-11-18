@@ -1,4 +1,4 @@
-app.controller('Signup', function ($http, AUTH_EVENTS, AuthenticationService, $scope) {
+app.controller('Signup', function ($http, AUTH_EVENTS, AuthenticationService, $rootScope, $scope) {
 
 	$scope.credentials = {
 		email: '',
