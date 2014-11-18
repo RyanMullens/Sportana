@@ -6,13 +6,24 @@ var connString = "postgres://student:student@localhost:5432/sportana";
 
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
+var authenticator = require('./authentication'); // Authentication Handler
+
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
-	//var auth = req.body.auth;
-	var login = req.params.login;
-	//res.send("hello");
-	dbc.getUserProfile(login, function(err, data){
-		res.send(JSON.stringify(data));
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			var login = req.params.login;
+			dbc.getUserProfile(username, login, function(err, data){
+				res.send(JSON.stringify(data));
+			});
+		}
 	});
 });
 

@@ -75,7 +75,7 @@ exports.getUserByAuth = function(id, callback) {
   });
 };
 
-exports.getUserProfile = function (login, callback) {
+exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
 			callback(undefined, {message: "error"});
@@ -89,7 +89,7 @@ exports.getUserProfile = function (login, callback) {
 					//client.end();
 					//pg.end();
 					if(err){
-						callback(undefined, {message: "error"});
+						callback(undefined, {message: "User does not exist"});
 						}
 					else{
 					  if(result.rows[0] !== undefined){
@@ -107,8 +107,8 @@ exports.getUserProfile = function (login, callback) {
 			            			   values : [login]},
 			             function(err, result){
 			            	done();
-			            	client.end();
-			            	pg.end();
+			            	//client.end();
+			            	//pg.end();
 			            	if(err){
 								callback(undefined, {message: "error"});
 			            	}
@@ -140,7 +140,47 @@ exports.getUserProfile = function (login, callback) {
 			            				delete result.rows[0]["imageurl"];
 			            			}
 		            				result.rows[0]["sportsArray"] = sportsArray;
-			            			callback(undefined, result.rows[0]);
+		            				//check if friends finally
+		            				var SQLQuery = "SELECT Friends.userB from Friends where Friends.userA = $1";
+		    						client.query({ text : SQLQuery,
+		    			            			   values : [username]},
+		    			             function(err, friends){
+		    			            	done();
+		    			            	client.end();
+		    			            	pg.end();
+		    			            	if(err){
+		    								callback(undefined, {message: "error"});
+		    			            	}
+		    			            	else {
+		    			            		if(friends.rows[0]){
+		    			            		if(friends.rows[0].length > 0){
+		    			            			console.log(friends.rows[0]["userb"]);
+		    			            			var i = 0; var j = true;
+		    			            			while(j){
+		    			            				console.log("entering while");
+		    			            				if(friends.rows[i]){
+			    			            				if(friends.rows[i]["userb"] == login){
+			    			            					console.log("they are friends");
+			    			            					result.rows[0]["isFriend"] = true;
+			    			            					j = false;
+			    			            				}
+		    			            				}
+		    			            				else{
+		    			            					console.log("they are NOT friends");
+		    			            					result.rows[0]["isFriend"] = false;
+		    			            					j = false;
+		    			            				}
+		    			            				i++;
+		    			            			}
+				    			            	callback(undefined, result.rows[0]);
+		    			            		}
+		    			            		}
+		    			            		else{ //no friends
+		    			            			result.rows[0]["isFriend"] = false;
+		    			            			callback(undefined, result.rows[0]);
+		    			            		}
+		    			            	}
+		    			            	});
 			            		}
 			            		else{
 			            			console.log("user does not exist");
