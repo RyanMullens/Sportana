@@ -19,7 +19,7 @@
 				</ul>
 			</div>
 			<div class="row">
-				Current Players: ({{game.players.length}})
+				Current Players: ({{viewGame.getPlayers().length}})
 				<div class="btn-group" ng-show="viewGame.isJoined()">
 					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
@@ -29,7 +29,7 @@
 							<div ng-repeat="friend in viewGame.getFriends() track by $index" class="checkbox">
 								<label><input type="checkbox" value="{{friend.id}}">{{friend.firstname}} {{friend.lastname}}</label>
 							</div>							
-							<button type="button" class="btn btn-primary">
+							<button type="button" class="btn btn-primary" ng-click="viewGame.inviteFriends()">
 								Invite
 							</button>
 						</form>
@@ -42,16 +42,17 @@
 						$('[data-toggle="tooltip"]').tooltip();   
 					});
 				</script>
-				<a ng-repeat="player in game.players track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
+				<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
+			</div>
+			<div class="row invited">
+				<a ng-repeat="player in viewGame.getInvites() track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.name}}" class="player" ng-src="{{player.img}}"/></a>
 			</div>
 		</div>
 		<div class="col-md-6">Game chat, websockets?</div>
 	</div>
 	<div class="row">
-		<button type="button" class="btn btn-warning" ng-show="viewGame.isJoined()">Leave Game</button>
-		<div ng-hide="viewGame.isJoined()">
-			<button type="button" class="btn btn-primary">Join</button>
-			<button type="button" class="btn btn-danger">Decline</button>
-		</div>
+		<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="viewGame.isJoined()">Leave Game</button>
+		<button type="button" class="btn btn-primary" ng-click="viewGame.joinGame()" ng-hide="viewGame.isJoined() || viewGame.isInvited()">Join Game</button>
+		<button type="button" class="btn btn-danger" ng-click="viewGame.declineGame()" ng-show="viewGame.isInvited()">Decline</button>
 	</div>
 </div>
