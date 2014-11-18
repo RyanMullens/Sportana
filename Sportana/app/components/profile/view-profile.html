@@ -4,13 +4,13 @@
 			<div ng-show="viewProfile.isLoaded()" class="profile row">
 				<div class="row">
 					<div class="profileImageHolder col-md-3">
-						<img class="profileImage" ng-src="{{viewProfile.getProfilePicture()}}"></img>
+						<img class="profileImage img-thumbnail" ng-src="{{viewProfile.getProfilePicture()}}"></img>
 					</div>	
 					<div class = "profileInfoHolder col-md-6">
 						<div class="profileNameHolder row" >
 							<div class="profileName" >
 								<div ng-hide="viewProfile.isEditing()">{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}</div>
-								<div ng-show="viewProfile.isEditing()">
+								<div class="profileEditNameInput" ng-show="viewProfile.isEditing()">
 									<input type="text" ng-model="editUser.firstname"></input>
 									<input type="text" ng-model="editUser.lastname"></input>
 									, {{ viewProfile.getAge() }}
@@ -112,6 +112,10 @@
 
 				<hr>
 
+				<div ng-show="viewProfile.isEditing()" class="row">
+					<input auto-complete ui-items="allSports" ng-model="selectedSport">
+					<input type="submit" value="Add Sport" class="btn btn-primary" ng-disabled="!isSportSelected()">
+				</div>
 
 				<div class="profileSportContainer row">
 					<div class="profileCategoryTitle col-md-4">Favorite Sports</div>
@@ -125,11 +129,11 @@
 
 							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
 
-				<script type="text/javascript">
-					$(document).ready(function(){
-    					$('[data-toggle="tooltip"]').tooltip();   
-					});
-				</script>
+								<script type="text/javascript">
+									$(document).ready(function(){
+				    					$('[data-toggle="tooltip"]').tooltip();   
+									});
+								</script>
 
 								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
 								
