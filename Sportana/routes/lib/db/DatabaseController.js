@@ -113,7 +113,6 @@ exports.getUserProfile = function (login, callback) {
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
-			            		console.log("hi");
 			            		console.log(result.rows[0]);
 	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
@@ -124,7 +123,6 @@ exports.getUserProfile = function (login, callback) {
 			            				result.rows[0]["skilllevel"] = 0;
 			            			}
 			            			if(result.rows.length > 1){
-			            				console.log("hello");
 			            				for(i = 0; i < result.rows.length; i++){
 			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 					            			delete result.rows[i]["sport"];
@@ -132,13 +130,11 @@ exports.getUserProfile = function (login, callback) {
 			            				}
 			            			}
 			            			else if(result.rows.length == 0){
-			            				console.log("hey");
 			            				sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
 			            				delete result.rows[0]["sport"];
 			            				delete result.rows[0]["imageurl"];
 			            			}
 			            			else{ //null
-			            				console.log("howdy");
 			            				sportsArray.push({sportsName: null, sportImage: null});
 			            				delete result.rows[0]["sport"];
 			            				delete result.rows[0]["imageurl"];
@@ -314,9 +310,8 @@ exports.createUser = function(UserObject, callback) {
                else if (!result.rows[0])
                {
                  // TODO : INSERT HERE -- No user exists with that name, so go ahead and create it
-
-                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, birthday, city, auth) VALUES (" +
-                   "$1, $2, $3, $4, $5, $6, $7, $8)";
+                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, city, birthday) VALUES (" +
+                   "$1, $2, $3, $4, $5, $6, $7)";
 
                  client.query({
                        text : SQLQuery,
@@ -326,9 +321,10 @@ exports.createUser = function(UserObject, callback) {
                          UserObject.password,
                          UserObject.firstname,
                          UserObject.lastname,
-                         UserObject.dateOfBirth,
                          UserObject.city,
-                         'abcdefgffewqrr']
+                         UserObject.dateOfBirth]
+                         //'abcdefgffewqrr']
+                 //No auth token when creating user. Auth token is generated upon logging in.
                  }, function(err, result){
                    done();
                    client.end();

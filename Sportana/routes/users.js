@@ -6,8 +6,6 @@ var connString = "postgres://student:student@localhost:5432/sportana";
 
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
-var authenticator = require('./authentication'); // Authentication Handler
-
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
 	//var auth = req.body.auth;
@@ -23,11 +21,10 @@ router.put('/', function(req, res) {
 	var email = req.body.email.split("@");
 	var login = email[0];
 	var emailSuffix = email[1];
-
 	var userObject = {
-			login: login, emailSuffix: emailSuffix,
+			login: login, emailSuffix: emailSuffix, password: req.body.password,
 			firstname: req.body.firstname, lastname: req.body.lastname,
-			dateOfBirth: req.body.dateOfBirth, city: req.body.city
+			dateOfBirth: req.body.dateOfBirth, city: req.body.city,
 			};
 	console.log("\n" + "Attempting to creat user... " + JSON.stringify(userObject) + "\n");
 	dbc.createUser(userObject, function(err, data){
