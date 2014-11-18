@@ -1,6 +1,5 @@
 app.controller("ViewGameController", function($http, CurrentUser)
 {
-	console.log(CurrentUser.getUser().id);
 	var game = {gameid:2, creator: 'myoda', gamedate:'Sunday, November 16',
 	gamestart: '3:00pm', gameend: '5:00pm', location: 'Amherst MA', sport: 'Baseball',
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
@@ -19,6 +18,19 @@ app.controller("ViewGameController", function($http, CurrentUser)
 
 	this.getFriends = function(){
 		return friends;
+	};
+
+	this.getUser = function(){
+		return CurrentUser.getUser().id;
+	};
+
+	this.isJoined = function(){
+		for(i = 0; i < game.players.length; i++){
+			if(this.getUser() === game.players[i].name){
+				return true;
+			}
+		}
+		return false;
 	};
 
 	app.directive('tooltip', function(){
