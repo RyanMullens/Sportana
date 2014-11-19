@@ -631,11 +631,49 @@ exports.removeRequest = function(username, requestID, callback) {
 };
 
 exports.joinGame = function(username, gameCreator, gameID, callback) {
-	callback("Not yet implemented");
+		pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO Participant(login, creator, gameID, status) VALUES ($1, $2, $3, 0)";
+    	  client.query(SQLQuery, [username, gameCreator, gameID], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
 };
 
 exports.joinQueue = function(username, gameCreator, gameID, callback) {
-	callback("Not yet implemented");
+	pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO Participant(login, creator, gameID, status) VALUES ($1, $2, $3, 1)";
+    	  client.query(SQLQuery, [username, gameCreator, gameID], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
 };
 
 /**
