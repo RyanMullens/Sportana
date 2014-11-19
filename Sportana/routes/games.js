@@ -53,7 +53,7 @@ router.post('/', function(req, res) {
 
 router.get('/:gameCreator/:gameID', function (req, res) {
 	//given the gameID
-	var creator = req.params.gameCreator;
+	var gameCreator = req.params.gameCreator;
 	var gameID = req.params.gameID;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {

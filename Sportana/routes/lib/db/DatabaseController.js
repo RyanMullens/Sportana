@@ -488,13 +488,13 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
   });
 };
 
-exports.getGameInfo = function(gameID, gameCreator, callback) {
+exports.getGameInfo = function(gameCreator, gameID, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
       callback(err, undefined);
     }
     else {
-      var SQLQuery = "SELECT * From Game where (gameID = $1 and gameCreator = $2)";
+      var SQLQuery = "SELECT * From Game where (gameID = $1 and creator = $2)";
       client.query({ text : SQLQuery,
                      values : [gameID , gameCreator]},
         function (err, result) {
@@ -508,11 +508,10 @@ exports.getGameInfo = function(gameID, gameCreator, callback) {
            callback(err, undefined);
           }
           else {
-                console.log(result);
-                var gameInfo = {};
+            var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
-            gameInfo.gameDate = result.rows[0].gamedate;
+            gameInfo.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[0].gamedate);
             gameInfo.gameStart = result.rows[0].gamestart;
             gameInfo.gameEnd = result.rows[0].gameend;
             gameInfo.sport = result.rows[0].sport;
