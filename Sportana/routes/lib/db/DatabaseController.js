@@ -75,6 +75,29 @@ exports.getUserByAuth = function(id, callback) {
   });
 };
 
+exports.putUserAuth = function(login, auth, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(false);
+		}
+		else {
+			var SQLQuery = "UPDATE Users SET auth=$1 WHERE login = $2";
+			client.query(SQLQuery, [auth, login], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(false);
+            	}
+            	else {
+					callback(true);
+            	}
+             });
+		}
+	});
+};
+
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
@@ -113,7 +136,6 @@ exports.getUserProfile = function (username, login, callback) {
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
-			            		console.log(result.rows[0]);
 	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
@@ -122,7 +144,7 @@ exports.getUserProfile = function (username, login, callback) {
 			            				result.rows[0]["timeliness"] = 0;
 			            				result.rows[0]["skilllevel"] = 0;
 			            			}
-			            			if(result.rows.length > 1){
+			            			if(result.rows.length > 0){
 			            				for(i = 0; i < result.rows.length; i++){
 			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 					            			delete result.rows[i]["sport"];
@@ -141,6 +163,7 @@ exports.getUserProfile = function (username, login, callback) {
 			            			}
 		            				result.rows[0]["sportsArray"] = sportsArray;
 		            				//check if friends finally
+		            				console.log("checking friends");
 		            				var SQLQuery = "SELECT Friends.userB from Friends where Friends.userA = $1";
 		    						client.query({ text : SQLQuery,
 		    			            			   values : [username]},
@@ -152,31 +175,34 @@ exports.getUserProfile = function (username, login, callback) {
 		    								callback(undefined, {message: "error"});
 		    			            	}
 		    			            	else {
-		    			            		if(friends.rows[0]){
-		    			            		if(friends.rows[0].length > 0){
-		    			            			console.log(friends.rows[0]["userb"]);
+		    			            		console.log("here");
+		    			            	if(friends.rows[0]){ //has at least one friend
+		    			            		if(friends.rows.length > 0){
+		    			            			console.log("amount of friends: " + friends.rows.length);
 		    			            			var i = 0; var j = true;
 		    			            			while(j){
-		    			            				console.log("entering while");
-		    			            				if(friends.rows[i]){
+		    			            				if(friends.rows[i]){ //if first friend, check
 			    			            				if(friends.rows[i]["userb"] == login){
-			    			            					console.log("they are friends");
+			    			            					console.log(friends.rows[i]["userb"]);
 			    			            					result.rows[0]["isFriend"] = true;
 			    			            					j = false;
 			    			            				}
 		    			            				}
 		    			            				else{
-		    			            					console.log("they are NOT friends");
+		    			            					console.log("no friends after checking all i");
 		    			            					result.rows[0]["isFriend"] = false;
 		    			            					j = false;
 		    			            				}
 		    			            				i++;
 		    			            			}
-				    			            	callback(undefined, result.rows[0]);
-		    			            		}
+		    			            			}
+		    			            		console.log(result.rows[0]);
+			    			            	callback(undefined, result.rows[0]);
 		    			            		}
 		    			            		else{ //no friends
+		    			            			console.log("no friends");
 		    			            			result.rows[0]["isFriend"] = false;
+		    			            			console.log(result.rows[0]);
 		    			            			callback(undefined, result.rows[0]);
 		    			            		}
 		    			            	}
@@ -197,28 +223,135 @@ exports.getUserProfile = function (username, login, callback) {
 	});
 };
 
-exports.putUserAuth = function(login, auth, callback) {
+exports.createUser = function(UserObject, callback) {
 	pg.connect(connString, function(err, client, done) {
-	    if(err) {
-			callback(false);
+		if(err) {
+			callback(undefined, {message: "error"});
 		}
-		else {
-			var SQLQuery = "UPDATE Users SET auth=$1 WHERE login = $2";
-			client.query(SQLQuery, [auth, login], function(err, result) {
-             	done();
-             	client.end();
-             	// This cleans up connected clients to the database and allows subsequent requests to the database
-        		pg.end();
-            	if(err){
-					callback(false);
-            	}
-            	else {
-					callback(true);
-            	}
-             });
+	  else
+    {
+			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
+			client.query({ text : sqlStatement,
+					         values : [UserObject.login] },
+
+            function(err, result) {
+	             done();
+			         if(err){
+			           callback(undefined, {message: "error"});
+				       }
+               else if (!result.rows[0])
+               {
+                 // TODO : INSERT HERE -- No user exists with that name, so go ahead and create it
+                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, city, birthday) VALUES (" +
+                   "$1, $2, $3, $4, $5, $6, $7)";
+
+                 client.query({
+                       text : SQLQuery,
+                       values : [
+                         UserObject.login,
+                         UserObject.emailSuffix,
+                         UserObject.password,
+                         UserObject.firstname,
+                         UserObject.lastname,
+                         UserObject.city,
+                         UserObject.dateOfBirth]
+                         //'abcdefgffewqrr']
+                 //No auth token when creating user. Auth token is generated upon logging in.
+                 }, function(err, result){
+                   done();
+                   client.end();
+                   pg.end();
+                   if(err){
+                     callback(undefined, {message: "database INSERT error"});
+                   }
+                   else
+                   {
+                     callback(undefined, {message: "success"});
+                   }
+                 });
+             }
+             else
+             {
+               // TODO : Return an error since that username is already taken
+
+               callback(undefined, {message: "User already exists"});
+             }
+			});
 		}
 	});
 };
+
+exports.editCity = function (username, city, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "UPDATE Users SET city=$1 WHERE login = $2";
+				client.query({ text : SQLQuery,
+							   values : [city, username]},
+					function(err, result){
+					done();
+					client.end();
+					pg.end();
+					if(err){
+						callback(undefined, {message: "could not update"});
+						}
+					else{
+						callback(undefined, {message: "success"});
+					}
+			});
+		}
+	});
+}
+
+exports.addFavoriteSport = function (username, sport, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "INSERT INTO FavoriteSports (login, sport) VALUES ($1, $2)";
+				client.query({ text : SQLQuery,
+							   values : [username, sport]},
+					function(err, result){
+					done();
+					client.end();
+					pg.end();
+					if(err){
+						callback(undefined, {message: "could not insert"});
+						}
+					else{
+						callback(undefined, {message: "success"});
+					}
+			});
+		}
+	});
+}
+
+exports.deleteFavoriteSport = function (username, sport, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "DELETE FROM FavoriteSports WHERE login = $1 AND sport = $2";
+				client.query({ text : SQLQuery,
+							   values : [username, sport]},
+					function(err, result){
+					done();
+					client.end();
+					pg.end();
+					if(err){
+						callback(undefined, {message: "could not delete"});
+						}
+					else{
+						callback(undefined, {message: "success"});
+					}
+			});
+		}
+	});
+}
 
 /**
  *****************************************************
@@ -331,64 +464,6 @@ exports.removeFriend = function(username, friendLogin, callback) {
 	});
 };
 
-exports.createUser = function(UserObject, callback) {
-	pg.connect(connString, function(err, client, done) {
-		if(err) {
-			callback(undefined, {message: "error"});
-		}
-	  else
-    {
-			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
-			client.query({ text : sqlStatement,
-					         values : [UserObject.login] },
-
-            function(err, result) {
-	             done();
-			         if(err){
-			           callback(undefined, {message: "error"});
-				       }
-               else if (!result.rows[0])
-               {
-                 // TODO : INSERT HERE -- No user exists with that name, so go ahead and create it
-                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, city, birthday) VALUES (" +
-                   "$1, $2, $3, $4, $5, $6, $7)";
-
-                 client.query({
-                       text : SQLQuery,
-                       values : [
-                         UserObject.login,
-                         UserObject.emailSuffix,
-                         UserObject.password,
-                         UserObject.firstname,
-                         UserObject.lastname,
-                         UserObject.city,
-                         UserObject.dateOfBirth]
-                         //'abcdefgffewqrr']
-                 //No auth token when creating user. Auth token is generated upon logging in.
-                 }, function(err, result){
-                   done();
-                   client.end();
-                   pg.end();
-                   if(err){
-                     callback(undefined, {message: "database INSERT error"});
-                   }
-                   else
-                   {
-                     callback(undefined, {message: "success"});
-                   }
-                 });
-             }
-             else
-             {
-               // TODO : Return an error since that username is already taken
-
-               callback(undefined, {message: "User already exists"});
-             }
-			});
-		}
-	});
-};
-
 exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
   pg.connect(connString, function(err, client, done) {
       if(err) {
@@ -409,6 +484,51 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
           callback(undefined);
               }
              });
+    }
+  });
+};
+
+exports.getGameInfo = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+      var SQLQuery = "SELECT * From Game where (gameID = GAME.gameID)";//how do i get the gameID
+      client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+          // Ends the "transaction":
+          done();
+          // Disconnects from the database:
+          client.end();
+          // This cleans up connected clients to the database and allows subsequent requests to the database
+          pg.end();
+          if (err) {
+           callback(err, undefined);
+          }
+          else {
+
+                var gameInfo = {};
+            gameInfo.creator = result.creator;
+            gameInfo.gameID = result.gameID;
+            gameInfo.gameDate = result.gameDate;
+            gameInfo.gameStart = result.gameStart;
+            gameInfo.gameEnd = result.gameEnd;
+            gameInfo.sport = result.sport;
+            gameInfo.location = result.location;
+            gameInfo.minPlayers = result.minPlayers;
+            gameInfo.maxPlayers = result.maxPlayers;
+            gameInfo.reservedSpots = result.reservedSpots;
+            gameInfo.minAge = result.minAge;
+            gameInfo.maxAge = result.maxAge;
+            gameInfo.isPublic = result.isPublic;
+
+            gameInfo.push(gameInfo);
+
+              callback(undefined, gameInfo);
+          }
+      });
     }
   });
 };
@@ -587,41 +707,26 @@ exports.getRequests = function(username, callback) {
   });
 };
 
-exports.rateUser = function(UserObject, callback) {
+exports.rate = function(UserObject, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
 			callback(undefined, {message: "error"});
 		}
 		else {
-			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1"
-				client.query({ text : sqlStatement,
-							   values : [UserObject.login]},
-					function(err, result){
-					done();
-					if(err){
-						callback(undefined, {message: "error"});
-						}
-					else{
-						if(result.rows[0]["login"] === login){
-						var SQLQuery = "INSERT INTO Ratings(userRated, rater, friendliness, timeliness, skilllevel) VALUES ($1, $2, $3, $4, $5)";
-						client.query({ text : SQLQuery,
-			            			   values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
-			             function(err, result){
-			            	done();
-			            	client.end();
-			            	pg.end();
-			            	if(err){
-								callback(undefined, {message: "error"});
-			            	}
-			            	else {
-			            		callback(undefined, {message: "success"});
-			            	}
-			            });
-						}
-				else{
-					callback(undefined, {message: "error"});
-				}
-			}});
+			var SQLQuery = "INSERT INTO Ratings(userRated, rater, friendliness, timeliness, skilllevel) VALUES ($1, $2, $3, $4, $5)";
+			client.query({ text : SQLQuery,
+ 			   values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
+ 			function(err, result){
+			 	done();
+			 	client.end();
+			 	pg.end();
+			 	if(err){
+			 		callback(undefined, {message: "insert error"});
+			 	}
+			 	else {
+			 		callback(undefined, {message: "success"});
+			 	}
+ 			   });
 		}
 	});
 };

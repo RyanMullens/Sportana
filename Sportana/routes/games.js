@@ -51,9 +51,42 @@ router.post('/', function(req, res) {
 
 });
 
-router.get('/', function(req, res) {
-
+router.get('/game', function (req, res) {
+	//given the gameID
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getGameInfo(username, function(err, gameInfo) {
+				if (err) {
+					response.success = false;
+					response.message = err;
+				} else {
+					response.success = true;
+					response.message = "";
+					response.gameInfo = gameInfo;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 });
+
+
+
+
+
+
+
+
+
+
 
 router.get('/search', function(req, res) {
   var queryData = url.parse(request.url, true).query;
