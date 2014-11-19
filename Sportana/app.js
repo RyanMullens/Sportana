@@ -14,6 +14,7 @@ var users = require('./routes/users');
 var requests = require('./routes/requests');
 var games = require('./routes/games');
 var search = require('./routes/search');
+var sports = require('./routes/sports');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/users', users);
 app.use('/api/requests', requests);
 app.use('/api/games', games);
 app.use('/api/search', search);
+app.use('/api/sports', sports);
 
 app.use('*', index);
 

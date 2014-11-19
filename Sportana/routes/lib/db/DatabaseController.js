@@ -676,6 +676,40 @@ exports.joinQueue = function(username, gameCreator, gameID, callback) {
   });
 };
 
+exports.getAllSports = function(callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Sport.sport, Sport.imageURL FROM Sport ORDER BY Sport.sport ASC";
+    	client.query({ text : SQLQuery,
+                     values : []},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var sports = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var sport = {};
+  					sport.sport = result.rows[i].sport;
+  					sport.image = result.rows[i].imageurl;
+  					sports.push(sport);
+		  		}
+          		callback(undefined, sports);
+        	}
+      });
+    }
+  });
+};
+
 /**
  *****************************************************
  * getRequests
