@@ -51,8 +51,10 @@ router.post('/', function(req, res) {
 
 });
 
-router.get('/game', function (req, res) {
+router.get('/:gameCreator/:gameID', function (req, res) {
 	//given the gameID
+	var creator = req.params.gameCreator;
+	var gameID = req.params.gameID;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
@@ -62,14 +64,14 @@ router.get('/game', function (req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.getGameInfo(username, function(err, gameInfo) {
+			dbc.getGameInfo(gameCreator, gameID, function(err, jsonGameInfo) {
 				if (err) {
 					response.success = false;
 					response.message = err;
 				} else {
+					response = jsonGameInfo; 
 					response.success = true;
 					response.message = "";
-					response.gameInfo = gameInfo;
 				}
 				res.write(JSON.stringify(response));
           		res.end();

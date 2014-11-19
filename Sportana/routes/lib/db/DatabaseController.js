@@ -488,15 +488,15 @@ exports.createGame = function(email, sportID, startTime, endTime , gameDate, loc
   });
 };
 
-exports.getGameInfo = function(username, callback) {
+exports.getGameInfo = function(gameID, gameCreator, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
       callback(err, undefined);
     }
     else {
-      var SQLQuery = "SELECT * From Game where (gameID = GAME.gameID)";//how do i get the gameID
+      var SQLQuery = "SELECT * From Game where (gameID = $1 and gameCreator = $2)";
       client.query({ text : SQLQuery,
-                     values : [username]},
+                     values : [gameID , gameCreator]},
         function (err, result) {
           // Ends the "transaction":
           done();
@@ -508,23 +508,21 @@ exports.getGameInfo = function(username, callback) {
            callback(err, undefined);
           }
           else {
-
+                console.log(result);
                 var gameInfo = {};
-            gameInfo.creator = result.creator;
-            gameInfo.gameID = result.gameID;
-            gameInfo.gameDate = result.gameDate;
-            gameInfo.gameStart = result.gameStart;
-            gameInfo.gameEnd = result.gameEnd;
-            gameInfo.sport = result.sport;
-            gameInfo.location = result.location;
-            gameInfo.minPlayers = result.minPlayers;
-            gameInfo.maxPlayers = result.maxPlayers;
-            gameInfo.reservedSpots = result.reservedSpots;
-            gameInfo.minAge = result.minAge;
-            gameInfo.maxAge = result.maxAge;
-            gameInfo.isPublic = result.isPublic;
-
-            gameInfo.push(gameInfo);
+            gameInfo.creator = result.rows[0].creator;
+            gameInfo.gameID = result.rows[0].gameid;
+            gameInfo.gameDate = result.rows[0].gamedate;
+            gameInfo.gameStart = result.rows[0].gamestart;
+            gameInfo.gameEnd = result.rows[0].gameend;
+            gameInfo.sport = result.rows[0].sport;
+            gameInfo.location = result.rows[0].location;
+            gameInfo.minPlayers = result.rows[0].minplayers;
+            gameInfo.maxPlayers = result.rows[0].maxplayers;
+            gameInfo.reservedSpots = result.rows[0].reservedspots;
+            gameInfo.minAge = result.rows[0].minage;
+            gameInfo.maxAge = result.rows[0].maxage;
+            gameInfo.isPublic = result.rows[0].ispublic;
 
               callback(undefined, gameInfo);
           }
