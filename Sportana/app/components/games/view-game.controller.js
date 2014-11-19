@@ -5,14 +5,14 @@ app.controller("ViewGameController", function($http, CurrentUser)
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 
-	var players = [{name: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
-	{name: 'jbond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
-	{name: 'ckent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}];
+	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
+	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
+	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
+	];
 
-	var friends = [{id: 'jbond', firstname:'James', lastname:'Bond'},
-	{id: 'myoda', firstname:'Master', lastname:'Yoda'}];
+	var friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'}];
 
-	var invited = [{name: 'myoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
+	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
 
 	this.getGame = function(){
@@ -37,36 +37,47 @@ app.controller("ViewGameController", function($http, CurrentUser)
 
 	this.contains = function(type){
 		for(i = 0; i < type.length; i++){
-			if(this.getUser() === type[i].name){
-				return true;
+			if(this.getUser() === type[i].login){
+				return type[i];
 			}
 		}
 		return false;
 	};
 
-	var joined = this.contains(this.getPlayers());
-
 	this.isJoined = function(){
-		return joined;
+		return !!this.contains(this.getPlayers());
 	};
 
-	var invited = this.contains(this.getInvited());
 
 	this.isInvited = function(){
-		return invited;
+		return !!this.contains(this.getInvited());
 	};
 
+	this.isPublic = function(){
+		return this.getGame().ispublic;
+	}
 
 	this.leaveGame = function(){
-
+		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers())),1);
 	};
 
 	this.joinGame = function(){
-
+		if(this.isInvited()){
+			players.push(this.contains(this.getInvited()));
+			console.log(this.isInvited());
+			this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
+		}
+		else{
+			players.push({login: this.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
+		}
 	};
 
 	this.declineGame = function(){
+		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
+	};
 
+	this.requestGame = function(){
+		
 	};
 
 	this.inviteFriends = function(){
