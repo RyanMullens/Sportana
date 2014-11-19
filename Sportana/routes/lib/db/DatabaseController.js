@@ -859,3 +859,88 @@ exports.searchUsers = function(firstName, lastName, callback) {
     }
   });
 };
+
+exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callback) {
+  if (!sport && !city && !ageMin && !ageMax && !isCompetitive) {
+  	callback('No search parameters given', undefined);
+  }
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Game.creator, Game.gameID, Game.gameDate, Game.gameStart, Game.gameEnd, Game.sport, Game.location, Game.numParticipants, Game.minPlayers, Game.maxPlayers, Game.minAge, Game.maxAge, Sport.imageURL " +
+    				   "FROM Game INNER JOIN Sport ON (Game.sport = Sport.sport) WHERE (Game.isPublic = true)";
+    	var searchValues = [];
+    	if (sport) {
+    		SQLQuery += " AND lower(Game.sport) = lower($"+(searchValues.length+1)+")";
+    		searchValues.push(sport);
+    	}
+    	
+    	if (city) {
+    	    SQLQuery += " AND lower(Game.location) = lower($" + (searchValues.length + 1) +")";
+    		searchValues.push(city);
+    	}
+    	
+    	if (ageMin) {
+    	    SQLQuery += " AND (Game.minAge > $" + (searchValues.length + 1) +")";
+    		searchValues.push(ageMin);
+    	}
+    	
+    	if (ageMax) {
+    	    SQLQuery += " AND (Game.maxAge < $" + (searchValues.length + 1) +")";
+    		searchValues.push(ageMax);
+    	}
+    	
+    	if (isCompetitive) {
+    	    SQLQuery += " AND (Game.isCompetitive = $" + (searchValues.length + 1) +")";
+    		searchValues.push(isCompetitive);
+    	}
+    	
+    	var currentDate = timeHelper.getCurrentDate();
+    	SQLQuery += " AND (Game.gameDate > $" + (searchValues.length+1) + ")";
+    	searchValues.push(currentDate);
+    	SQLQuery += " OR ((Game.gameDate = $" + (searchValues.length+1) + ")";
+    	searchValues.push(currentDate);
+    	SQLQuery += " AND (Game.gameStart > $" + (searchValues.length+1) + "))";
+    	searchValues.push(timeHelper.getCurrentTime());
+    	SQLQuery += " ORDER BY Game.gameDate, Game.gameStart ASC";
+
+		client.query({ text : SQLQuery,
+                     values : searchValues},
+        function (err, result) {
+            //console.log(result);
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var games = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var game = {};
+          			game.creator = result.rows[i].creator; 
+          			game.gameID  = result.rows[i].gameid;
+          			game.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+          			game.gameStart = result.rows[i].gamestart;
+          			game.gameEnd = result.rows[i].gameend;
+          			game.sport = result.rows[i].sport;
+          			game.location = result.rows[i].location;
+          			game.numParticipants = result.rows[i].numparticipants;
+          			game.minPlayers = result.rows[i].minplayers;
+          			game.maxPlayers = result.rows[i].maxplayers;
+          			game.minAge = result.rows[i].minage;
+          			game.maxAge = result.rows[i].maxage;
+          			game.sportImage = result.rows[i].imageurl;
+  					games.push(game);
+		  		}
+          		callback(undefined, games);
+        	}
+      });
+    }
+  });
+};

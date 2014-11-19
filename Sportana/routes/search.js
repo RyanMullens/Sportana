@@ -19,6 +19,19 @@ var authenticator = require('./authentication'); // Authentication Handler
  * 	“success”  : boolean
  *  "results" :
  *   [{
+        "creator"         : string 
+        "gameID"          : int
+        "gameDate"		  : date // yyyy-mm-dd
+        "gameStart"		  : time // hh:mm:ss
+        "gameEnd"		  : time // hh:mm:ss
+        "sport" 		  : string
+        "sportImage"	  : string // imageURL
+        "location"		  : string
+        "numParticipants" : int
+        "minPlayers" 	  : int
+        "maxPlayers" 	  : int
+        "minAge" 		  : int
+        "maxAge" 		  : int
  *   }]
  * }
  *****************************************************
@@ -29,11 +42,30 @@ router.get('/games', function(req, res) {
 	var ageMin = req.query.ageMin;
 	var ageMax = req.query.ageMax;
 	var isCompetitive = req.query.competitive;
-	
-	response.success = false;
-	response.message = 'Not yet implemented';
-	res.write(JSON.stringify(response));
-    res.end();
+	var auth = req.get('SportanaAuthentication');
+
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.searchGames(sport, city, ageMin, ageMax, isCompetitive, function(err, games) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.results = games;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 });
 
 /**

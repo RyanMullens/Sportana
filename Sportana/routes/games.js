@@ -2,14 +2,33 @@ var express = require('express');
 var router = express.Router();
 
 var url = require('url'); // For parsing the query string in url
-
-var pg = require('pg');
-var connString = "postgres://student:student@localhost:5432/sportana";
-
 var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
-
 var authenticator = require('./authentication'); // Authentication Handler
 
+/**
+ *****************************************************
+ * PUT	/games
+ * REQUEST:
+ * {
+ * 	“sportID"    : string
+ *  "gameDate" 	 : date // yyyy-mm-dd
+ *  "startTime"  : time // hh:mm:ss
+ *  "endTime"    : time // hh:mm:ss
+ *  "location"   : string
+ *  "minAge"	 : int
+ *  "maxAge"	 : int
+ *  "minPlayers" : int
+ *  "maxPlayers" : int
+ *  "status"	 : int // 1: public, 0: not public
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”             : string // empty on success
+ * 	“success”             : boolean
+ * }
+ *****************************************************
+ */
 router.put('', function(req, res) {
 
 	var sportID = req.body.sportID;
@@ -47,10 +66,61 @@ router.put('', function(req, res) {
 
 });
 
-router.post('/', function(req, res) {
+/**
+ *****************************************************
+ * POST	/games
+ * REQUEST:
+ * {
+ * 	“sportID"    : string
+ *  "gameDate" 	 : date // yyyy-mm-dd
+ *  "startTime"  : time // hh:mm:ss
+ *  "endTime"    : time // hh:mm:ss
+ *  "location"   : string
+ *  "minAge"	 : int
+ *  "maxAge"	 : int
+ *  "minPlayers" : int
+ *  "maxPlayers" : int
+ *  "status"	 : int // 1: public, 0: not public
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”             : string // empty on success
+ * 	“success”             : boolean
+ * }
+ *****************************************************
+ */
+router.post('', function(req, res) {
 
 });
 
+/**
+ *****************************************************
+ * GET	/games/{gameCreator}/{gameID}
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”    	: string // empty on success
+ * 	“success”    	: boolean
+ *  "creator"    	: string
+ *  "gameID"        : int
+ *  "gameDate" 	 	: date // yyyy-mm-dd
+ *  "gameStart"  	: time // hh:mm:ss
+ *  "gameEnd"    	: time // hh:mm:ss
+ *  "location"   	: string
+ * 	“sport"      	: string 
+ *  "minAge"   	    : int
+ *  "maxAge"	    : int
+ *  "minPlayers"    : int
+ *  "maxPlayers"    : int
+ *  "reservedSpots" : int
+ *  "isPublic"	 	: boolean
+ * }
+ *****************************************************
+ */
 router.get('/:gameCreator/:gameID', function (req, res) {
 	//given the gameID
 	var gameCreator = req.params.gameCreator;
@@ -78,23 +148,6 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 			});
 		}
 	});
-});
-
-
-
-
-
-
-
-
-
-
-
-router.get('/search', function(req, res) {
-  var queryData = url.parse(request.url, true).query;
-  var sport = queryData.sport;
-  // Search for the sport
-   
 });
 
 module.exports = router;

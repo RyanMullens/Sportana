@@ -58,11 +58,11 @@ INSERT INTO FavoriteSports(login , sport) values
 ('ckent' , 'Football');
 
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
-('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true, false);
-INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isCompetitive) values
-('ckent' , '2014-09-20' , '08:00:00' , '09:00:00' , 'soccer' , 'umass', 0 , 30 , 10 , 6 , 10 , 30 , true, true);
-INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isCompetitive) values
-('jbond' , '2014-10-21' , '13:00:00' , '15:00:00' , 'football' , 'Mcguirk', 0 , 50 , 20 , 15 , 15 , 35 , true, false);
+('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'Basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true, false);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
+('ckent' , '2014-12-20' , '08:00:00' , '09:00:00' , 'Soccer' , 'umass', 0 , 30 , 10 , 6 , 10 , 30 , true, true);
+INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
+('jbond' , '2014-11-21' , '13:00:00' , '15:00:00' , 'Football' , 'Mcguirk', 0 , 50 , 20 , 15 , 15 , 35 , true, false);
 
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
 ('bwayne' , 'mscott' , 1 , 0 , 0);
@@ -90,36 +90,36 @@ INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
 ('myoda' , 'jbond' , 1 , 'So are we going to play today?');
 
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('bwayne' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('myoda' , 'soccer' , 5 , 20 , 'umass');
+('myoda' , 'Soccer' , 5 , 20 , 'umass');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'football' , 10 , 45 , 'Mcguirk');
+('bwayne' , 'Football' , 10 , 45 , 'Mcguirk');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'soccer' , 10 , 35 , 'umass');
+('bwayne' , 'Soccer' , 10 , 35 , 'umass');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('jbond' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('jbond' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('ckent' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('ckent' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('ckent' , 'soccer' , 10 , 20 , 'umass');
+('ckent' , 'Soccer' , 10 , 20 , 'umass');
 
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('bwayne' , 'soccer' , 10 , 20 , 'umass');
+('bwayne' , 'Soccer' , 10 , 20 , 'umass');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('bwayne' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('bwayne' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('jbond' , 'soccer' , 10 , 20 , 'umass');
+('jbond' , 'Soccer' , 10 , 20 , 'umass');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('myoda' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('myoda' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('ckent' , 'soccer' , 10 , 20 , 'umass');
+('ckent' , 'Soccer' , 10 , 20 , 'umass');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('mscott' , 'basketball' , 10 , 20 , 'Orchard Hill courts');
+('mscott' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('bwayne' , 'football' , 10 , 20 , 'Mcguirk');
+('bwayne' , 'Football' , 10 , 20 , 'Mcguirk');
 INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
-('mscott' , 'football' , 10 , 20 , 'Mcguirk');
+('mscott' , 'Football' , 10 , 20 , 'Mcguirk');
 
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values
 ('mscott' , '2014-09-09' , '10:00:00' , '11:00:00');
