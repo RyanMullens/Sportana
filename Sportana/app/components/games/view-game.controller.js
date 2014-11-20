@@ -1,4 +1,4 @@
-app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
+app.controller("ViewGameController", function($http, $stateParams, $scope, CurrentUser)
 {
 	/*var game = {gameid:2, creator: 'myoda', gamedate:'Sunday, November 16',
 	gamestart: '3:00pm', gameend: '5:00pm', location: 'Amherst MA', sport: 'Baseball',
@@ -6,6 +6,7 @@ app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 	*/
 	var game;
+	var loaded = false;
 
 	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
@@ -21,7 +22,8 @@ app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
 	.success(function(data, status, headers, config){
 			//Debug object in console
 			console.log(data);
-			this.game = data;
+			$scope.game = data;
+			loaded = true;
     		//$scope.user = data;
     		//$scope.loaded = true;
     })
@@ -29,8 +31,13 @@ app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
 		console.log('There was an error retrieving game information');
 	});
 
+	this.isLoaded = function(){
+		console.log(loaded);
+		return loaded;
+	};
+
 	this.getGame = function(){
-		return game;
+		return $scope.game;
 	};
 
 	this.getFriends = function(){
@@ -68,8 +75,9 @@ app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
 	};
 
 	this.isPublic = function(){
+		console.log(this.getGame());
 		return this.getGame().ispublic;
-	}
+	};
 
 	this.leaveGame = function(){
 		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers())),1);
