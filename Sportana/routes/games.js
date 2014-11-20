@@ -68,30 +68,82 @@ router.put('', function(req, res) {
 
 /**
  *****************************************************
- * POST	/games
+ * POST	/games/join
+ * Join a game
+ *
  * REQUEST:
  * {
- * 	“sportID"    : string
- *  "gameDate" 	 : date // yyyy-mm-dd
- *  "startTime"  : time // hh:mm:ss
- *  "endTime"    : time // hh:mm:ss
- *  "location"   : string
- *  "minAge"	 : int
- *  "maxAge"	 : int
- *  "minPlayers" : int
- *  "maxPlayers" : int
- *  "status"	 : int // 1: public, 0: not public
+ *  "creator" : string
+ *  "gameID"  : int
  * }
  *
  * RESPONSE:
  * {
- * 	“message”             : string // empty on success
- * 	“success”             : boolean
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
  * }
  *****************************************************
  */
-router.post('', function(req, res) {
+router.post('/join', function(req, res) {
+	var creator = req.body.creator;
+	var gameID = req.body.gameID;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!creator)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.joinGame(username, creator, gameID, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
 
+});
+
+/**
+ *****************************************************
+ * POST	/games/queue
+ * Wait for a game
+ *
+ * REQUEST:
+ * {
+ *  "sport"        : string
+ *	"city"         : string
+ *	"ageMin"       : int
+ *	"ageMax"       : int
+ *	"competitive"  : boolean
+ *  "availability" :
+ *  [{
+ *	  "date"       : date
+ *    "startTime"  : time
+ *    "endTime"    : time
+ *  }]
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
+ * }
+ *****************************************************
+ */
+router.post('/queue', function(req, res) {
+	response.success = false;
+	response.message = "Not yet implemented";
+	res.write(JSON.stringify(response));
+    res.end();
 });
 
 /**
