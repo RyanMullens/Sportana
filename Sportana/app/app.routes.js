@@ -158,7 +158,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
   })
 
   .state("app.viewGame", {
-   url: "/game/:gameId" ,
+   url: "/game/:creatorId/:gameId" ,
    views: {
     "content@main": {
     	templateUrl: "/components/games/view-game.html",

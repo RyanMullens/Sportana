@@ -1,9 +1,11 @@
-app.controller("ViewGameController", function($http, CurrentUser)
+app.controller("ViewGameController", function($http, $stateParams, CurrentUser)
 {
-	var game = {gameid:2, creator: 'myoda', gamedate:'Sunday, November 16',
+	/*var game = {gameid:2, creator: 'myoda', gamedate:'Sunday, November 16',
 	gamestart: '3:00pm', gameend: '5:00pm', location: 'Amherst MA', sport: 'Baseball',
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
+	*/
+	var game;
 
 	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
@@ -14,6 +16,18 @@ app.controller("ViewGameController", function($http, CurrentUser)
 
 	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
+
+	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
+	.success(function(data, status, headers, config){
+			//Debug object in console
+			console.log(data);
+			this.game = data;
+    		//$scope.user = data;
+    		//$scope.loaded = true;
+    })
+	.error(function(data, status, headers, config) {
+		console.log('There was an error retrieving game information');
+	});
 
 	this.getGame = function(){
 		return game;
@@ -76,11 +90,20 @@ app.controller("ViewGameController", function($http, CurrentUser)
 		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
 	};
 
-	this.requestGame = function(){
-		
+	this.requestJoin = function(){
+
 	};
 
 	this.inviteFriends = function(){
+
+	};
+
+
+	this.getMessages = function(){
+
+	};
+
+	this.postMessage = function(){
 
 	};
 });

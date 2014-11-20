@@ -5,19 +5,16 @@ app.controller("ViewGamesController", function($http, $scope){
 		console.log('there was an error');
 	});*/
 	var games = [
-		{id: 7, sport: 'Football', sportImg: '/assets/img/icon_73766.png',
+		{id: 1, creator: 'mscott', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
 		playersJoined: 5,date: 'October 30 2014', 
-		time: '5:30pm', location: 'Amherst', players: ['/assets/img/profile.png','/assets/img/profile.png','/assets/img/profile.png']},
-		{id: 8, sport: 'Baseball', sportImg: '/assets/img/icon_73766.png', 
-		playersJoined: 5,date: 'Novermber 1 2014', 
-		time: '5:30pm', location: 'Sharon', players: ['/assets/img/profile.png','/assets/img/profile.png','/assets/img/profile.png']}
+		time: '5:30pm', location: 'Amherst', players: ['/assets/img/profile.png','/assets/img/profile.png','/assets/img/profile.png']}
 	];
 
 	var notifications = [
-		{id: 9, sport: 'Football', sportImg: '/assets/img/icon_73766.png', 
+		{id: 1, creator: 'jbond', sport: 'Football', sportImg: '/assets/img/icon_73766.png', 
 		invitedBy: 'jbond', playersJoined: 5, playersInvited: 4, 
 		date: 'October 30 2014', time: '5:30pm', location: 'Amherst'},
-		{id: 10, sport: 'Football', sportImg: '/assets/img/icon_73766.png',
+		{id: 1, creator: 'ckent', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
 		invitedBy: 'myoda', playersJoined: 5, playersInvited: 4, 
 		date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
 	];
