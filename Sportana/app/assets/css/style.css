@@ -404,6 +404,10 @@ body {
   width: 100%;
 }
 
+#account{
+  box-shadow: none;
+}
+
 #logout {
   background-color: #808386;
   color: #FFFFFF;

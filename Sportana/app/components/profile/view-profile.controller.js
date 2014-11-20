@@ -1,5 +1,9 @@
 app.controller("ViewProfileController", function($http, $state, $stateParams, $scope, CurrentUser){
 
+
+	$scope.allSports = [];
+	$scope.allSportsImgs = [];
+
 	$scope.user = {};
 	$scope.editUser = {};
 
@@ -11,6 +15,8 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 		//Temp hack... sorry. This may loop indefinetly. Especially if not logged in
 		userId = $state.go('app.user', {userId:  CurrentUser.getUser().id});//CurrentUser.getUser().id;
 	}
+
+	$scope.user = {};
 
 	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)
@@ -30,6 +36,26 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 		})
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
+		});
+
+	$http.get('/api/sports')
+		.success(function(data, status, headers, config)
+		{
+			//Debug object in console
+			console.log(data);
+    		
+			//$scope.allSports = [];
+
+    		for(var sport in data.sports)
+    		{
+    			$scope.allSports.push(data.sports[sport].sport);
+    			$scope.allSportsImgs.push(data.sports[sport].image);
+    		}
+
+    		console.log($scope.allSports);
+		})
+		.error(function(data, status, headers, config) {
+    		console.log('There was an error retrieving all sports');
 		});
 
 
@@ -108,7 +134,7 @@ this.isSelf = function()
 
 this.isFriend = function()
 {
-	return false;
+	return $scope.user.isFriend;
 }
 
 this.isEditing = function()
@@ -165,16 +191,6 @@ this.cancelProfile = function()
 	this.editing = false;
 }
 
-this.addSport = function()
-{
-	console.log("Add Sport!");
-
-	var testSportObj = {sportImage: "/assets/img/sports/baseball.png", sportsName: "Table Tennis"};
-
-	$scope.editUser.sportsArray.unshift(testSportObj);
-}
-
-
 this.addFriend = function()
 {
 	alert("Add Friend " + userId);
@@ -197,14 +213,88 @@ this.removeFriend = function()
 //Edit sports stuff...
 
 
-$scope.allSports = ["Soccer", "Football","Baseball","Frisbee","Basketball"];
+
 
 $scope.selectedSport = "";
 
+
+$scope.addSportLocal = function(sport, img)
+{
+	console.log("Add Sport!");
+
+	var sportObj = {sportImage: img, sportsName: sport};
+
+	$scope.editUser.sportsArray.unshift(sportObj);
+}
+
+$scope.deleteSportLocal = function(name)
+{
+	var index = $scope.editUser.sportsArray.indexOf(name);
+	$scope.editUser.sportsArray.splice(index, 1);
+}
+
 $scope.isSportSelected = function()
 {
-	return $scope.allSports.indexOf($scope.selectedSport) != -1;
+	if($scope.allSports != undefined)
+	{
+		return $scope.allSports.indexOf($scope.selectedSport) != -1;
+	}
+	return false;
 }
+
+$scope.addFavoriteSport = function()
+{
+	var sportToAdd = $scope.selectedSport;
+
+	console.log("Adding " + sportToAdd + "!");
+
+	$http.post('/api/users/addFavoriteSport',{ 'sport' : sportToAdd  })
+		.success(function(data, status, headers, config)
+		{
+			console.log(data);
+
+			if(data.message === "could not insert")
+			{
+				console.alert("Sport was already there");
+			}
+			else{
+				console.log("Added remotely!");
+
+				var index = $scope.allSports.indexOf(sportToAdd);
+
+				$scope.addSportLocal(sportToAdd,$scope.allSportsImgs[index]);
+			}
+
+		})
+		.error(function(data, status, headers, config) 
+		{
+    		console.log('There was an error adding sport :(');
+		});
+}
+
+
+$scope.deleteFavoriteSport = function(sport)
+{
+	var sportToDelete = sport.sportsName;
+
+	console.log("Deleting " + sportToDelete + "!");
+
+	$http.delete('/api/users/deleteFavoriteSport/' + sportToDelete)
+		.success(function(data, status, headers, config)
+		{
+			console.log(data);
+
+				console.log("Deleted remotely!");
+				$scope.deleteSportLocal(sport);
+		})
+		.error(function(data, status, headers, config) 
+		{
+    		console.log('There was an error adding sport :(');
+		});
+}
+
+
+
 
 
 });

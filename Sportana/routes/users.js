@@ -83,7 +83,7 @@ router.post('/addFavoriteSport', function(req, res) {
 });
 
 /* DELETE deletes a favorite sport, one at a time */
-router.delete('/deleteFavoriteSport', function(req, res) {
+router.delete('/deleteFavoriteSport/:sport', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};
@@ -93,7 +93,7 @@ router.delete('/deleteFavoriteSport', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			var sport = req.body.sport;
+			var sport = req.params.sport;
 			dbc.deleteFavoriteSport(username, sport, function(err, data){
 				res.send(JSON.stringify(data));
 			});

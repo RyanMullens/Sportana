@@ -112,20 +112,36 @@
 
 				<hr>
 
-				<div ng-show="viewProfile.isEditing()" class="row">
-					<input auto-complete ui-items="allSports" ng-model="selectedSport">
-					<input type="submit" value="Add Sport" class="btn btn-primary" ng-disabled="!isSportSelected()">
-				</div>
-
+				
 				<div class="profileSportContainer row">
-					<div class="profileCategoryTitle col-md-4">Favorite Sports</div>
+					<div class="col-md-4">
+
+					<div class="profileCategoryTitle row">Favorite Sports</div>
+
+					<div ng-show="viewProfile.isEditing()">
+									<input auto-complete ui-items="allSports" ng-model="selectedSport">
+									<button type="submit" ng-click="addFavoriteSport()" class="btn btn-success" ng-disabled="!isSportSelected()">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Sport
+									</button>
+								</div>
+					</div>
 					<div class='profileSportHolder col-md-8'>
 						<div class="profileSportList">
 
-							<div ng-show="viewProfile.isEditing()" ng-click="viewProfile.addSport()" class='profileSport btn btn-success'>
-								<img ng-src="/assets/img/sports/add.png"></img>
-								<div class="sportName">Add Sport</div>
-							</div>
+							<!--
+								<div>
+								<div ng-show="viewProfile.isEditing()" ng-click="viewProfile.addSport()" class='profileSport btn btn-success'>
+									<img ng-src="/assets/img/sports/add.png"></img>
+									<div class="sportName">Add Sport</div>
+								</div>
+								
+								<div ng-show="viewProfile.isEditing()">
+									<input auto-complete ui-items="allSports" ng-model="selectedSport">
+									<button type="submit" class="btn btn-success" ng-disabled="!isSportSelected()">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Sport
+									</button>
+								</div>
+							</div> !-->
 
 							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
 
@@ -135,7 +151,7 @@
 									});
 								</script>
 
-								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
+								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}" ng-click="deleteFavoriteSport(sport)"></img>
 								
 							</div>
 						</div>
