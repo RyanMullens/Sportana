@@ -9,22 +9,27 @@
 					<div class = "profileInfoHolder col-md-6">
 						<div class="profileNameHolder row" >
 							<div class="profileName" >
-								<div ng-hide="viewProfile.isEditing()">{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}</div>
-								<div class="profileEditNameInput" ng-show="viewProfile.isEditing()">
-									<input type="text" ng-model="editUser.firstname"></input>
-									<input type="text" ng-model="editUser.lastname"></input>
+								<div>{{viewProfile.getFullName()}}, {{ viewProfile.getAge() }}</div>
+								<!--<div class="profileEditNameInput" ng-show="viewProfile.isEditing()">
+									<input type="text" ng-model="user.firstname"></input>
+									<input type="text" ng-model="user.lastname"></input>
 									, {{ viewProfile.getAge() }}
-								</div>
+								</div>!-->
 							</div>
 						</div>
 
 						<div class="profileCity row">
-							<div ng-hide="viewProfile.isEditing()">
-								{{ viewProfile.getCity() }}
+							<div ng-hide="viewProfile.isEditingCity()">
+									{{ viewProfile.getCity() }}
+									<div ng-click="viewProfile.editCity()" ng-show="viewProfile.isEditing()" class="btn btn-default">Edit City</div>									
 							</div>
-							<div ng-show="viewProfile.isEditing()">
-								<input type="text" ng-model="editUser.city"></input>
+
+							<div class="profileEditCity" ng-show="viewProfile.isEditing() && viewProfile.isEditingCity()">
+									<input type="text" ng-model="viewProfile.tempCity"></input>
+									<div ng-click="viewProfile.saveCity()" class="btn btn-success">Save</div>
+									<div ng-click="viewProfile.cancelCity()" class="btn btn-danger">Cancel</div>
 							</div>
+							
 						</div>
 					</div>	
 					<div class="profileButtonHolder col-md-3">
@@ -45,6 +50,7 @@
 							&nbsp;Remove Friend
 						</button> 
 
+						<!--
 						<button ng-show="viewProfile.isSelf() && viewProfile.isEditing()" ng-click="viewProfile.saveProfile()" class="profileSpecialButton btn btn-success">
 							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 							&nbsp;Save
@@ -54,6 +60,7 @@
 							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 							&nbsp;Cancel
 						</button> 
+						!-->
 
 
 					</div>
@@ -119,10 +126,12 @@
 					<div class="profileCategoryTitle row">Favorite Sports</div>
 
 					<div ng-show="viewProfile.isEditing()">
-									<input auto-complete ui-items="allSports" ng-model="selectedSport">
-									<button type="submit" ng-click="addFavoriteSport()" class="btn btn-success" ng-disabled="!isSportSelected()">
-										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Sport
-									</button>
+									<input class="col-xs-7" auto-complete ui-items="allSports" ng-model="selectedSport">
+									<div class="col-xs-5">
+										<button type="submit" ng-click="addFavoriteSport()" class="btn btn-success" ng-disabled="!isSportSelected()">
+											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Sport
+										</button>
+									</div>
 								</div>
 					</div>
 					<div class='profileSportHolder col-md-8'>
@@ -151,8 +160,10 @@
 									});
 								</script>
 
-								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}" ng-click="deleteFavoriteSport(sport)"></img>
-								
+								<div>
+								<span ng-click="deleteFavoriteSport(sport)" ng-show="viewProfile.isEditing()" style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
+								</div>
 							</div>
 						</div>
 					</div>

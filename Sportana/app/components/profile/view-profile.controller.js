@@ -5,10 +5,14 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	$scope.allSportsImgs = [];
 
 	$scope.user = {};
-	$scope.editUser = {};
+
 
 	this.editing = false;
 	$scope.loaded = false;
+
+	this.editingCity = false;
+	this.tempCity = "";
+
 
 	userId = $stateParams.userId;
 	if(!userId) {
@@ -26,6 +30,14 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
     		
     		$scope.user = data;
     		$scope.loaded = true;
+
+    		//Hack to prevent empty sport from showing
+    		if($scope.user.sportsArray.length == 1 && $scope.user.sportsArray[0].sportName == null)
+    		{
+    			$scope.user.sportsArray = [];
+    		}	
+
+
     		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
 							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
@@ -139,7 +151,12 @@ this.isFriend = function()
 
 this.isEditing = function()
 {
-	return this.editing;
+	return this.isSelf();
+}
+
+this.isEditingCity = function()
+{
+	return this.editingCity;
 }
 
 
@@ -153,18 +170,47 @@ this.cloneUser = function(user)
 
 this.getCurrentSports = function()
 {
-	if(this.isEditing())
-	{
-		return $scope.editUser.sportsArray;
-	}
-	else{
-		return $scope.user.sportsArray;
-	}
+	return $scope.user.sportsArray;
 }
 
 
 //Actions
-this.editProfile = function()
+this.editCity = function()
+{
+	console.log("Edit City")
+	this.tempCity = $scope.user.city;
+	this.editingCity = true;
+}
+
+this.saveCity = function()
+{
+	console.log("Save City")
+
+	var thisTemp = this;
+
+	$http.post('/api/users/editCity',{ 'city' : thisTemp.tempCity  })
+		.success(function(data, status, headers, config)
+		{
+			console.log(data);
+
+			$scope.user.city = thisTemp.tempCity;
+
+			thisTemp.editingCity = false;
+		})
+		.error(function(data, status, headers, config) 
+		{
+    		console.log('There was an error editing city :(');
+		});
+}
+
+this.cancelCity = function()
+{
+	console.log("Canceling City")
+	this.editingCity = false;
+}
+
+
+/*this.editProfile = function()
 {
 	console.log("Edit Profile");
 
@@ -189,7 +235,7 @@ this.cancelProfile = function()
 	$scope.editUser = null;
 
 	this.editing = false;
-}
+}*/
 
 this.addFriend = function()
 {
@@ -224,13 +270,13 @@ $scope.addSportLocal = function(sport, img)
 
 	var sportObj = {sportImage: img, sportsName: sport};
 
-	$scope.editUser.sportsArray.unshift(sportObj);
+	$scope.user.sportsArray.unshift(sportObj);
 }
 
 $scope.deleteSportLocal = function(name)
 {
-	var index = $scope.editUser.sportsArray.indexOf(name);
-	$scope.editUser.sportsArray.splice(index, 1);
+	var index = $scope.user.sportsArray.indexOf(name);
+	$scope.user.sportsArray.splice(index, 1);
 }
 
 $scope.isSportSelected = function()
