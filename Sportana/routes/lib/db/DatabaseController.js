@@ -507,7 +507,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
           if (err) {
            callback(err, undefined);
           }
-          else {
+          else {/*
             var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
@@ -522,8 +522,8 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.minAge = result.rows[0].minage;
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
-
-              callback(undefined, gameInfo);
+*/
+              callback(undefined, result.rows[0]);
           }
       });
     }
