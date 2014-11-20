@@ -23,7 +23,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			//Debug object in console
 			console.log(data);
 			$scope.game = data;
-			loaded = true;
+			$scope.loaded = true;
     		//$scope.user = data;
     		//$scope.loaded = true;
     })
@@ -33,7 +33,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.isLoaded = function(){
 		console.log(loaded);
-		return loaded;
+		return $scope.loaded;
 	};
 
 	this.getGame = function(){
