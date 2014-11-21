@@ -111,7 +111,7 @@ var CheckRatings = function(obj, callback){
 var ConcatSports = function(obj, callback){
 	var sportsArray = [];
 	var result = obj;
-	if(result.rows.length > 0){
+	if(result.rows.length > 0 && result.rows[0]["sport"] !== null){
 		for(i = 0; i < result.rows.length; i++){
 			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 		}
@@ -128,12 +128,13 @@ var ConcatSports = function(obj, callback){
 }
 
 var isFriend = function(username, login, callback) {
+	console.log("isFriend called");
 	pg.connect(connString, function(err, client, done) {
+		var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 		if(err) {
-			callback(undefined, {message: "error 279"});
+			callback(undefined, {message: "error"});
 		}
 		else{
-			var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 			//if Friends?
 			var SQLQuery = "SELECT Friends.userB from Friends WHERE Friends.userA = $1";
 			client.query({ text : SQLQuery,
@@ -141,19 +142,15 @@ var isFriend = function(username, login, callback) {
  			   function(err, result){
  				   done();
  				   if(err){
- 					  callback(undefined, {message: "error 290"});
+ 					  callback(undefined, {message: "error"});
  				   }
  				   else {
  					   if(result.rows[0]){
  						   for(var i = 0; i < result.rows.length; i++){
  						   if(result.rows[i]["userb"] === login){
  							   isFriend = 1;
- 							   callback(undefined, isFriend);
  						   	   }
  						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
  					   }
  				   }
  			   });
@@ -164,14 +161,13 @@ var isFriend = function(username, login, callback) {
 			   function(err, result){
 				   done();
 				   if(err){
-					   callback(undefined, {message: "error 311"});
+					   callback(undefined, {message: "error"});
 				   }
 				   else{
  					   if(result.rows[0]){
  						   for(var i = 0; i < result.rows.length; i++){
  						   if(result.rows[i]["userto"] === login){
  							   isFriend = 2;
- 							   callback(undefined, isFriend);
  						   	   }
  						   }
  					   }
@@ -184,22 +180,22 @@ var isFriend = function(username, login, callback) {
 			   function(err, result){
 				   done();
 				   if(err){
-					   callback(undefined, {message: "error 332"});
+					   callback(undefined, {message: "error"});
 				   }
 				   else{
  					   if(result.rows[0]){
  						   for(var i = 0; i < result.rows.length; i++){
  						   if(result.rows[i]["userfrom"] === login){
  							   isFriend = 3;
- 							   callback(undefined, isFriend);
  						   	   }
  						   }
  					   }
+ 					   console.log("Finished querying, isfriend = " + isFriend);
+ 					   client.end(); pg.end();
+ 					   callback(undefined, isFriend);
+ 					   return;
  				   }		  
 			   });
-		   if(isFriend === 0){
-			   callback(undefined, 0);
-		   	   }
 		   }
 	});
 }
