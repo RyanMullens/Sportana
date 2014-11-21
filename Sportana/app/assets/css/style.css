@@ -251,6 +251,7 @@ body {
     position: absolute;
     text-align: center;
     bottom: 0;
+    pointer-events: none;
   }
 
   .barGraphLabel
@@ -270,7 +271,15 @@ body {
   .editGraphBar
   {
      background-color:#ec971f;
+     height: 20%;
+     position: relative;
   }
+
+  .clearEditRating
+  {
+    background-color: rgba(0,0,0,0);
+  }
+
 
   .profileSportContainer
   {

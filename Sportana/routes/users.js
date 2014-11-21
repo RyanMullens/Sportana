@@ -121,7 +121,7 @@ router.post('/ratings', function(req, res) {
 			var friendliness = req.body.friendliness;
 			var timeliness = req.body.timeliness;
 			var skilllevel = req.body.skilllevel;
-			if(rater != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
+			if(username != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
 				var userObject = {
 						rater: username, userRated: userRated,
 						friendliness: friendliness, timeliness: timeliness, skilllevel: skilllevel
