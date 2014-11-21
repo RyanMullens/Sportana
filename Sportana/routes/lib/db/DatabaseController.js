@@ -876,27 +876,27 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
     		SQLQuery += " AND lower(Game.sport) = lower($"+(searchValues.length+1)+")";
     		searchValues.push(sport);
     	}
-    	
+
     	if (city) {
     	    SQLQuery += " AND lower(Game.location) = lower($" + (searchValues.length + 1) +")";
     		searchValues.push(city);
     	}
-    	
+
     	if (ageMin) {
     	    SQLQuery += " AND (Game.minAge > $" + (searchValues.length + 1) +")";
     		searchValues.push(ageMin);
     	}
-    	
+
     	if (ageMax) {
     	    SQLQuery += " AND (Game.maxAge < $" + (searchValues.length + 1) +")";
     		searchValues.push(ageMax);
     	}
-    	
+
     	if (isCompetitive) {
     	    SQLQuery += " AND (Game.isCompetitive = $" + (searchValues.length + 1) +")";
     		searchValues.push(isCompetitive);
     	}
-    	
+
     	var currentDate = timeHelper.getCurrentDate();
     	SQLQuery += " AND (Game.gameDate > $" + (searchValues.length+1) + ")";
     	searchValues.push(currentDate);
@@ -923,7 +923,7 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
           		var games = [];
           		for( var i = 0; i < result.rows.length; i++ ) {
           			var game = {};
-          			game.creator = result.rows[i].creator; 
+          			game.creator = result.rows[i].creator;
           			game.gameID  = result.rows[i].gameid;
           			game.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
           			game.gameStart = result.rows[i].gamestart;
