@@ -22,7 +22,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-		data.sportImg = '/assets/img/sports/' + data.sport + '.png';
+		data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
 		console.log(data);
 		$scope.game = data;
 		$scope.loaded = true;
