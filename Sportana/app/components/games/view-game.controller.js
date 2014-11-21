@@ -17,22 +17,20 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
+	var messages = [{from: 'myoda', message: 'Hello World'},{from: 'jbond', message: 'Hello world from jbond'}];
+
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-			//Debug object in console
 			console.log(data);
 			$scope.game = data;
 			$scope.loaded = true;
-    		//$scope.user = data;
-    		//$scope.loaded = true;
     })
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving game information');
 	});
 
 	this.isLoaded = function(){
-		console.log(loaded);
 		return $scope.loaded;
 	};
 
@@ -75,7 +73,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.isPublic = function(){
-		console.log(this.getGame());
 		return this.getGame().ispublic;
 	};
 
@@ -106,13 +103,13 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	};
 
-
 	this.getMessages = function(){
-
+		return messages;
 	};
 
-	this.postMessage = function(){
-
+	this.postMessage = function(message){
+		messages.push({from: this.getUser(), message: message});
+		$scope.message = '';
 	};
 });
 

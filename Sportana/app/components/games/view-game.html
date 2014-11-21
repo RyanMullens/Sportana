@@ -49,7 +49,20 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			Game chat, websockets?
+			<div class="row messages">
+				<div class="message" ng-repeat="message in viewGame.getMessages()">
+					<div class="from">
+						{{message.from}}
+					</div>
+					<div class="message">
+						{{message.message}}
+					</div>
+				</div>
+				<div class="enter-message">
+					<input type="text" placeholder="Enter your message..." ng-model="message">
+					<button type="submit" ng-click="viewGame.postMessage(message)" class="btn btn-primary">Send</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row">
