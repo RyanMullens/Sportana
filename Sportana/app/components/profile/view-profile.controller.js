@@ -148,8 +148,31 @@ this.isSelf = function()
 
 this.isFriend = function()
 {
-	return $scope.user.isFriend;
+	return $scope.user.isFriend == 1;
 }
+
+this.isAddFriend = function()
+{
+	return $scope.user.isFriend == 0 && this.isSelf() == false;
+}
+
+this.isRemoveFriend = function()
+{
+	return this.isFriend();
+}
+ 
+this.isAcceptFriend = function()
+{
+	return $scope.user.isFriend == 3;
+}
+ 
+this.isPendingFriend = function()
+{
+	return $scope.user.isFriend == 2;
+}
+ 
+
+
 
 this.isEditing = function()
 {
@@ -159,6 +182,11 @@ this.isEditing = function()
 this.isEditingCity = function()
 {
 	return this.editingCity;
+}
+
+this.isEditingSports = function()
+{
+	return this.editingSports;
 }
 
 this.isRating = function()
@@ -206,6 +234,17 @@ this.saveRate = function()
 this.cancelRate = function()
 {
 	this.rating = false;
+}
+
+
+this.editSport = function()
+{
+	this.editingSports = true;
+}
+
+this.hideSport = function()
+{
+	this.editingSports = false;
 }
 
 

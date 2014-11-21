@@ -33,22 +33,30 @@
 						</div>
 					</div>	
 					<div class="profileButtonHolder col-md-3">
-						<button ng-show="viewProfile.isSelf() && !viewProfile.isEditing()" ng-click="viewProfile.editProfile()" class="profileSpecialButton btn btn-primary">
-							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
-							&nbsp;&nbsp;Edit Profile
-						</button> 
-
-						<button ng-show="!viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
+						<button ng-show="!viewProfile.isAddFriend()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 							&nbsp;Add Friend
 						</button>
 
-						<button ng-show="viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
+						<button ng-show="viewProfile.isRemoveFriend()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
 							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Remove Friend
 						</button> 
+
+						<button ng-show="viewProfile.isAcceptRequest()" ng-click="viewProfile.acceptFriend()" class="profileSpecialButton btn btn-warning">
+							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+							&nbsp;Accept Request
+						</button> 
+
+						<button ng-show="viewProfile.isPendingRequest()" class="profileSpecialButton btn btn-warning" enabled='false'>
+							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+							&nbsp;Pending Request
+						</button> 
+
 
 						<!--
 						<button ng-show="viewProfile.isSelf() && viewProfile.isEditing()" ng-click="viewProfile.saveProfile()" class="profileSpecialButton btn btn-success">
@@ -175,11 +183,12 @@
 
 				
 				<div class="profileSportContainer row">
-					<div class="col-md-4">
+					<div class="profileTitleCol col-md-4">
 
 					<div class="profileCategoryTitle row">Favorite Sports</div>
+					<div ng-show="viewProfile.isEditing() && !viewProfile.isEditingSports()" ng-click="viewProfile.editSport()" ng-show="viewProfile.isEditing()" class="btn btn-default">Edit Sports</div>	
 
-					<div ng-show="viewProfile.isEditing()">
+					<div ng-show="viewProfile.isEditingSports()">
 									<input class="col-xs-7" auto-complete ui-items="allSports" ng-model="selectedSport">
 									<div class="col-xs-5">
 										<button type="submit" ng-click="addFavoriteSport()" class="btn btn-success" ng-disabled="!isSportSelected()">
@@ -208,14 +217,10 @@
 
 							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
 
-								<script type="text/javascript">
-									$(document).ready(function(){
-				    					$('[data-toggle="tooltip"]').tooltip();   
-									});
-								</script>
+								
 
 								<div>
-								<span ng-click="deleteFavoriteSport(sport)" ng-show="viewProfile.isEditing()" style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								<span ng-show="viewProfile.isEditingSports()" ng-click="deleteFavoriteSport(sport)" ng-show="viewProfile.isEditing()" style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
 								</div>
 							</div>

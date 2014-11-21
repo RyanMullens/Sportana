@@ -280,6 +280,10 @@ body {
     background-color: rgba(0,0,0,0);
   }
 
+  .profileTitleCol
+  {
+    text-align: center;
+  }
 
   .profileSportContainer
   {
