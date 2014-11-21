@@ -1086,9 +1086,6 @@ exports.getMessages = function(creator, gameID, callback) {
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {
-        	console.log("Query " + SQLQuery);
-        	console.log("Creator: " + creator);
-        	console.log("GameID: " + gameID);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
