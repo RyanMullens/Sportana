@@ -267,6 +267,11 @@ body {
     width: 100%;
   }
 
+  .editGraphBar
+  {
+     background-color:#ec971f;
+  }
+
   .profileSportContainer
   {
     width: 100%;

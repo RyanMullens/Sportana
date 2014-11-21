@@ -69,15 +69,28 @@
 				<hr>
 
 				<div class="profileRatingContainer row">
-					<div class="profileCategoryTitle col-md-4">Rating</div>
+					<div class="profileCategoryTitle col-md-4">
+
+					<div class="row">Rating</div>
+					<div ng-hide="viewProfile.isEditing()">
+						<div ng-hide="viewProfile.isRating()" ng-click="viewProfile.rate()" class="btn btn-warning">Rate Me!</div>
+						<div ng-show="viewProfile.isRating()" ng-click="viewProfile.saveRate()" class="btn btn-success">Rate</div>
+						<div ng-show="viewProfile.isRating()" ng-click="viewProfile.cancelRate()" class="btn btn-danger">Cancel</div>
+					</div>
+
+					</div>
+
 					<div class='col-md-8'>
 
 						<div class="ratingsHolder row">
 							<div class="col-xs-4">
 								<div class="row">
 									<div class="barGraphBarHolder">
-										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getFriendliness()}}%;">
+										<div ng-hide="viewProfile.isRating()" class="barGraphBar" style="height: {{100/5 * viewProfile.getFriendliness()}}%;">
 											<div class="barGraphBarValue">{{ viewProfile.getFriendliness() }}</div>
+										</div>
+										<div  ng-show="viewProfile.isRating()" class="barGraphBar editGraphBar" style="height: {{100/5 * viewProfile.tempRating.friendliness}}%;">
+											<div class="barGraphBarValue">{{viewProfile.tempRating.friendliness}}</div>
 										</div>
 									</div>
 								</div>

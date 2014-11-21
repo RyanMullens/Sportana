@@ -13,6 +13,8 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	this.editingCity = false;
 	this.tempCity = "";
 
+	this.rating = false;
+	this.tempRating = {friendliness : 1, timeliness:1, skilllevel:1};
 
 	userId = $stateParams.userId;
 	if(!userId) {
@@ -159,6 +161,10 @@ this.isEditingCity = function()
 	return this.editingCity;
 }
 
+this.isRating = function()
+{
+	return this.rating;
+}
 
 this.cloneUser = function(user)
 {
@@ -175,6 +181,27 @@ this.getCurrentSports = function()
 
 
 //Actions
+
+this.rate = function()
+{
+	this.rating = true;
+	console.log("Rate");
+}
+
+this.saveRate = function()
+{
+	this.rating = false;
+	console.log("Save Rate");
+}
+
+this.cancelRate = function()
+{
+	//this.tempRating.friendliness += 1;
+	this.rating = false;
+	console.log("Cancel Rate");	
+}
+
+
 this.editCity = function()
 {
 	console.log("Edit City")
