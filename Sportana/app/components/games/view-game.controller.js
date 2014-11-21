@@ -22,10 +22,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-			console.log(data);
-			$scope.game = data;
-			$scope.loaded = true;
-    })
+		data.sportImg = '/assets/img/sports/' + data.sport + '.png';
+		console.log(data);
+		$scope.game = data;
+		$scope.loaded = true;
+	})
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving game information');
 	});
@@ -81,14 +82,20 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.joinGame = function(){
-		if(this.isInvited()){
-			players.push(this.contains(this.getInvited()));
-			console.log(this.isInvited());
-			this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
-		}
-		else{
-			players.push({login: this.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
-		}
+		that = this;
+		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameid})
+		.success(function(data, status, headers, config){
+			if(that.isInvited()){
+				players.push(that.contains(that.getInvited()));
+				that.getInvited().splice(that.getInvited().indexOf(that.contains(that.getInvited())),1);
+			}
+			else{
+				players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
+			}
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with joining the game');
+		});
 	};
 
 	this.declineGame = function(){
