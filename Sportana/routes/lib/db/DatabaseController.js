@@ -97,6 +97,111 @@ exports.putUserAuth = function(login, auth, callback) {
 		}
 	});
 };
+<<<<<<< HEAD
+=======
+
+var CheckRatings = function(obj, callback){
+	var result = obj;
+	if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
+		result.rows[0]["friendliness"] = 0;
+		result.rows[0]["timeliness"] = 0;
+		result.rows[0]["skilllevel"] = 0;
+	}
+	callback(result);
+}
+
+var ConcatSports = function(obj, callback){
+	var sportsArray = [];
+	var result = obj;
+	if(result.rows.length > 0 && result.rows[0]["sport"] !== null){
+		for(i = 0; i < result.rows.length; i++){
+			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
+		}
+		delete result.rows[0]["sport"];
+		delete result.rows[0]["imageurl"];
+		result.rows[0]["sportsArray"] = sportsArray;
+		callback(result.rows[0]);
+	}
+	else{
+		delete result.rows[0]["sport"];
+		delete result.rows[0]["imageurl"];
+		callback(result.rows[0]);
+	}
+}
+
+var isFriend = function(username, login, callback) {
+	console.log("isFriend called");
+	pg.connect(connString, function(err, client, done) {
+		var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else{
+			//if Friends?
+			var SQLQuery = "SELECT Friends.userB from Friends WHERE Friends.userA = $1";
+			client.query({ text : SQLQuery,
+ 			   values : [username]},
+ 			   function(err, result){
+ 				   done();
+ 				   if(err){
+ 					  callback(undefined, {message: "error"});
+ 				   }
+ 				   else {
+ 					   if(result.rows[0]){
+ 						   for(var i = 0; i < result.rows.length; i++){
+ 						   if(result.rows[i]["userb"] === login){
+ 							   isFriend = 1;
+ 						   	   }
+ 						   }
+ 					   }
+ 				   }
+ 			   });
+		   //Pending
+		   var SQLQuery = "SELECT userTo, userFrom, type FROM Notifications WHERE userfrom = $1 AND type = " + '0' + "";
+		   client.query({ text : SQLQuery,
+			   values : [username]},
+			   function(err, result){
+				   done();
+				   if(err){
+					   callback(undefined, {message: "error"});
+				   }
+				   else{
+ 					   if(result.rows[0]){
+ 						   for(var i = 0; i < result.rows.length; i++){
+ 						   if(result.rows[i]["userto"] === login){
+ 							   isFriend = 2;
+ 						   	   }
+ 						   }
+ 					   }
+ 				   }
+				});
+		   //Requested
+		   var SQLQuery = "SELECT userTo, userFrom, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
+		   client.query({ text : SQLQuery,
+			   values : [username]},
+			   function(err, result){
+				   done();
+				   if(err){
+					   callback(undefined, {message: "error"});
+				   }
+				   else{
+ 					   if(result.rows[0]){
+ 						   for(var i = 0; i < result.rows.length; i++){
+ 						   if(result.rows[i]["userfrom"] === login){
+ 							   isFriend = 3;
+ 						   	   }
+ 						   }
+ 					   }
+ 					   console.log("Finished querying, isfriend = " + isFriend);
+ 					   client.end(); pg.end();
+ 					   callback(undefined, isFriend);
+ 					   return;
+ 				   }		  
+			   });
+		   }
+	});
+}
+>>>>>>> 846c62cbbf6533dce7637ac16f2d8cebd7100f0c
 
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
