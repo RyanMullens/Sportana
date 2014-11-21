@@ -211,13 +211,11 @@ exports.getUserProfile = function (username, login, callback) {
 							   values : [login]},
 					function(err, result){
 					done();
-					//client.end();
-					//pg.end();
 					if(err){
 						callback(undefined, {message: "User does not exist"});
 						}
 					else{
-					  if(result.rows[0] !== undefined){
+					  if(result.rows[0] != undefined){
 					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
 						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
 						"FavoriteSports.sport, Sport.imageURL " +
@@ -232,83 +230,32 @@ exports.getUserProfile = function (username, login, callback) {
 			            			   values : [login]},
 			             function(err, result){
 			            	done();
-			            	//client.end();
-			            	//pg.end();
+			            	client.end();
+			            	pg.end();
 			            	if(err){
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
-	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-			            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
-			            				result.rows[0]["friendliness"] = 0;
-			            				result.rows[0]["timeliness"] = 0;
-			            				result.rows[0]["skilllevel"] = 0;
-			            			}
-			            			if(result.rows.length > 0){
-			            				for(i = 0; i < result.rows.length; i++){
-			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
-					            			delete result.rows[i]["sport"];
-					            			delete result.rows[i]["imageurl"];
+			            			CheckRatings(result, function(checked){
+			            				result = checked;
+			            			});
+				            		var temp;
+			            			ConcatSports(result, function(concated){
+			            				temp = concated;
+			            			});
+			            			result.rows[0] = temp;
+			            			isFriend(username, login, function(err, value){
+			            				if(err){
+			            					callback(undefined, {message: "error"});
 			            				}
-			            			}
-			            			else if(result.rows.length == 0){
-			            				sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
-			            				delete result.rows[0]["sport"];
-			            				delete result.rows[0]["imageurl"];
-			            			}
-			            			else{ //null
-			            				sportsArray.push({sportsName: null, sportImage: null});
-			            				delete result.rows[0]["sport"];
-			            				delete result.rows[0]["imageurl"];
-			            			}
-		            				result.rows[0]["sportsArray"] = sportsArray;
-		            				//check if friends finally
-		            				console.log("checking friends");
-		            				var SQLQuery = "SELECT Friends.userB from Friends where Friends.userA = $1";
-		    						client.query({ text : SQLQuery,
-		    			            			   values : [username]},
-		    			             function(err, friends){
-		    			            	done();
-		    			            	client.end();
-		    			            	pg.end();
-		    			            	if(err){
-		    								callback(undefined, {message: "error"});
-		    			            	}
-		    			            	else {
-		    			            		console.log("here");
-		    			            	if(friends.rows[0]){ //has at least one friend
-		    			            		if(friends.rows.length > 0){
-		    			            			console.log("amount of friends: " + friends.rows.length);
-		    			            			var i = 0; var j = true;
-		    			            			while(j){
-		    			            				if(friends.rows[i]){ //if first friend, check
-			    			            				if(friends.rows[i]["userb"] == login){
-			    			            					console.log(friends.rows[i]["userb"]);
-			    			            					result.rows[0]["isFriend"] = true;
-			    			            					j = false;
-			    			            				}
-		    			            				}
-		    			            				else{
-		    			            					console.log("no friends after checking all i");
-		    			            					result.rows[0]["isFriend"] = false;
-		    			            					j = false;
-		    			            				}
-		    			            				i++;
-		    			            			}
-		    			            			}
-		    			            		console.log(result.rows[0]);
-			    			            	callback(undefined, result.rows[0]);
-		    			            		}
-		    			            		else{ //no friends
-		    			            			console.log("no friends");
-		    			            			result.rows[0]["isFriend"] = false;
-		    			            			console.log(result.rows[0]);
-		    			            			callback(undefined, result.rows[0]);
-		    			            		}
-		    			            	}
-		    			            	});
+			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
+			            					result.rows[0]["isFriend"] = value;
+			            					console.log(result.rows[0]);
+			            					callback(undefined, result.rows[0]);
+			            				}
+			            			});
 			            		}
 			            		else{
 			            			console.log("user does not exist");
