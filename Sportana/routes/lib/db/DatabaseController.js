@@ -97,13 +97,6 @@ exports.putUserAuth = function(login, auth, callback) {
 		}
 	});
 };
-/*
-var sportsArray = [];
-if(result.rows[0]["login"] === login){
-	result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-
-
-*/
 
 var CheckRatings = function(obj, callback){
 	var result = obj;
@@ -118,7 +111,7 @@ var CheckRatings = function(obj, callback){
 var ConcatSports = function(obj, callback){
 	var sportsArray = [];
 	var result = obj;
-	if(result.rows.length > 0 && result.rows[0]["sport"] != null){
+	if(result.rows.length > 0){
 		for(i = 0; i < result.rows.length; i++){
 			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 		}
@@ -171,20 +164,16 @@ var isFriend = function(username, login, callback) {
 			   function(err, result){
 				   done();
 				   if(err){
-					   console.log(err);
 					   callback(undefined, {message: "error 311"});
 				   }
 				   else{
  					   if(result.rows[0]){
  						   for(var i = 0; i < result.rows.length; i++){
- 						   if(result.rows[i]["userTo"] === login){
+ 						   if(result.rows[i]["userto"] === login){
  							   isFriend = 2;
  							   callback(undefined, isFriend);
  						   	   }
  						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
  					   }
  				   }
 				});
@@ -205,9 +194,6 @@ var isFriend = function(username, login, callback) {
  							   callback(undefined, isFriend);
  						   	   }
  						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
  					   }
  				   }		  
 			   });
@@ -283,7 +269,6 @@ exports.getUserProfile = function (username, login, callback) {
 			            });
 						}
 				else{
-					console.log(result.rows[0]);
 					callback(undefined, {message: "error"});
 				}
 			}});
