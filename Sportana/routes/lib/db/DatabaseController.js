@@ -118,21 +118,20 @@ var CheckRatings = function(obj, callback){
 var ConcatSports = function(obj, callback){
 	var sportsArray = [];
 	var result = obj;
-	if(result.rows.length > 0){
+	if(result.rows.length > 0 && result.rows[0]["sport"] != null){
 		for(i = 0; i < result.rows.length; i++){
 			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 		}
+		delete result.rows[0]["sport"];
+		delete result.rows[0]["imageurl"];
+		result.rows[0]["sportsArray"] = sportsArray;
+		callback(result.rows[0]);
 	}
-	else if(result.rows.length == 0){
-		sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
+	else{
+		delete result.rows[0]["sport"];
+		delete result.rows[0]["imageurl"];
+		callback(result.rows[0]);
 	}
-	else{ //null
-		sportsArray.push({sportsName: null, sportImage: null});
-	}
-	delete result.rows[0]["sport"];
-	delete result.rows[0]["imageurl"];
-	result.rows[0]["sportsArray"] = sportsArray;
-	callback(result.rows[0]);
 }
 
 var isFriend = function(username, login, callback) {
@@ -260,8 +259,6 @@ exports.getUserProfile = function (username, login, callback) {
 			            			CheckRatings(result, function(checked){
 			            				result = checked;
 			            			});
-			            			console.log(result.rows[0]);
-			            			
 				            		var temp;
 			            			ConcatSports(result, function(concated){
 			            				temp = concated;
