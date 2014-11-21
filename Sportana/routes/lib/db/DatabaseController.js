@@ -97,8 +97,6 @@ exports.putUserAuth = function(login, auth, callback) {
 		}
 	});
 };
-<<<<<<< HEAD
-=======
 
 var CheckRatings = function(obj, callback){
 	var result = obj;
@@ -201,7 +199,6 @@ var isFriend = function(username, login, callback) {
 		   }
 	});
 }
->>>>>>> 846c62cbbf6533dce7637ac16f2d8cebd7100f0c
 
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
