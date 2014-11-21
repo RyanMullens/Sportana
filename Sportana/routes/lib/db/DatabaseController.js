@@ -951,8 +951,9 @@ exports.postMessage = function(username, creator, gameID, message, callback) {
     	  callback(err);
     	}
     	else {
-    	  var SQLQuery = "INSERT INTO GameWallPost(userPosting, gameCreator, gameID, post) VALUES ($1, $2, $3, $4)";
-    	  client.query(SQLQuery, [username, creator, gameID, message], function(err, result) {
+    	  var now = timeHelper.getCurrentDateAndTime();
+    	  var SQLQuery = "INSERT INTO GameWallPost(userPosting, gameCreator, gameID, post, timePosted) VALUES ($1, $2, $3, $4, $5)";
+    	  client.query(SQLQuery, [username, creator, gameID, message, now], function(err, result) {
               done();
               client.end();
               // This cleans up connected clients to the database and allows subsequent requests to the database
@@ -974,12 +975,15 @@ exports.getMessages = function(creator, gameID, callback) {
       callback(err, undefined);
     }
     else {
-    	var SQLQuery = "SELECT GameWallPost.post, Users.firstName, Users.lastName, Users.login " +
-    				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) "
-    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2)";
+    	var SQLQuery = "SELECT GameWallPost.post, GameWallPost.timePosted, Users.firstName, Users.lastName, Users.login " +
+    				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) " +
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.timePosted DESC";
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {
+        	console.log("Query " + SQLQuery);
+        	console.log("Creator: " + creator);
+        	console.log("GameID: " + gameID);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
@@ -996,7 +1000,8 @@ exports.getMessages = function(creator, gameID, callback) {
   					message.message = result.rows[i].post;
   					message.from = result.rows[i].login;
   					message.fromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-
+					message.datePosted = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted);
+					message.timePosted = timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
   					messages.push(message);
 		  		}
           		callback(undefined, messages);

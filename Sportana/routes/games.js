@@ -161,9 +161,11 @@ router.post('/queue', function(req, res) {
  * 	“message”   : string // empty on success
  * 	“success”   : boolean
  *  "posts"     : [{
- *    "from"     : string // login
- *    "fromName" : string // users name
- *    "message"  : string
+ *    "from"       : string // login
+ *    "fromName"   : string // users name
+ *    "message"    : string
+ *	  "datePosted" : date // yyyy-mm-dd
+ *    "timePosted" : time // hh:mm:ss
  *  }]
  * }
  *****************************************************
@@ -171,9 +173,10 @@ router.post('/queue', function(req, res) {
 router.get('/messages', function(req, res) {
 	var creator = req.query.creator;
 	var gameID = req.query.gameID;
+	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
-		if (err || (!creator)) {
+		if (err || (!username)) {
 			response.message = "Error with authentication";
 			response.success = false;
           res.write(JSON.stringify(response));
@@ -218,9 +221,10 @@ router.post('/messages', function(req, res) {
     var creator = req.body.creator;
     var gameID = req.body.gameID;
     var message = req.body.message;
+	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
-		if (err || (!creator)) {
+		if (err || (!username)) {
 			response.message = "Error with authentication";
 			response.success = false;
           res.write(JSON.stringify(response));
@@ -277,8 +281,8 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
-			response.message = "Error with authentication";
-			response.success = false;
+		  response.message = "Error with authentication";
+		  response.success = false;
           res.write(JSON.stringify(response));
           res.end();
 		} else {

@@ -143,6 +143,7 @@ gameCreator VARCHAR(50),
 gameID INT,
 pid INT,
 post VARCHAR(500),
+timePosted TIMESTAMP,
 PRIMARY KEY(gameCreator, gameID, userPosting, pid),
 FOREIGN KEY (gameCreator, gameID)
 REFERENCES Game(creator, gameID)
