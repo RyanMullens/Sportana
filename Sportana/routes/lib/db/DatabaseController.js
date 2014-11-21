@@ -97,126 +97,6 @@ exports.putUserAuth = function(login, auth, callback) {
 		}
 	});
 };
-/*
-var sportsArray = [];
-if(result.rows[0]["login"] === login){
-	result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-
-
-*/
-
-var CheckRatings = function(obj, callback){
-	var result = obj;
-	if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
-		result.rows[0]["friendliness"] = 0;
-		result.rows[0]["timeliness"] = 0;
-		result.rows[0]["skilllevel"] = 0;
-	}
-	callback(result);
-}
-
-var ConcatSports = function(obj, callback){
-	var sportsArray = [];
-	var result = obj;
-	if(result.rows.length > 0 && result.rows[0]["sport"] != null){
-		for(i = 0; i < result.rows.length; i++){
-			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
-		}
-		delete result.rows[0]["sport"];
-		delete result.rows[0]["imageurl"];
-		result.rows[0]["sportsArray"] = sportsArray;
-		callback(result.rows[0]);
-	}
-	else{
-		delete result.rows[0]["sport"];
-		delete result.rows[0]["imageurl"];
-		callback(result.rows[0]);
-	}
-}
-
-var isFriend = function(username, login, callback) {
-	pg.connect(connString, function(err, client, done) {
-		if(err) {
-			callback(undefined, {message: "error 279"});
-		}
-		else{
-			var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
-			//if Friends?
-			var SQLQuery = "SELECT Friends.userB from Friends WHERE Friends.userA = $1";
-			client.query({ text : SQLQuery,
- 			   values : [username]},
- 			   function(err, result){
- 				   done();
- 				   if(err){
- 					  callback(undefined, {message: "error 290"});
- 				   }
- 				   else {
- 					   if(result.rows[0]){
- 						   for(var i = 0; i < result.rows.length; i++){
- 						   if(result.rows[i]["userb"] === login){
- 							   isFriend = 1;
- 							   callback(undefined, isFriend);
- 						   	   }
- 						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
- 					   }
- 				   }
- 			   });
-		   //Pending
-		   var SQLQuery = "SELECT userTo, userFrom, type FROM Notifications WHERE userfrom = $1 AND type = " + '0' + "";
-		   client.query({ text : SQLQuery,
-			   values : [username]},
-			   function(err, result){
-				   done();
-				   if(err){
-					   console.log(err);
-					   callback(undefined, {message: "error 311"});
-				   }
-				   else{
- 					   if(result.rows[0]){
- 						   for(var i = 0; i < result.rows.length; i++){
- 						   if(result.rows[i]["userTo"] === login){
- 							   isFriend = 2;
- 							   callback(undefined, isFriend);
- 						   	   }
- 						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
- 					   }
- 				   }
-				});
-		   //Requested
-		   var SQLQuery = "SELECT userTo, userFrom, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
-		   client.query({ text : SQLQuery,
-			   values : [username]},
-			   function(err, result){
-				   done();
-				   if(err){
-					   callback(undefined, {message: "error 332"});
-				   }
-				   else{
- 					   if(result.rows[0]){
- 						   for(var i = 0; i < result.rows.length; i++){
- 						   if(result.rows[i]["userfrom"] === login){
- 							   isFriend = 3;
- 							   callback(undefined, isFriend);
- 						   	   }
- 						   }
- 					   }
- 					   else{
- 					   isFriend = 0;
- 					   }
- 				   }		  
-			   });
-		   if(isFriend === 0){
-			   callback(undefined, 0);
-		   	   }
-		   }
-	});
-}
 
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
@@ -229,11 +109,13 @@ exports.getUserProfile = function (username, login, callback) {
 							   values : [login]},
 					function(err, result){
 					done();
+					//client.end();
+					//pg.end();
 					if(err){
 						callback(undefined, {message: "User does not exist"});
 						}
 					else{
-					  if(result.rows[0] != undefined){
+					  if(result.rows[0] !== undefined){
 					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
 						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
 						"FavoriteSports.sport, Sport.imageURL " +
@@ -248,32 +130,83 @@ exports.getUserProfile = function (username, login, callback) {
 			            			   values : [login]},
 			             function(err, result){
 			            	done();
-			            	client.end();
-			            	pg.end();
+			            	//client.end();
+			            	//pg.end();
 			            	if(err){
 								callback(undefined, {message: "error"});
 			            	}
 			            	else {
+	            				var sportsArray = [];
 			            		if(result.rows[0]["login"] === login){
 			            			result.rows[0]["birthday"] = timeHelper.makeAgeFromBirthday(result.rows[0]["birthday"]);
-			            			CheckRatings(result, function(checked){
-			            				result = checked;
-			            			});
-				            		var temp;
-			            			ConcatSports(result, function(concated){
-			            				temp = concated;
-			            			});
-			            			result.rows[0] = temp;
-			            			isFriend(username, login, function(err, value){
-			            				if(err){
-			            					callback(undefined, {message: "error"});
+			            			if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
+			            				result.rows[0]["friendliness"] = 0;
+			            				result.rows[0]["timeliness"] = 0;
+			            				result.rows[0]["skilllevel"] = 0;
+			            			}
+			            			if(result.rows.length > 0){
+			            				for(i = 0; i < result.rows.length; i++){
+			            					sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
+					            			delete result.rows[i]["sport"];
+					            			delete result.rows[i]["imageurl"];
 			            				}
-			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
-			            					result.rows[0]["isFriend"] = value;
-			            					console.log(result.rows[0]);
-			            					callback(undefined, result.rows[0]);
-			            				}
-			            			});
+			            			}
+			            			else if(result.rows.length == 0){
+			            				sportsArray.push({sportsName: result.rows[0]["sport"], sportImage: result.rows[0]["imageurl"]});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+			            			else{ //null
+			            				sportsArray.push({sportsName: null, sportImage: null});
+			            				delete result.rows[0]["sport"];
+			            				delete result.rows[0]["imageurl"];
+			            			}
+		            				result.rows[0]["sportsArray"] = sportsArray;
+		            				//check if friends finally
+		            				console.log("checking friends");
+		            				var SQLQuery = "SELECT Friends.userB from Friends where Friends.userA = $1";
+		    						client.query({ text : SQLQuery,
+		    			            			   values : [username]},
+		    			             function(err, friends){
+		    			            	done();
+		    			            	client.end();
+		    			            	pg.end();
+		    			            	if(err){
+		    								callback(undefined, {message: "error"});
+		    			            	}
+		    			            	else {
+		    			            		console.log("here");
+		    			            	if(friends.rows[0]){ //has at least one friend
+		    			            		if(friends.rows.length > 0){
+		    			            			console.log("amount of friends: " + friends.rows.length);
+		    			            			var i = 0; var j = true;
+		    			            			while(j){
+		    			            				if(friends.rows[i]){ //if first friend, check
+			    			            				if(friends.rows[i]["userb"] == login){
+			    			            					console.log(friends.rows[i]["userb"]);
+			    			            					result.rows[0]["isFriend"] = true;
+			    			            					j = false;
+			    			            				}
+		    			            				}
+		    			            				else{
+		    			            					console.log("no friends after checking all i");
+		    			            					result.rows[0]["isFriend"] = false;
+		    			            					j = false;
+		    			            				}
+		    			            				i++;
+		    			            			}
+		    			            			}
+		    			            		console.log(result.rows[0]);
+			    			            	callback(undefined, result.rows[0]);
+		    			            		}
+		    			            		else{ //no friends
+		    			            			console.log("no friends");
+		    			            			result.rows[0]["isFriend"] = false;
+		    			            			console.log(result.rows[0]);
+		    			            			callback(undefined, result.rows[0]);
+		    			            		}
+		    			            	}
+		    			            	});
 			            		}
 			            		else{
 			            			console.log("user does not exist");
@@ -283,7 +216,6 @@ exports.getUserProfile = function (username, login, callback) {
 			            });
 						}
 				else{
-					console.log(result.rows[0]);
 					callback(undefined, {message: "error"});
 				}
 			}});
@@ -575,7 +507,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
           if (err) {
            callback(err, undefined);
           }
-          else {/*
+          else {
             var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
@@ -590,8 +522,8 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.minAge = result.rows[0].minage;
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
-*/
-              callback(undefined, result.rows[0]);
+
+              callback(undefined, gameInfo);
           }
       });
     }
@@ -1011,4 +943,66 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
       });
     }
   });
+};
+
+exports.postMessage = function(username, creator, gameID, message, callback) {
+  pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO GameWallPost(userPosting, gameCreator, gameID, post) VALUES ($1, $2, $3, $4)";
+    	  client.query(SQLQuery, [username, creator, gameID, message], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
+};
+
+exports.getMessages = function(creator, gameID, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT GameWallPost.post, Users.firstName, Users.lastName, Users.login " +
+    				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) "
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2)";
+    	client.query({ text : SQLQuery,
+                     values : [creator, gameID]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var messages = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var message = {};
+  					message.message = result.rows[i].post;
+  					message.from = result.rows[i].login;
+  					message.fromName = result.rows[i].firstname + " " + result.rows[i].lastname;
+
+  					messages.push(message);
+		  		}
+          		callback(undefined, messages);
+        	}
+      });
+    }
+  });
+
 };

@@ -148,6 +148,102 @@ router.post('/queue', function(req, res) {
 
 /**
  *****************************************************
+ * GET	/games/messages?creator={creator}
+ *					   &gameID={gameID}
+ * Get messages in game wall
+ *
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”   : string // empty on success
+ * 	“success”   : boolean
+ *  "posts"     : [{
+ *    "from"     : string // login
+ *    "fromName" : string // users name
+ *    "message"  : string
+ *  }]
+ * }
+ *****************************************************
+ */
+router.get('/messages', function(req, res) {
+	var creator = req.query.creator;
+	var gameID = req.query.gameID;
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!creator)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getMessages(creator, gameID, function(err, messages) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.posts = messages;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
+/**
+ *****************************************************
+ * POST	/games/messages
+ * Post a message to message wall
+ *
+ * REQUEST:
+ * {
+ *  "creator"    	: string
+ *  "gameID"        : int
+ * 	“message”    	: string 
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
+ * }
+ *****************************************************
+ */
+router.post('/messages', function(req, res) {
+    var creator = req.body.creator;
+    var gameID = req.body.gameID;
+    var message = req.body.message;
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!creator)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.postMessage(username, creator, gameID, message, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
+
+/**
+ *****************************************************
  * GET	/games/{gameCreator}/{gameID}
  * REQUEST:
  * {
