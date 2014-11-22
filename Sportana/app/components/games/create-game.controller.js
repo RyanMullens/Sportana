@@ -84,8 +84,8 @@ app.controller("CreateGameController", function($http, $scope)
 											$scope.gameLocation.details,
 				minAge: 			$scope.players.minAge,
 				maxAge: 			$scope.players.maxAge,
-				minAmount: 		$scope.players.minAmount,
-				minAmount: 		$scope.players.minAmount,
+				minPlayers: 	$scope.players.minAmount,
+				maxPlayers: 	$scope.players.maxAmount,
 				status: 			$scope.status
 			};
 
