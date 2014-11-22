@@ -45,12 +45,10 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 
 	this.isGameLoaded = function(){
-		console.log($scope.gameLoaded);
 		return $scope.gameLoaded;
 	};
 
 	this.isMessagesLoaded = function(){
-		console.log($scope.messagesLoaded);
 		return $scope.messagesLoaded;
 	};
 
@@ -59,6 +57,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getFriends = function(){
+		console.log(friends);
 		return friends;
 	};
 
@@ -124,7 +123,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	this.requestJoin = function(){
 
 	};
-*/
+	*/
 	this.inviteFriends = function(){
 
 	};
@@ -134,8 +133,17 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.postMessage = function(post){
-		$scope.messages.push({from: this.getUser(), message: post, time: Date.now()});
+		that = this;
+		$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
 		$scope.message = '';
+		
+		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameid, message: post})
+		.success(function(data, status, headers, config){
+			console.log("it worked?");
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with posting the message');
+		});
 	};
 });
 
