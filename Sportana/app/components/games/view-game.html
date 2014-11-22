@@ -1,4 +1,4 @@
-<div id="viewGame" ng-show="viewGame.isLoaded()">
+<div id="viewGame" ng-show="viewGame.isGameLoaded()">
 	<div class="alert alert-warning" ng-hide="viewGame.isPublic() || viewGame.isJoined() || viewGame.isInvited()">
 		This game is private, please ask the creator to invite you if you wish to join.
 	</div>
@@ -52,7 +52,7 @@
 					<a ng-repeat="player in viewGame.getInvites() track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-6" ng-show="viewGame.isMessagesLoaded()">
 				<div class="messages-container">
 					<span class="alert alert-info" ng-hide="viewGame.isJoined()">
 						You must join the game to view and post messages.
@@ -64,6 +64,9 @@
 							</div>
 							<div class="message">
 								{{message.message}}
+							</div>
+							<div class ="time">
+								{{message.time | date}}
 							</div>
 						</div>
 						<div class="enter-message">
