@@ -1011,8 +1011,7 @@ exports.postMessage = function(username, creator, gameID, message, callback) {
     	  callback(err);
     	}
     	else {
-    	  //var now = timeHelper.getCurrentDateAndTime();
-    	  var now = Date.now();
+    	  var now = timeHelper.getCurrentDateAndTime();
     	  var SQLQuery = "INSERT INTO GameWallPost(userPosting, gameCreator, gameID, post, timePosted) VALUES ($1, $2, $3, $4, $5)";
     	  client.query(SQLQuery, [username, creator, gameID, message, now], function(err, result) {
               done();

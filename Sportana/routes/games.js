@@ -140,6 +140,12 @@ router.post('/join', function(req, res) {
  *****************************************************
  */
 router.post('/queue', function(req, res) {
+	var sport = req.body.sport;
+	var city = req.body.city;
+	var ageMin = req.body.ageMin;
+	var ageMax = req.body.ageMax;
+	var isCompetitive = req.body.competitive;
+	var availability = req.body.availability;
 	response.success = false;
 	response.message = "Not yet implemented";
 	res.write(JSON.stringify(response));
