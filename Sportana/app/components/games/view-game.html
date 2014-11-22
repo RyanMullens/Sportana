@@ -25,7 +25,14 @@
 				<div class="row invite">
 					Current Players: ({{viewGame.getPlayers().length}})
 					<div class="btn-group" ng-show="viewGame.isJoined()">
-						<script type="text/javascript">
+						<span class="btn btn-primary" custom-popover popover-html="<div ng-repeat='friend in viewGame.getFriends() track by $index' class='checkbox'>
+        <label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label>
+    </div>                          
+    <button type='button' class='btn btn-primary' ng-click='viewGame.inviteFriends()'>
+        Invite
+    </button>" popover-placement="bottom" popover-label="Invite"></span>
+
+				<!--		<script type="text/javascript">
 							$(document).ready(function(){
 								$('[data-toggle="popover"]').popover();   
 							});
@@ -41,7 +48,7 @@
 					</form>">
 					Invite
 				</button>
-						<!--
+						
 						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
 						</button>
