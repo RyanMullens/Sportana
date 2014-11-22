@@ -125,7 +125,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 	*/
 	this.inviteFriends = function(){
-
+		console.log("does this work?");
 	};
 
 	this.getMessages = function(){
