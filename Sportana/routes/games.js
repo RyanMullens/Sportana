@@ -140,11 +140,117 @@ router.post('/join', function(req, res) {
  *****************************************************
  */
 router.post('/queue', function(req, res) {
+	var sport = req.body.sport;
+	var city = req.body.city;
+	var ageMin = req.body.ageMin;
+	var ageMax = req.body.ageMax;
+	var isCompetitive = req.body.competitive;
+	var availability = req.body.availability;
 	response.success = false;
 	response.message = "Not yet implemented";
 	res.write(JSON.stringify(response));
     res.end();
 });
+
+/**
+ *****************************************************
+ * GET	/games/messages?creator={creator}
+ *					   &gameID={gameID}
+ * Get messages in game wall
+ *
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”   : string // empty on success
+ * 	“success”   : boolean
+ *  "posts"     : [{
+ *    "from"       : string // login
+ *    "fromName"   : string // users name
+ *    "message"    : string
+ *	  "datePosted" : date // yyyy-mm-dd
+ *    "timePosted" : time // hh:mm:ss
+ *  }]
+ * }
+ *****************************************************
+ */
+router.get('/messages', function(req, res) {
+	var creator = req.query.creator;
+	var gameID = req.query.gameID;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getMessages(creator, gameID, function(err, messages) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.posts = messages;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
+/**
+ *****************************************************
+ * POST	/games/messages
+ * Post a message to message wall
+ *
+ * REQUEST:
+ * {
+ *  "creator"    	: string
+ *  "gameID"        : int
+ * 	“message”    	: string 
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
+ * }
+ *****************************************************
+ */
+router.post('/messages', function(req, res) {
+    var creator = req.body.creator;
+    var gameID = req.body.gameID;
+    var message = req.body.message;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.postMessage(username, creator, gameID, message, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
 
 /**
  *****************************************************
@@ -181,8 +287,8 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
-			response.message = "Error with authentication";
-			response.success = false;
+		  response.message = "Error with authentication";
+		  response.success = false;
           res.write(JSON.stringify(response));
           res.end();
 		} else {

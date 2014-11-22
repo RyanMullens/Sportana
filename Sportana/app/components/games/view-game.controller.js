@@ -5,8 +5,10 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 	*/
-	var game;
-	var loaded = false;
+	$scope.game = {};
+	$scope.messages;
+	$scope.gameLoaded = false;
+	$scope.messagesLoaded = true;
 
 	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
@@ -18,22 +20,36 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
 
+
+
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-			//Debug object in console
-			console.log(data);
-			$scope.game = data;
-			$scope.loaded = true;
-    		//$scope.user = data;
-    		//$scope.loaded = true;
-    })
+		data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
+		console.log(data);
+		$scope.game = data;
+		$scope.gameLoaded = true;
+	})
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving game information');
 	});
 
-	this.isLoaded = function(){
-		console.log(loaded);
-		return $scope.loaded;
+	$http.get('/api/games/messages?creator=' + $stateParams.creatorId + '&gameID=' + $stateParams.gameId)
+	.success(function(data, status, headers, config){
+		console.log(data);
+		$scope.messages = data.posts;
+		$scope.messagesLoaded = true;
+	})
+	.error(function(data, status, headers, config) {
+		console.log('There was an error retrieving messages');
+	});
+
+
+	this.isGameLoaded = function(){
+		return $scope.gameLoaded;
+	};
+
+	this.isMessagesLoaded = function(){
+		return $scope.messagesLoaded;
 	};
 
 	this.getGame = function(){
@@ -41,6 +57,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getFriends = function(){
+		console.log(friends);
 		return friends;
 	};
 
@@ -75,7 +92,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.isPublic = function(){
-		console.log(this.getGame());
 		return this.getGame().ispublic;
 	};
 
@@ -84,52 +100,54 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.joinGame = function(){
-		if(this.isInvited()){
-			players.push(this.contains(this.getInvited()));
-			console.log(this.isInvited());
-			this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
-		}
-		else{
-			players.push({login: this.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
-		}
+		that = this;
+		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameid})
+		.success(function(data, status, headers, config){
+			if(that.isInvited()){
+				players.push(that.contains(that.getInvited()));
+				that.getInvited().splice(that.getInvited().indexOf(that.contains(that.getInvited())),1);
+			}
+			else{
+				players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
+			}
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with joining the game');
+		});
 	};
 
 	this.declineGame = function(){
 		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
 	};
-
+/*
 	this.requestJoin = function(){
 
 	};
-
+	*/
 	this.inviteFriends = function(){
-
+		console.log("does this work?");
 	};
-
 
 	this.getMessages = function(){
-
+		return $scope.messages;
 	};
 
-	this.postMessage = function(){
-
-	};
-});
-
-app.directive('tooltip', function(){
-	return {
-		restrict: 'A',
-		link: function(scope, element, attrs){
-			$(element).hover(function(){
-                // on mouseenter
-                $(element).tooltip('show');
-            }, function(){
-                // on mouseleave
-                $(element).tooltip('hide');
-            });
-		}
+	this.postMessage = function(post){
+		that = this;
+		$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
+		$scope.message = '';
+		
+		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameid, message: post})
+		.success(function(data, status, headers, config){
+			console.log("it worked?");
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with posting the message');
+		});
 	};
 });
+
+
 /*
  creator         | character varying(50)  | not null
  gameid          | integer                | not null

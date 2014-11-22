@@ -33,22 +33,30 @@
 						</div>
 					</div>	
 					<div class="profileButtonHolder col-md-3">
-						<button ng-show="viewProfile.isSelf() && !viewProfile.isEditing()" ng-click="viewProfile.editProfile()" class="profileSpecialButton btn btn-primary">
-							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> 
-							&nbsp;&nbsp;Edit Profile
-						</button> 
-
-						<button ng-show="!viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
+						<button ng-show="!viewProfile.isAddFriend()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 							&nbsp;Add Friend
 						</button>
 
-						<button ng-show="viewProfile.isFriend() && !viewProfile.isSelf()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
+						<button ng-show="viewProfile.isRemoveFriend()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
 							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Remove Friend
 						</button> 
+
+						<button ng-show="viewProfile.isAcceptRequest()" ng-click="viewProfile.acceptFriend()" class="profileSpecialButton btn btn-warning">
+							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+							&nbsp;Accept Request
+						</button> 
+
+						<button ng-show="viewProfile.isPendingRequest()" class="profileSpecialButton btn btn-warning" enabled='false'>
+							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+							&nbsp;Pending Request
+						</button> 
+
 
 						<!--
 						<button ng-show="viewProfile.isSelf() && viewProfile.isEditing()" ng-click="viewProfile.saveProfile()" class="profileSpecialButton btn btn-success">
@@ -73,7 +81,10 @@
 
 					<div class="row">Rating</div>
 					<div ng-hide="viewProfile.isEditing()">
-						<div ng-hide="viewProfile.isRating()" ng-click="viewProfile.rate()" class="btn btn-warning">Rate Me!</div>
+						<div ng-hide="viewProfile.isRating()" ng-click="viewProfile.rate()" class="btn btn-warning">
+							<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+							Rate Me!
+						</div>
 						<div ng-show="viewProfile.isRating()" ng-click="viewProfile.saveRate()" class="btn btn-success">Rate</div>
 						<div ng-show="viewProfile.isRating()" ng-click="viewProfile.cancelRate()" class="btn btn-danger">Cancel</div>
 					</div>
@@ -85,13 +96,25 @@
 						<div class="ratingsHolder row">
 							<div class="col-xs-4">
 								<div class="row">
-									<div class="barGraphBarHolder">
+									<div class="barGraphBarHolder" ng-mouseout="viewProfile.resetCurrentRate(0)">
 										<div ng-hide="viewProfile.isRating()" class="barGraphBar" style="height: {{100/5 * viewProfile.getFriendliness()}}%;">
 											<div class="barGraphBarValue">{{ viewProfile.getFriendliness() }}</div>
 										</div>
-										<div  ng-show="viewProfile.isRating()" class="barGraphBar editGraphBar" style="height: {{100/5 * viewProfile.tempRating.friendliness}}%;">
-											<div class="barGraphBarValue">{{viewProfile.tempRating.friendliness}}</div>
+
+										<div ng-show="viewProfile.isRating()">
+
+											<div ng-mouseover="viewProfile.ratePlayerMove(5,0)" ng-class="{clearEditRating: viewProfile.getCurrentRate(5,0)}" ng-click="viewProfile.setCurrentRate(5,0)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(4,0)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(4,0)}" ng-click="viewProfile.setCurrentRate(4,0)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(3,0)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(3,0)}" ng-click="viewProfile.setCurrentRate(3,0)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(2,0)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(2,0)}" ng-click="viewProfile.setCurrentRate(2,0)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(1,0)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(1,0)}" ng-click="viewProfile.setCurrentRate(1,0)" class="barGraphBar editGraphBar">
+											</div>
+
+											<span class="barGraphBarValue">{{viewProfile.getTempRateValue(0)}}</span>
+
 										</div>
+
+										
 									</div>
 								</div>
 								<div class="barGraphLabel row">
@@ -99,25 +122,51 @@
 								</div>
 							</div>
 							<div class="col-xs-4">
-								<div class="row">
-									<div class="barGraphBarHolder">
-										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getTimeliness()}}%;">
-
+								<div class="barGraphBarHolder" ng-mouseout="viewProfile.resetCurrentRate(1)">
+										<div ng-hide="viewProfile.isRating()" class="barGraphBar" style="height: {{100/5 * viewProfile.getTimeliness()}}%;">
 											<div class="barGraphBarValue">{{ viewProfile.getTimeliness() }}</div>
 										</div>
 
+										<div ng-show="viewProfile.isRating()">
+
+											<div ng-mouseover="viewProfile.ratePlayerMove(5,1)" ng-class="{clearEditRating: viewProfile.getCurrentRate(5,1)}" ng-click="viewProfile.setCurrentRate(5,1)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(4,1)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(4,1)}" ng-click="viewProfile.setCurrentRate(4,1)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(3,1)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(3,1)}" ng-click="viewProfile.setCurrentRate(3,1)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(2,1)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(2,1)}" ng-click="viewProfile.setCurrentRate(2,1)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(1,1)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(1,1)}" ng-click="viewProfile.setCurrentRate(1,1)" class="barGraphBar editGraphBar">
+											</div>
+
+											<span class="barGraphBarValue">{{viewProfile.getTempRateValue(1)}}</span>
+
+										</div>
+
+										
 									</div>
-								</div>
 								<div class="barGraphLabel row">
 									Timeliness
 								</div>
 							</div>
 							<div class="col-xs-4">
 								<div class="row">
-									<div class="barGraphBarHolder">
-										<div class="barGraphBar" style="height: {{100/5 * viewProfile.getSkill()}}%;">
+									<div class="barGraphBarHolder" ng-mouseout="viewProfile.resetCurrentRate(2)">
+										<div ng-hide="viewProfile.isRating()" class="barGraphBar" style="height: {{100/5 * viewProfile.getSkill()}}%;">
 											<div class="barGraphBarValue">{{ viewProfile.getSkill() }}</div>
 										</div>
+
+										<div ng-show="viewProfile.isRating()">
+
+											<div ng-mouseover="viewProfile.ratePlayerMove(5,2)" ng-class="{clearEditRating: viewProfile.getCurrentRate(5,2)}" ng-click="viewProfile.setCurrentRate(5,2)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(4,2)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(4,2)}" ng-click="viewProfile.setCurrentRate(4,2)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(3,2)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(3,2)}" ng-click="viewProfile.setCurrentRate(3,2)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(2,2)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(2,2)}" ng-click="viewProfile.setCurrentRate(2,2)" class="barGraphBar editGraphBar"></div>
+											<div ng-mouseover="viewProfile.ratePlayerMove(1,2)"  ng-class="{clearEditRating: viewProfile.getCurrentRate(1,2)}" ng-click="viewProfile.setCurrentRate(1,2)" class="barGraphBar editGraphBar">
+											</div>
+
+											<span class="barGraphBarValue">{{viewProfile.getTempRateValue(2)}}</span>
+
+										</div>
+
+										
 									</div>
 								</div>
 								<div class="barGraphLabel row">
@@ -134,11 +183,12 @@
 
 				
 				<div class="profileSportContainer row">
-					<div class="col-md-4">
+					<div class="profileTitleCol col-md-4">
 
 					<div class="profileCategoryTitle row">Favorite Sports</div>
+					<div ng-show="viewProfile.isEditing() && !viewProfile.isEditingSports()" ng-click="viewProfile.editSport()" ng-show="viewProfile.isEditing()" class="btn btn-default">Edit Sports</div>	
 
-					<div ng-show="viewProfile.isEditing()">
+					<div ng-show="viewProfile.isEditingSports()">
 									<input class="col-xs-7" auto-complete ui-items="allSports" ng-model="selectedSport">
 									<div class="col-xs-5">
 										<button type="submit" ng-click="addFavoriteSport()" class="btn btn-success" ng-disabled="!isSportSelected()">
@@ -167,14 +217,10 @@
 
 							<div ng-repeat="sport in viewProfile.getCurrentSports()" class='profileSport'>
 
-								<script type="text/javascript">
-									$(document).ready(function(){
-				    					$('[data-toggle="tooltip"]').tooltip();   
-									});
-								</script>
+								
 
 								<div>
-								<span ng-click="deleteFavoriteSport(sport)" ng-show="viewProfile.isEditing()" style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								<span ng-show="viewProfile.isEditingSports()" ng-click="deleteFavoriteSport(sport)" ng-show="viewProfile.isEditing()" style="color:red" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 								<img data-toggle="tooltip" tooltip data-placement="bottom" title="{{sport.sportsName}}" ng-src="{{sport.sportImage}}"></img>
 								</div>
 							</div>

@@ -96,7 +96,30 @@ body {
   /****  START FRIENDS ****/
 
   .friend{
-    height:100px;
+    height:150px;
+    border:1px solid #333;
+    border-radius:5px;
+    text-align:center;
+  }
+  .friend .info{
+    margin-top:8%;
+  }
+  .friend .name{
+    font-size:24px;
+  }
+  .friend .age{
+    font-size:18px;
+  }
+  .friend .location{
+    font-size:16px;
+  }
+  .friend .view{
+    margin-top:50%;
+  }
+  .friend img{
+    height:150px;
+    width:auto;
+    padding:5px;
   }
 
   /****  END FRIENDS ****/
@@ -251,6 +274,7 @@ body {
     position: absolute;
     text-align: center;
     bottom: 0;
+    pointer-events: none;
   }
 
   .barGraphLabel
@@ -270,6 +294,18 @@ body {
   .editGraphBar
   {
      background-color:#ec971f;
+     height: 20%;
+     position: relative;
+  }
+
+  .clearEditRating
+  {
+    background-color: rgba(0,0,0,0);
+  }
+
+  .profileTitleCol
+  {
+    text-align: center;
   }
 
   .profileSportContainer

@@ -11,7 +11,6 @@ var authenticator = require('./authentication'); // Authentication Handler
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
-	console.log("auth: " + auth);
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};
 		if (err || (!username)) {
@@ -22,7 +21,9 @@ router.get('/:login', function(req, res) {
 		} else {
 			var login = req.params.login;
 			dbc.getUserProfile(username, login, function(err, data){
-				res.send(JSON.stringify(data));
+				//res.send(JSON.stringify(data));
+				res.write(JSON.stringify(data));
+				res.end();
 			});
 		}
 	});
@@ -120,7 +121,7 @@ router.post('/ratings', function(req, res) {
 			var friendliness = req.body.friendliness;
 			var timeliness = req.body.timeliness;
 			var skilllevel = req.body.skilllevel;
-			if(rater != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
+			if(username != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
 				var userObject = {
 						rater: username, userRated: userRated,
 						friendliness: friendliness, timeliness: timeliness, skilllevel: skilllevel

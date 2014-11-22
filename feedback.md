@@ -1,3 +1,18 @@
+# Project 3 Feedback
+
+I find your non-goal of not reminding the players of an upcoming game intriquing. I would speculate on whether or not users would remember the games they have joined, but perhaps you could do some A/B testing on this matter. (Participants would be split, half would be notified, half would not. I wonder how this would effect and not effect the rate of remembering and participating)
+
+I really hope that the hilarious captions of the games on "Find Game 2" are final. Soccer, "the one that is actually played with feet". Genius. On a similar note, I find your icons quite well done and generally UI extremely well done. You are projecting this new, monochromatic, modern design onto centuries-old games tied to traditional design. I love this, I find it visually and conceptually intriguing.
+
+Your scenarios are so detailed, my goodness! Your Trello activity is always spot-on as well.
+However, you are missing some weeks of meeting notes.
+
+(I thought I'd also add that, in the future, if you're looking for a SQL-like graph database, check out OrientDB. It supports relations and a document structure! It's mighty cool! I promise!)
+
+In general, you did an incredible job on Project 3!  You get a big, wall-smashing, thumbs up!
+
+<img src="http://fileinabox.com/files/2008/11/thumbs-up.jpg">
+
 # Project 2 Feedback
 
 I love the idea of a qualitative intelligent queuing system, chat, and the idea of a general "feedless" interface! For your chat feature, you should check out the Socket.io library, especially it's sample 6-line Hello World chat app! (http://socket.io) 

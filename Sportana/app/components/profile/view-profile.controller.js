@@ -34,10 +34,10 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
     		$scope.loaded = true;
 
     		//Hack to prevent empty sport from showing
-    		if($scope.user.sportsArray.length == 1 && $scope.user.sportsArray[0].sportName == null)
+    		/*if($scope.user.sportsArray.length == 1 && $scope.user.sportsArray[0].sportName == null)
     		{
     			$scope.user.sportsArray = [];
-    		}	
+    		}	*/
 
 
     		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
@@ -148,8 +148,31 @@ this.isSelf = function()
 
 this.isFriend = function()
 {
-	return $scope.user.isFriend;
+	return $scope.user.isFriend == 1;
 }
+
+this.isAddFriend = function()
+{
+	return $scope.user.isFriend == 0 && this.isSelf() == false;
+}
+
+this.isRemoveFriend = function()
+{
+	return this.isFriend();
+}
+ 
+this.isAcceptFriend = function()
+{
+	return $scope.user.isFriend == 3;
+}
+ 
+this.isPendingFriend = function()
+{
+	return $scope.user.isFriend == 2;
+}
+ 
+
+
 
 this.isEditing = function()
 {
@@ -159,6 +182,11 @@ this.isEditing = function()
 this.isEditingCity = function()
 {
 	return this.editingCity;
+}
+
+this.isEditingSports = function()
+{
+	return this.editingSports;
 }
 
 this.isRating = function()
@@ -185,20 +213,38 @@ this.getCurrentSports = function()
 this.rate = function()
 {
 	this.rating = true;
-	console.log("Rate");
 }
 
 this.saveRate = function()
 {
-	this.rating = false;
-	console.log("Save Rate");
+	var thisTemp = this;
+
+	$http.post('/api/users/ratings',{ 'userRated':$scope.user.login  , 'friendliness' : thisTemp.rateValues[0],'timeliness' : thisTemp.rateValues[1],'skilllevel' : thisTemp.rateValues[2]  })
+		.success(function(data, status, headers, config)
+		{
+			console.log(data);
+			thisTemp.rating = false;
+		})
+		.error(function(data, status, headers, config) 
+		{
+    		console.log('There was an error editing city :(');
+		});
 }
 
 this.cancelRate = function()
 {
-	//this.tempRating.friendliness += 1;
 	this.rating = false;
-	console.log("Cancel Rate");	
+}
+
+
+this.editSport = function()
+{
+	this.editingSports = true;
+}
+
+this.hideSport = function()
+{
+	this.editingSports = false;
 }
 
 
@@ -236,34 +282,6 @@ this.cancelCity = function()
 	this.editingCity = false;
 }
 
-
-/*this.editProfile = function()
-{
-	console.log("Edit Profile");
-
-	$scope.editUser = this.cloneUser($scope.user);
-
-	this.editing = true;
-}
-
-this.saveProfile = function()
-{
-	console.log("Saved Profile!");
-
-	$scope.user = $scope.editUser;
-
-	this.editing = false;
-}
-
-this.cancelProfile = function()
-{
-	console.log("Cancel Profile!");
-
-	$scope.editUser = null;
-
-	this.editing = false;
-}*/
-
 this.addFriend = function()
 {
 	alert("Add Friend " + userId);
@@ -282,11 +300,44 @@ this.removeFriend = function()
 }
 
 
+/*START RATING*/
+//Will refactor into directive when i have free time 
 
-//Edit sports stuff...
+this.rateValues = [0,0,0];
+this.tempRateValues = [0,0,0];
 
 
+this.ratePlayerMove = function(value,idx)
+{
+	console.log(value);
+	this.tempRateValues[idx] = value;
+}
 
+this.getCurrentRate = function(value,idx)
+{
+	return value > this.tempRateValues[idx];
+}
+
+this.setCurrentRate = function(value,idx)
+{
+	console.log("Set rating: " + value);
+	this.rateValues[idx] = value; 
+}
+
+this.resetCurrentRate = function(idx)
+{
+	this.tempRateValues[idx] = this.rateValues[idx];
+}
+
+this.getTempRateValue = function(idx)
+{
+	return this.tempRateValues[idx];
+}
+
+/*END RATING*/
+
+
+/*START SPORTS*/
 
 $scope.selectedSport = "";
 
@@ -366,6 +417,7 @@ $scope.deleteFavoriteSport = function(sport)
 		});
 }
 
+/*END SPORTS*/
 
 
 
