@@ -147,20 +147,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 });
 
-app.directive('tooltip', function(){
-	return {
-		restrict: 'A',
-		link: function(scope, element, attrs){
-			$(element).hover(function(){
-                // on mouseenter
-                $(element).tooltip('show');
-            }, function(){
-                // on mouseleave
-                $(element).tooltip('hide');
-            });
-		}
-	};
-});
+
 /*
  creator         | character varying(50)  | not null
  gameid          | integer                | not null
