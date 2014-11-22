@@ -134,12 +134,12 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.postMessage = function(post){
 		that = this;
-		$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
-		$scope.message = '';
+
 		
 		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameid, message: post})
 		.success(function(data, status, headers, config){
-			console.log("it worked?");
+			$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
+			$scope.message = '';
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with posting the message');
