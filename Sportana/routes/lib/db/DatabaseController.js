@@ -557,6 +557,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
            callback(err, undefined);
           }
           else {
+          	/*
             var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
@@ -571,8 +572,8 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.minAge = result.rows[0].minage;
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
-
-              callback(undefined, gameInfo);
+			*/
+              callback(undefined, result.rows[0]);
           }
       });
     }
@@ -1000,7 +1001,8 @@ exports.postMessage = function(username, creator, gameID, message, callback) {
     	  callback(err);
     	}
     	else {
-    	  var now = timeHelper.getCurrentDateAndTime();
+    	  //var now = timeHelper.getCurrentDateAndTime();
+    	  var now = Date.now();
     	  var SQLQuery = "INSERT INTO GameWallPost(userPosting, gameCreator, gameID, post, timePosted) VALUES ($1, $2, $3, $4, $5)";
     	  client.query(SQLQuery, [username, creator, gameID, message, now], function(err, result) {
               done();
@@ -1046,8 +1048,9 @@ exports.getMessages = function(creator, gameID, callback) {
   					message.message = result.rows[i].post;
   					message.from = result.rows[i].login;
   					message.fromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-					message.datePosted = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted);
-					message.timePosted = timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
+					message.time = result.rows[i].timeposted;
+					//message.datePosted = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted);
+					//message.timePosted = timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
   					messages.push(message);
 		  		}
           		callback(undefined, messages);
