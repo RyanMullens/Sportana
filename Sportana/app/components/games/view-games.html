@@ -5,7 +5,7 @@
 		<div class="row notification" ng-repeat="notification in viewGames.getNotifications()">
 			<div class="row">
 				<span class="col-md-3"><img class="sport" ng-src='{{notification.sportImg}}' /> {{notification.sport}}</span>
-				<span class="col-md-3"><a class="btn btn-primary" ui-sref="app.viewGame({gameId: notification.id})">View Game</a></span>
+				<span class="col-md-3"><a class="btn btn-primary" ui-sref="app.viewGame({creatorId: game.creator, gameId: notification.id})">View Game</a></span>
 				<span class="col-md-3">Location: {{notification.location}}</span>
 				<span class="col-md-3">Date: {{notification.date}}<br>Time: {{notification.time}}</span>
 			</div>
@@ -30,7 +30,7 @@
 			<div class="row">
 				<span class="col-md-3">Players Going: {{game.playersJoined}}</span>
 				<span class="col-md-7"><img class="player" ng-repeat="players in game.players track by $index" ng-src="{{players}}" /></span>
-				<span class="col-md-2"><a class="btn btn-primary" ui-sref="app.viewGame({gameId: game.id})">View Game</a></span>
+				<span class="col-md-2"><a class="btn btn-primary" ui-sref="app.viewGame({creatorId: game.creator, gameId: game.id})">View Game</a></span>
 			</div>
 		</div>
 	</div>

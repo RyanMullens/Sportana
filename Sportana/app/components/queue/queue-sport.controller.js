@@ -1,5 +1,5 @@
 // Created by: @bread on 10/25
-app.controller("QueueSportController", function($location, queueService, $state)
+app.controller("QueueSportController", function($location, QueueService, $state)
 {
 	var sports = [
 		{icon: "/images/icon_73766.png", name: "Basketball", 	description: "A game about hoops and nets."},
@@ -17,19 +17,19 @@ app.controller("QueueSportController", function($location, queueService, $state)
 
 	// When the page is loaded
 	this.init = function() {
-		selectedSports = queueService.getSports();
+		selectedSports = QueueService.getSports();
 	}
 
 	// When moving to another section in the preferences
 	this.finish = function() {
-		queueService.setSports(selectedSports);
+		QueueService.setSports(selectedSports);
 		$state.go('queueLocation');
 		this.selectedSports = [];
     }
 
-    // When a Sport is selected 
+    // When a Sport is selected
 	this.toggle = function(sport) {
-		
+
 		var index = selectedSports.indexOf(sport);
 		if(index === -1) {
 			selectedSports.push(sport);
