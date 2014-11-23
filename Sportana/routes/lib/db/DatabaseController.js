@@ -567,7 +567,9 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
            callback(err, undefined);
           }
           else {
-          	/*
+          	if (!result.rows[0]) {
+          		callback("No result found", undefined);
+          	}
             var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
@@ -582,8 +584,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.minAge = result.rows[0].minage;
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
-			*/
-              callback(undefined, result.rows[0]);
+            callback(undefined, gameInfo);
           }
       });
     }
@@ -969,7 +970,6 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
 		client.query({ text : SQLQuery,
                      values : searchValues},
         function (err, result) {
-            //console.log(result);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
@@ -1057,9 +1057,7 @@ exports.getMessages = function(creator, gameID, callback) {
   					message.message = result.rows[i].post;
   					message.from = result.rows[i].login;
   					message.fromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-					message.time = result.rows[i].timeposted;
-					//message.datePosted = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted);
-					//message.timePosted = timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
+					message.time = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted) + " " + timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
   					messages.push(message);
 		  		}
           		callback(undefined, messages);
