@@ -213,7 +213,7 @@ router.get('/messages', function(req, res) {
  * {
  *  "creator"    	: string
  *  "gameID"        : int
- * 	“message”    	: string 
+ * 	“message”    	: string
  * }
  *
  * RESPONSE:
@@ -269,7 +269,7 @@ router.post('/messages', function(req, res) {
  *  "gameStart"  	: time // hh:mm:ss
  *  "gameEnd"    	: time // hh:mm:ss
  *  "location"   	: string
- * 	“sport"      	: string 
+ * 	“sport"      	: string
  *  "minAge"   	    : int
  *  "maxAge"	    : int
  *  "minPlayers"    : int
@@ -297,7 +297,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 					response.success = false;
 					response.message = err;
 				} else {
-					response = jsonGameInfo; 
+					response = jsonGameInfo;
 					response.success = true;
 					response.message = "";
 				}

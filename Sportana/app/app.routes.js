@@ -108,7 +108,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
    views: {
     "content@main": {
     	templateUrl: "/components/games/create-game.html",
-    	controller: "CreateGameController as createGame"
+    	controller: "CreateGameController as CREATE"
     }
   }
 })
@@ -117,7 +117,8 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
    url: "/queue",
    views: {
     "content@main": {
-      templateUrl: "/components/queue/queue.html"
+      templateUrl: "/components/queue/queue-sports.html",
+      controller: "QueueSportController as sports"
     }
   }
 })

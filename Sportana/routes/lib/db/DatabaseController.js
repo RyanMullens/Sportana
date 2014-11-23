@@ -113,7 +113,7 @@ var ConcatSports = function(obj, callback){
 	console.log("ConcatSports called");
 	var sportsArray = [];
 	var result = obj;
-	if(result.rows.length > 0 && result.rows[0]["sport"] !== null){
+	if(result.rows.length > 0 && result.rows[0]["sport"] != null){ //Has at least one favorite sport
 		for(i = 0; i < result.rows.length; i++){
 			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 		}
@@ -122,9 +122,11 @@ var ConcatSports = function(obj, callback){
 		result.rows[0]["sportsArray"] = sportsArray;
 		callback(result.rows[0]);
 	}
-	else{
+	else{ //Has no favorite sports
+		sportsArray.push({sportsName: "", sportImage: ""});
 		delete result.rows[0]["sport"];
 		delete result.rows[0]["imageurl"];
+		result.rows[0]["sportsArray"] = sportsArray;
 		callback(result.rows[0]);
 	}
 }
@@ -153,7 +155,7 @@ var isFriend = function(username, login, callback) {
  						   if(result.rows[i]["userb"] === login){
  							   isFriend = 1;
  							   client.end(); pg.end();
- 							   callback(undefined, isFriend);
+ 							   callback(undefined, isFriend, undefined);
  							   return;
  						   }
 					   }
@@ -171,13 +173,15 @@ var isFriend = function(username, login, callback) {
 		 						   for(var j = 0; j < result1.rows.length; j++){
 		 						   if(result1.rows[j]["userto"] === login){
 		 							   isFriend = 2;
+		 							   var nid = result1.rows[j]["nid"];
 		 							   client.end(); pg.end();
-		 							   callback(undefined, isFriend);
+		 							   callback(undefined, isFriend, nid);
 		 							   return;
 			 						   }
 			 					   }
+		 						   console.log("hello");
 							   	   //Requested
-		 						   var SQLQuery2 = "SELECT userTo, userFrom, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
+		 						   var SQLQuery2 = "SELECT userTo, userFrom, nid, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
 		 						   client.query({ text : SQLQuery2,
 		 							   values : [username]},
 		 							   function(err, result2){
@@ -187,11 +191,13 @@ var isFriend = function(username, login, callback) {
 		 									   callback(undefined, {message: "error"});
 		 								   }
 		 								   else{
+		 									   console.log("hi");
 		 									   for(var k = 0; k < result2.rows.length; k++){
 		 										   if(result2.rows[k]["userfrom"] === login){
 		 				 							   isFriend = 3;
+		 				 							   var nid = result2.rows[k]["nid"];
 		 				 							   client.end(); pg.end();
-		 				 							   callback(undefined, isFriend);
+		 				 							   callback(undefined, isFriend, nid);
 		 				 							   return;
 		 				 						   	   }
 		 				 						   }
@@ -200,7 +206,7 @@ var isFriend = function(username, login, callback) {
 	 				 							   callback(undefined, isFriend);
 	 				 							   return;
 		 									   }
-		 				 				   }		  
+		 				 				   }
 		 							   });
  				 				   }
  						});
@@ -259,12 +265,14 @@ exports.getUserProfile = function (username, login, callback) {
 			            				temp = concated;
 			            			});
 			            			result.rows[0] = temp;
-			            			isFriend(username, login, function(err, value){
+			            			isFriend(username, login, function(err, value, nid){
 			            				if(err){
 			            					callback(undefined, {message: "error"});
 			            				}
 			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 			            					result.rows[0]["isFriend"] = value;
+			            					if(nid !== undefined)
+			            						result.rows[0]["requestID"] = nid;
 			            					console.log(result.rows[0]);
 			            					callback(undefined, result.rows[0]);
 			            				}
@@ -937,27 +945,27 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
     		SQLQuery += " AND lower(Game.sport) = lower($"+(searchValues.length+1)+")";
     		searchValues.push(sport);
     	}
-    	
+
     	if (city) {
     	    SQLQuery += " AND lower(Game.location) = lower($" + (searchValues.length + 1) +")";
     		searchValues.push(city);
     	}
-    	
+
     	if (ageMin) {
     	    SQLQuery += " AND (Game.minAge > $" + (searchValues.length + 1) +")";
     		searchValues.push(ageMin);
     	}
-    	
+
     	if (ageMax) {
     	    SQLQuery += " AND (Game.maxAge < $" + (searchValues.length + 1) +")";
     		searchValues.push(ageMax);
     	}
-    	
+
     	if (isCompetitive) {
     	    SQLQuery += " AND (Game.isCompetitive = $" + (searchValues.length + 1) +")";
     		searchValues.push(isCompetitive);
     	}
-    	
+
     	var currentDate = timeHelper.getCurrentDate();
     	SQLQuery += " AND (Game.gameDate > $" + (searchValues.length+1) + ")";
     	searchValues.push(currentDate);
@@ -983,7 +991,7 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
           		var games = [];
           		for( var i = 0; i < result.rows.length; i++ ) {
           			var game = {};
-          			game.creator = result.rows[i].creator; 
+          			game.creator = result.rows[i].creator;
           			game.gameID  = result.rows[i].gameid;
           			game.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
           			game.gameStart = result.rows[i].gamestart;

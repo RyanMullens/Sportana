@@ -284,19 +284,74 @@ this.cancelCity = function()
 
 this.addFriend = function()
 {
-	alert("Add Friend " + userId);
+	console.log("Add Friend " + userId);
 
 	$http.put('/api/requests/friend', {userTo:userId} )
 	
 	.success(function(data, status, headers, config)
 	{
 		console.log(JSON.stringify(data));
+
+		if(data != undefined && data.success == true)
+		{
+			$scope.user.isFriend = 2;
+		}
 	});
 }
 
 this.removeFriend = function()
 {
-	alert("Remove Friend");
+	console.log("Remove Friend");
+
+	$http.delete('/api/friends/' + userId)
+	
+	.success(function(data, status, headers, config)
+	{
+		console.log(JSON.stringify(data));
+
+		if(data != undefined && data.success == true)
+		{
+			$scope.user.isFriend = 0;
+		}
+	});	
+}
+
+this.acceptFriend = function()
+{
+	console.log("Accept Friend... " + $scope.user.requestID);
+
+	var id = $scope.user.requestID;
+
+	$http.post('/api/requests/' + id, {'confirmed':'true'} )
+	
+	.success(function(data, status, headers, config)
+	{
+		console.log(JSON.stringify(data));
+
+		if(data != undefined && data.success == true)
+		{
+			$scope.user.isFriend = 1;
+		}
+	});
+}
+
+this.pendingFriend = function()
+{
+	console.log("Pending Friend... " + $scope.user.requestID);
+
+	var id = $scope.user.requestID;
+
+	$http.post('/api/requests/' + id, {'confirmed':'false'} )
+	
+	.success(function(data, status, headers, config)
+	{
+		console.log(JSON.stringify(data));
+
+		if(data != undefined && data.success == true)
+		{
+			$scope.user.isFriend = 0;
+		}		
+	});
 }
 
 

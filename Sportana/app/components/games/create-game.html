@@ -1,2 +1,70 @@
-<h1 class="page-header">Create Game</h1>
-<body><p>temporarily commented out the actual db connection and json return because we're still working on db</p></body>
+<div id="createGame">
+
+  <div id="instructions">
+    Create your game.
+    <button class="btn" ng-show="isReady()" ng-click="create()">Create</button>
+  </div>
+
+  <div id="gamePanel">
+    <div id="game-information" class="col-md-6 main">
+
+      Sport
+      <div class="btn-group">
+        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+          <img class="sportIcon" ng-src="{{selectedSport.image}}"/>{{selectedSport.sport}} <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="sport in allSports track by $index" ng-click="toggle(sport)" ng-class="{selected: isSelected(sport)}">
+            <img class="sportIcon" ng-src="{{sport.image}}"/>{{sport.sport}}
+          </li>
+        </ul>
+      </div>
+
+      </br>
+
+      Date
+      <!-- DATE FORMAT: {{ dateObject | date:"EEEE, MMMM d, yyyy" }} -->
+      <input kendo-date-picker k-ng-model="gameDate"/>
+      </br>
+
+      Start Time
+      <input kendo-time-picker k-ng-model="gameTime.start" />
+
+      End Time
+      <input kendo-time-picker k-ng-model="gameTime.end" />
+      </br>
+
+      Location
+      </br>
+
+      City
+      <input type="text" ng-model="gameLocation.city"/>
+
+      Details
+      <input type="text" ng-model="gameLocation.details"/>
+      </br>
+
+      Maximum number of players
+      <input type="text" ng-model="players.maxAmount"/>
+
+
+      <!-- <div class="btn-group">
+        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+          {{duration}}
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li ng-repeat="i in getNumber(5) track by \$index" ng-click="setDuration(\$index)">{{\$index}}</li>
+        </ul>
+      </div> -->
+
+
+
+    </div>
+
+
+    <div id="invited-friends" class="col-md-6 main">
+
+    </div>
+  </div>
+</div>
