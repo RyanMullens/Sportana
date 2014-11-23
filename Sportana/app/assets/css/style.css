@@ -151,6 +151,101 @@ body {
 
   /****  END VIEWGAMES AND GAME ****/
 
+  /****  START CREATE GAME ****/
+  #create-game {
+    padding: 0px 40px;
+    font-weight: 200;
+    color: #464648;
+  }
+  #create-game .ddl-button-content {
+    vertical-align: middle;
+  }
+
+  #create-game .sport-thumbnail {
+    width: 75px;
+    height:75px;
+  }
+  #create-game .ddl-sport-name {
+    /* text-transform: uppercase; */
+    margin-left: 10;
+    font-size: 30pt;
+    font-weight: light;
+    font-family: "HelveticaNeueThin", "HelveticaNeue-Thin", "Helvetica Neue Thin", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Arial", sans-serif; font-weight:200; font-stretch:normal;
+  }
+  #create-game .dropdown-toggle {
+    width: 400;
+    height: 100%;
+    padding-left: 25;
+    padding-right: 25;
+    padding-top: 10;
+    padding-bottom: 10;
+  }
+  #create-game .dropdown-menu {
+    width: 400;
+    height: 300;
+    overflow: scroll;
+    padding: 25;
+  }
+  #create-game .k-widget {
+    font-size: 16pt;
+  }
+  #create-game .k-icon {
+    margin-top:14;
+    margin-bottom:16;
+  }
+  #create-game h2 {
+    font-size: 20pt;
+    margin-top: 0;
+  }
+  #create-game h3 {
+    font-size: 20pt;
+    display: inline;
+  }
+
+  #create-game .date-information {
+    width: 100%;
+    margin: 40 auto;
+    padding-left: 10;
+    padding-right: 10;
+    display: inline-block;
+    text-align: center;
+  }
+  #create-game .top {
+    width: 100%;
+    height: 150px;
+    margin: 40 auto;
+    padding-left: 10;
+    padding-right: 10;
+  }
+
+  #create-game .location-information {
+    height: 100%;
+    display: inline;
+    white-space:nowrap;
+  }
+
+  #create-game .form-control {
+    font-size: 16pt;
+    display: inline;
+  }
+
+  #create-game .city {
+    position: absolute;
+    top: 0;
+  }
+  #create-game .details {
+    position: absolute;
+    bottom: 0;
+  }
+
+  .hairline {
+    border-top: 1px solid ;
+    border-color: #C7C8CA;
+  }
+
+
+  /****  END CREATE GAME ****/
+
   /**** START VIEW PROFILE ****/
 
   .profile{
