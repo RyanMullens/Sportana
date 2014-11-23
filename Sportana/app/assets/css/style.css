@@ -548,8 +548,10 @@ body {
   width: 100%;
 }
 
-#account{
+#account
+{
   box-shadow: none;
+  float:right;
 }
 
 #logout {
@@ -575,7 +577,7 @@ body {
 
 @media (min-width: 768px) {
   #search {
-    width: 400px;
+    width: 70%;
   }
 }
 

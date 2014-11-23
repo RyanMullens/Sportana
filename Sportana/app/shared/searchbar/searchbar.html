@@ -4,14 +4,19 @@
             ng-click="toggleMenu()" data-toggle="offcanvas">
             <span class="glyphicon glyphicon-align-justify"></span></button>
 
-    <form class="searchbarSearchForm col-xs-8 navbar-form navbar-left" role="search" ng-submit="submitSearch()">
+    <div class="col-xs-8 col-sm-7">
+    <form class="searchbarSearchForm navbar-form" role="search" ng-submit="submitSearch()">
       <div class="form-group col-xs-12">
         <input id="search" ng-model="searchQuery" type="text" class="form-control" placeholder="Search for Players">
       </div>
     </form>
+    </div>
 
-  <div id="account" class="navbar-form col-xs-2 col-md-2">
-    <button type="button" class="btn btn-md " id="logout" ng-click="logout()">Logout</button>
-  </div>
+    <div class="col-xs-2 col-sm-2">
+      <div id="account" class="navbar-form">
+        <button class="btn btn-default" ><span style="font-size: 20pt;vertical-align: middle;" class="glyphicon glyphicon-bell" aria-hidden="true"></span></button>
+        <button type="button" class="btn btn-md " id="logout" ng-click="logout()">Logout</button>
+      </div>
+    </div>
 
 </div>
