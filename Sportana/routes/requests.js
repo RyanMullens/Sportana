@@ -17,8 +17,8 @@ var authenticator = require('./authentication'); // Authentication Handler
  *
  * RESPONSE:
  * {
- * 	“message”  : string    // empty on success
- * 	“success”  : boolean
+ * 	â€œmessageâ€�  : string    // empty on success
+ * 	â€œsuccessâ€�  : boolean
  *  "requests" :
  *   [{
  *    "id"            : int
@@ -65,15 +65,15 @@ router.get('', function (req, res) {
  * PUT	/requests/game
  * REQUEST:
  * {
- * 	“userToID”    : string
- *	“gameCreator” : string
- *	“gameID”      : int
+ * 	â€œuserToIDâ€�    : string
+ *	â€œgameCreatorâ€� : string
+ *	â€œgameIDâ€�      : int
  * }
  *
  * RESPONSE:
  * {
- * 	“message” : string    // empty on success
- * 	“success” : boolean
+ * 	â€œmessageâ€� : string    // empty on success
+ * 	â€œsuccessâ€� : boolean
  * }
  *****************************************************
  */
@@ -110,13 +110,13 @@ router.put('/game', function(req, res) {
  * PUT	/requests/friend
  * REQUEST:
  * {
- * 	“userToID” : string
+ * 	â€œuserToIDâ€� : string
  * }
  *
  * RESPONSE:
  * {
- * 	“message” : string    // empty on success
- * 	“success” : boolean
+ * 	â€œmessageâ€� : string    // empty on success
+ * 	â€œsuccessâ€� : boolean
  * }
  *****************************************************
  */
@@ -131,13 +131,15 @@ router.put('/friend', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.addRequest(username, userTo, "friend", undefined, undefined, function(err) {
+			dbc.addRequest(username, userTo, "friend", undefined, undefined, function(err, nid) {
 				if (err) {
 					response.message = err;
 					response.success = false;
 				} else {
 					response.message = "";
 					response.success = true;
+					if(nid >= 0)
+						response.requestID = nid;
 				}
 				res.write(JSON.stringify(response));
           		res.end();
@@ -151,13 +153,13 @@ router.put('/friend', function(req, res) {
  * POST	/requests/{requestID}
  * REQUEST:
  * {
- * 	“confirmed”: boolean
+ * 	â€œconfirmedâ€�: boolean
  * }
  *
  * RESPONSE:
  * {
- * 	“message” : string    // empty on success
- * 	“success” : boolean
+ * 	â€œmessageâ€� : string    // empty on success
+ * 	â€œsuccessâ€� : boolean
  * }
  *
  * NOTE: This will also remove the request from the database
