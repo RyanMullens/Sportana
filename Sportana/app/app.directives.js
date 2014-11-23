@@ -33,8 +33,8 @@ app.directive('popOver', function ($compile) {
     template: "<span ng-transclude></span>",
     link: function (scope, element, attrs) {
       var popOverContent;
-      if (scope.items) {
-        var html = "<div ng-repeat='friend in items.getFriends()' class='checkbox'><label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label></div><button type='button' class='btn btn-primary' ng-click='items.inviteFriends()'>Invite</button>";
+      if (scope.that) {
+        var html = "<div><div ng-repeat='friend in that.getFriends() track by $index' class='checkbox'><label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label></div><button type='button' class='btn btn-primary' ng-click='that.inviteFriends()'>Invite</button></div>";
         popOverContent = $compile(html)(scope);
       }
       var options = {
@@ -46,7 +46,7 @@ app.directive('popOver', function ($compile) {
       $(element).popover(options);
     },
     scope: {
-      items: '=',
+      that: '=',
       title: '@'
     }
   };
@@ -74,3 +74,17 @@ app.directive('popOver', function ($compile) {
     </button>
 </form>
 */
+app.directive('tooltip', function(){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs){
+            $(element).hover(function(){
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+        }
+    };
+});

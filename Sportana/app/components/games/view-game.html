@@ -10,22 +10,22 @@
 					<h2><img class="sport" ng-src="{{game.sportImg}}" />{{game.sport}}</h2>
 				</div>
 				<div class="row date">
-					{{game.gamedate | date}}<br/>
-					{{game.gamestart}} - {{game.gameend}}
+					{{game.gameDate | date}}<br/>
+					{{game.gameStart}} - {{game.gameEnd}}
 				</div>
 				<div class="row location">
 					{{game.location}}
 				</div>
 				<div class="row">
 					<ul>
-						<li>Age Demographic: {{game.minage}} - {{game.maxage}}</li>
-						<li>Players Desired: {{game.minplayers}} - {{game.maxplayers}}</li>
+						<li>Age Demographic: {{game.minAge}} - {{game.maxAge}}</li>
+						<li>Players Desired: {{game.minPlayers}} - {{game.maxPlayers}}</li>
 					</ul>
 				</div>
 				<div class="row invite">
 					Current Players: ({{viewGame.getPlayers().length}})
-					<div class="btn-group" ng-show="viewGame.isJoined()" ng-init="items = viewGame.getFriends()">
-						<span class="btn btn-primary" pop-over items="viewGame.getThis()", title="Invite Friends">Invite</span>
+					<div class="btn-group" ng-show="viewGame.isJoined()">
+						<span class="btn btn-primary" pop-over that="viewGame.getThis()" title="Invite Friends">Invite {{viewGame.getFriends()[0].firstname}}</span>
 					<!--
 					<span class="btn btn-primary" pop-over items="items", title="Mode of transport">Invite</span>
 
@@ -69,10 +69,10 @@
 						$('[data-toggle="tooltip"]').tooltip();   
 					});
 				</script>
-				<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
+				<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
 			</div>
 			<div class="row invited">
-				<a ng-repeat="player in viewGame.getInvites() track by $index" ui-sref="app.user({userId: player.name})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
+				<a ng-repeat="player in viewGame.getInvites() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
 			</div>
 		</div>
 		<div class="col-md-6" ng-show="viewGame.isMessagesLoaded()">
