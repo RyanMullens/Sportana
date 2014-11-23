@@ -113,7 +113,7 @@ var ConcatSports = function(obj, callback){
 	console.log("ConcatSports called");
 	var sportsArray = [];
 	var result = obj;
-	if(result.rows.length > 0 && result.rows[0]["sport"] !== null){
+	if(result.rows.length > 0 && result.rows[0]["sport"] != null){ //Has at least one favorite sport
 		for(i = 0; i < result.rows.length; i++){
 			sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
 		}
@@ -122,9 +122,11 @@ var ConcatSports = function(obj, callback){
 		result.rows[0]["sportsArray"] = sportsArray;
 		callback(result.rows[0]);
 	}
-	else{
+	else{ //Has no favorite sports
+		sportsArray.push({sportsName: "", sportImage: ""});
 		delete result.rows[0]["sport"];
 		delete result.rows[0]["imageurl"];
+		result.rows[0]["sportsArray"] = sportsArray;
 		callback(result.rows[0]);
 	}
 }
@@ -153,7 +155,7 @@ var isFriend = function(username, login, callback) {
  						   if(result.rows[i]["userb"] === login){
  							   isFriend = 1;
  							   client.end(); pg.end();
- 							   callback(undefined, isFriend);
+ 							   callback(undefined, isFriend, undefined);
  							   return;
  						   }
 					   }
@@ -171,13 +173,15 @@ var isFriend = function(username, login, callback) {
 		 						   for(var j = 0; j < result1.rows.length; j++){
 		 						   if(result1.rows[j]["userto"] === login){
 		 							   isFriend = 2;
+		 							   var nid = result1.rows[j]["nid"];
 		 							   client.end(); pg.end();
-		 							   callback(undefined, isFriend);
+		 							   callback(undefined, isFriend, nid);
 		 							   return;
 			 						   }
 			 					   }
+		 						   console.log("hello");
 							   	   //Requested
-		 						   var SQLQuery2 = "SELECT userTo, userFrom, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
+		 						   var SQLQuery2 = "SELECT userTo, userFrom, nid, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
 		 						   client.query({ text : SQLQuery2,
 		 							   values : [username]},
 		 							   function(err, result2){
@@ -187,11 +191,13 @@ var isFriend = function(username, login, callback) {
 		 									   callback(undefined, {message: "error"});
 		 								   }
 		 								   else{
+		 									   console.log("hi");
 		 									   for(var k = 0; k < result2.rows.length; k++){
 		 										   if(result2.rows[k]["userfrom"] === login){
 		 				 							   isFriend = 3;
+		 				 							   var nid = result2.rows[k]["nid"];
 		 				 							   client.end(); pg.end();
-		 				 							   callback(undefined, isFriend);
+		 				 							   callback(undefined, isFriend, nid);
 		 				 							   return;
 		 				 						   	   }
 		 				 						   }
@@ -259,12 +265,14 @@ exports.getUserProfile = function (username, login, callback) {
 			            				temp = concated;
 			            			});
 			            			result.rows[0] = temp;
-			            			isFriend(username, login, function(err, value){
+			            			isFriend(username, login, function(err, value, nid){
 			            				if(err){
 			            					callback(undefined, {message: "error"});
 			            				}
 			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 			            					result.rows[0]["isFriend"] = value;
+			            					if(nid !== undefined)
+			            						result.rows[0]["requestID"] = nid;
 			            					console.log(result.rows[0]);
 			            					callback(undefined, result.rows[0]);
 			            				}
@@ -567,7 +575,9 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
            callback(err, undefined);
           }
           else {
-          	/*
+          	if (!result.rows[0]) {
+          		callback("No result found", undefined);
+          	}
             var gameInfo = {};
             gameInfo.creator = result.rows[0].creator;
             gameInfo.gameID = result.rows[0].gameid;
@@ -582,8 +592,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.minAge = result.rows[0].minage;
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
-			*/
-              callback(undefined, result.rows[0]);
+            callback(undefined, gameInfo);
           }
       });
     }
@@ -969,7 +978,6 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
 		client.query({ text : SQLQuery,
                      values : searchValues},
         function (err, result) {
-            //console.log(result);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
@@ -1057,9 +1065,7 @@ exports.getMessages = function(creator, gameID, callback) {
   					message.message = result.rows[i].post;
   					message.from = result.rows[i].login;
   					message.fromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-					message.time = result.rows[i].timeposted;
-					//message.datePosted = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted);
-					//message.timePosted = timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
+					message.time = timeHelper.makeDateFromDateAndTime(result.rows[i].timeposted) + " " + timeHelper.makeTimeFromDateAndTime(result.rows[i].timeposted);
   					messages.push(message);
 		  		}
           		callback(undefined, messages);

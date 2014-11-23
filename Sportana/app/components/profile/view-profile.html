@@ -33,25 +33,25 @@
 						</div>
 					</div>	
 					<div class="profileButtonHolder col-md-3">
-						<button ng-show="!viewProfile.isAddFriend()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
+						<button ng-show="viewProfile.isAddFriend()" ng-click="viewProfile.addFriend()" class="profileSpecialButton btn btn-success">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 							&nbsp;Add Friend
 						</button>
 
-						<button ng-show="viewProfile.isRemoveFriend()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-warning">
+						<button ng-show="viewProfile.isRemoveFriend()" ng-click="viewProfile.removeFriend()" class="profileSpecialButton btn btn-danger">
 							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Remove Friend
 						</button> 
 
-						<button ng-show="viewProfile.isAcceptRequest()" ng-click="viewProfile.acceptFriend()" class="profileSpecialButton btn btn-warning">
-							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+						<button ng-show="viewProfile.isAcceptFriend()" ng-click="viewProfile.acceptFriend()" class="profileSpecialButton btn btn-primary">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Accept Request
 						</button> 
 
-						<button ng-show="viewProfile.isPendingRequest()" class="profileSpecialButton btn btn-warning" enabled='false'>
+						<button ng-show="viewProfile.isPendingFriend()" ng-click="viewProfile.pendingFriend()" class="profileSpecialButton btn btn-primary" enabled='false'>
 							<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 							<span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
 							&nbsp;Pending Request

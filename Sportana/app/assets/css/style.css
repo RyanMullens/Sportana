@@ -144,9 +144,13 @@ body {
   }
   #viewGame .players{
     height:100px;
+    padding-bottom:10px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
+  }
+  #viewGame .popover{
+    width:180px;
   }
 
   /****  END VIEWGAMES AND GAME ****/
