@@ -15,7 +15,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
 	];
 
-	var friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'}];
+	$scope.friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'}];
 
 	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
@@ -52,13 +52,18 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		return $scope.messagesLoaded;
 	};
 
+	this.getThis = function(){
+		var that = this;
+		return that;
+	};
+
 	this.getGame = function(){
 		return $scope.game;
 	};
 
 	this.getFriends = function(){
-		console.log(friends);
-		return friends;
+		console.log($scope.friends);
+		return $scope.friends;
 	};
 
 	this.getPlayers = function(){

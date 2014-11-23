@@ -25,7 +25,7 @@
 				<div class="row invite">
 					Current Players: ({{viewGame.getPlayers().length}})
 					<div class="btn-group" ng-show="viewGame.isJoined()" ng-init="items = viewGame.getFriends()">
-						<span class="btn btn-primary" pop-over items="items", title="Invite Friends">Invite</span>
+						<span class="btn btn-primary" pop-over items="viewGame.getThis()", title="Invite Friends">Invite</span>
 					<!--
 					<span class="btn btn-primary" pop-over items="items", title="Mode of transport">Invite</span>
 
