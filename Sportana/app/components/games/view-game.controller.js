@@ -97,7 +97,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		return !!this.contains(this.getInvited());
 	};
 	this.isPublic = function(){
-		return this.getGame().ispublic;
+		return this.getGame().isPublic;
 	};
 
 	this.leaveGame = function(){
