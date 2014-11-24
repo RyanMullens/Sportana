@@ -2,7 +2,7 @@
 app.controller("ViewGamesController", function($http, $scope){
 
 	var games = [
-	{id: 1, creator: 'mscott', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
+	{gameID: 1, creator: 'mscott', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
 	playersJoined: 5,date: 'October 30 2014', 
 	time: '5:30pm', location: 'Amherst', players: ['/assets/img/profile.png','/assets/img/profile.png','/assets/img/profile.png']}
 	];
@@ -19,10 +19,10 @@ app.controller("ViewGamesController", function($http, $scope){
 	*/
 	$scope.notifications = [];
 
+	var that = this;
 	$http.get('/api/requests/').
 	success(function(data, status, headers, config) {
 		console.log(data.requests);
-		var that = this;
 		for(var i = 0; i < data.requests.length; i++){
 			that.httpGetGame(data.requests[i].gameCreator, data.requests[i].gameID);
 		}
@@ -33,12 +33,11 @@ app.controller("ViewGamesController", function($http, $scope){
 	});
 
 	this.httpGetGame = function(gameCreator, gameID){
-		$scope = $scope;
 		$http.get('/api/games/' + gameCreator + '/' + gameID)
 		.success(function(data, status, headers, config){
 			data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
-			console.log(data);
-			$scope.notification.push(data);
+			$scope.notifications.push(data);
+			console.log($scope.notifications);
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error retrieving game information');
@@ -54,15 +53,19 @@ app.controller("ViewGamesController", function($http, $scope){
 	};
 
 	this.acceptGame = function(notification, accepted){
-		this.acceptGame = $http.post('/requests/'+notification.id, {confirmed:accepted+''}).
+		this.acceptGame = $http.post('api/requests/'+notification.id, {confirmed:accepted+''}).
 		success(function(data, status, headers, config) {
-	    // this callback will be called asynchronously
-	    // when the response is available
-	}).
+		}).
 		error(function(data, status, headers, config) {
-	    // called asynchronously if an error occurs
-	    // or server returns response with an error status.
-	});
+			console.log("There was an error with accepting the game");
+		});
+
+		$http.post('/api/games/join', {creator: notification.gameCreator, gameID: notification.gameID})
+		.success(function(data, status, headers, config){
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with joining the game');
+		});
 
 		if(accepted){
 			games.push(notification);
