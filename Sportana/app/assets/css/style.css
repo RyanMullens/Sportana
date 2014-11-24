@@ -546,9 +546,21 @@ body {
 	margin-bottom: 20px;
 }
 
+#nav-middle-div 
+{
+ margin-right: 175px; 
+}
+
+#nav-right-div 
+{
+ width: 175px; 
+ float: right; 
+}
+
+
+
 #searchBar {
   background-color: #AFB0B3;
-  width: 100%;
 }
 
 #account
@@ -563,7 +575,8 @@ body {
   margin-right: 20px;
 }
 
-.searchbarSearchForm{
+.searchbarSearchForm
+{
   box-shadow: none;
 }
 
@@ -572,7 +585,9 @@ body {
   padding-left: 5px;
 }
 
-#search {
+#search
+ {
+  width:75%;
   text-align: center;
   margin 0 0;
   white-space:normal;

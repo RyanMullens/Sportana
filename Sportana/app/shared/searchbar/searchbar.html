@@ -1,22 +1,20 @@
-<div id="searchBar" class="navbar navbar-default navbar-fixed-top container col-sm-offset-3 col-md-offset-3 col-md-9" role="navigation">
+<div id="searchBar" class="navbar navbar-default navbar-fixed-top col-sm-offset-3" role="navigation">
 
-    <button type="button" class="col-xs-2 btn btn-md btn-link" id="toggleMenuBtn"
-            ng-click="toggleMenu()" data-toggle="offcanvas">
-            <span class="glyphicon glyphicon-align-justify"></span></button>
-
-    <div class="col-xs-8 col-sm-7">
-    <form class="searchbarSearchForm navbar-form" role="search" ng-submit="submitSearch()">
-      <div class="form-group col-xs-12">
-        <input id="search" ng-model="searchQuery" type="text" class="form-control" placeholder="Search for Players">
-      </div>
-    </form>
-    </div>
-
-    <div class="col-xs-2 col-sm-2">
+    <div id="nav-right-div">
       <div id="account" class="navbar-form">
-        <button class="btn btn-default" ><span style="font-size: 20pt;vertical-align: middle;" class="glyphicon glyphicon-bell" aria-hidden="true"></span></button>
+        <button class="btn btn-default" ><span style="font-size: 15pt;vertical-align: middle;" class="glyphicon glyphicon-bell" aria-hidden="true"></span></button>
         <button type="button" class="btn btn-md " id="logout" ng-click="logout()">Logout</button>
       </div>
+    </div>
+
+    <div id="nav-middle-div">
+      <button type="button" class="col-xs-2 btn btn-md btn-link" id="toggleMenuBtn"
+              ng-click="toggleMenu()" data-toggle="offcanvas">
+              <span class="glyphicon glyphicon-align-justify"></span></button>
+
+      <form class="searchbarSearchForm navbar-form" role="search" ng-submit="submitSearch()">
+          <input id="search" ng-model="searchQuery" type="text" class="form-control" placeholder="Search for Players">
+      </form>
     </div>
 
 </div>
