@@ -1100,7 +1100,7 @@ exports.removeFriendRequest = function(username, friendLogin, callback) {
 		}
 		else {
 			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (userFrom=$2) AND (type=0)";
-			client.query(SQLQuery, [username, friendLogin], function(err, result) {
+			client.query(SQLQuery, [friendLogin,username], function(err, result) {
              	done();
              	client.end();
              	// This cleans up connected clients to the database and allows subsequent requests to the database
