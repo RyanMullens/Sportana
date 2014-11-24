@@ -295,6 +295,7 @@ this.addFriend = function()
 		if(data != undefined && data.success == true)
 		{
 			$scope.user.isFriend = 2;
+			$scope.user.requestID = data.requestID;
 		}
 	});
 }
@@ -337,12 +338,11 @@ this.acceptFriend = function()
 
 this.pendingFriend = function()
 {
-	console.log("Pending Friend... " + $scope.user.requestID);
+	console.log("Pending Friend... " + $scope.user.login);
 
-	var id = $scope.user.requestID;
+	var login = $scope.user.login;
 
-	$http.post('/api/requests/' + id, {'confirmed':'false'} )
-	
+	$http.delete('/api/friends/request?friendID=' + login)
 	.success(function(data, status, headers, config)
 	{
 		console.log(JSON.stringify(data));
