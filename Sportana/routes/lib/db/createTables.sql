@@ -291,7 +291,7 @@ CREATE OR REPLACE FUNCTION update_unread_posts()
 	END;
 	$$ language 'plpgsql';	
 
-CREATE OR REPLACE FUNCTION update_notificationID()
+CREATE OR REPLACE FUNCTION update_searchProfileID()
 	RETURNS TRIGGER AS $$
 	DECLARE
 		x int8;
