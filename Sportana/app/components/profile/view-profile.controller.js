@@ -342,7 +342,7 @@ this.pendingFriend = function()
 
 	var login = $scope.user.login;
 
-	$http.delete('/api/friends/request?friendID=' + login)
+	$http.delete('/api/friends/request/' + login)
 	.success(function(data, status, headers, config)
 	{
 		console.log(JSON.stringify(data));

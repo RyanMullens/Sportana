@@ -117,8 +117,8 @@ router.delete('/:friendID', function (req, res) {
  *
  *****************************************************
  */
-router.delete('/request', function (req, res) {
-	var friendLogin = req.query.friendID;
+router.delete('/request/:friendID', function (req, res) {
+	var friendLogin = req.params.friendID;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
