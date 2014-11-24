@@ -344,4 +344,75 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 	});
 });
 
+/**
+ *****************************************************
+ * GET	/games/queue
+ * Get queueing preferences
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”       : string // empty on success
+ * 	“success”       : boolean
+ *  "profiles"      : [{
+ *    "profileID"   : int
+ *    "sport"       : string
+ *	  "city"        : string
+ *	  "ageMin"      : int
+ *	  "ageMax"      : int
+ *	  "competitive" : boolean
+ *   }]
+ * }
+ *****************************************************
+ */
+router.get('/queue', function (req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+		  response.message = "Error with authentication";
+		  response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			// dbc call... table is SearchPreferences not queue - kinda confusing sorry
+			// look at createTables for the structure
+		}
+	});
+});
+
+/**
+ *****************************************************
+ * DELETE	/games/queue/{profileID}
+ * Delete queue profile
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”       : string // empty on success
+ * 	“success”       : boolean
+ * }
+ *****************************************************
+ */
+router.delete('/queue/:profileID', function (req, res) {
+	var pid = req.params.profileID;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+		  response.message = "Error with authentication";
+		  response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			// dbc call... table is SearchPreferences not queue - kinda confusing sorry
+			// look at createTables for the structure
+		}
+	});
+});
+
 module.exports = router;
