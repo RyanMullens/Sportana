@@ -178,7 +178,8 @@ sport VARCHAR(50),
 minAge INT,
 maxAge INT,
 location VARCHAR(100),
-pid SERIAL,
+pid INT,
+isCompetitive BOOLEAN,
 PRIMARY KEY (login, pid),
 FOREIGN KEY (login)
 REFERENCES Users(login)
@@ -289,6 +290,21 @@ CREATE OR REPLACE FUNCTION update_unread_posts()
 		RETURN NEW;
 	END;
 	$$ language 'plpgsql';	
+
+CREATE OR REPLACE FUNCTION update_searchProfileID()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		x := (SELECT max(pid) FROM SearchProfile WHERE SearchProfile.login = NEW.login);
+		IF (x > 0) THEN
+	   		NEW.pid = 1 + x;
+		ELSE
+	   		NEW.pid = 1;
+		END IF;	   
+	   		RETURN NEW;
+	END;
+	$$ language 'plpgsql';
 	
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
@@ -324,3 +340,8 @@ CREATE TRIGGER auto_increment_notificationID
 	BEFORE INSERT ON Notifications
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_notificationID();  	
+	
+CREATE TRIGGER auto_increment_searchProfileID
+	BEFORE INSERT ON SearchProfile
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_searchProfileID();  	

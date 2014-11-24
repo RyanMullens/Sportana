@@ -528,15 +528,15 @@ exports.removeFriend = function(username, friendLogin, callback) {
 	});
 };
 
-exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
+exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, reservedSlots, status, callback) {
   pg.connect(connString, function(err, client, done) {
       if(err) {
       callback(err);
     }
     else {
-      var SQLQuery = "INSERT INTO Game(creator , gameDate, gameStart, gameEnd, sport , location , maxPlayers, minPlayers, reservedSpots, minAge, maxAge , isPublic) values "+
-      "($1 , $2,$3 , $4,$5 , $6,$7 , $8, $9 ,$10 , $11, $12)";
-      client.query(SQLQuery, [email, sportID, startTime, endTime, gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status], function(err, result) {
+      var SQLQuery = "INSERT INTO Game(creator, sport, gameDate, gameStart, gameEnd, location, minPlayers, maxPlayers, reservedSpots, minAge, maxAge, isPublic) values "+
+      "($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)";
+      client.query(SQLQuery, [email, sportID, gameDate, startTime, endTime, location, minPlayers, maxPlayers, reservedSlots, minAge, maxAge, status], function(err, result) {
               done();
               client.end();
               // This cleans up connected clients to the database and allows subsequent requests to the database
@@ -1091,4 +1091,50 @@ exports.getMessages = function(creator, gameID, callback) {
     }
   });
 
+};
+
+exports.removeFriendRequest = function(username, friendLogin, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (userFrom=$2) AND (type=0)";
+			client.query(SQLQuery, [friendLogin,username], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+					callback(undefined);
+            	}
+             });
+		}
+	});
+};
+
+exports.waitForGame = function(login, sport, city, ageMin, ageMax, isCompetitive, callback) {
+  pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO SearchProfile(login, sport, location, minAge, maxAge, isCompetitive) VALUES ($1, $2, $3, $4, $5, $6)";
+    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
 };
