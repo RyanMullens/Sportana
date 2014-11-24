@@ -1,24 +1,98 @@
-<div id="sportSelection">
+<div id="create-game"> <!-- TODO : Change this ID -- just using for now to get the style w/o refactoring -->
 
 	<div id="instructions">
 		Select your preferred sports.
 		<button class="btn" ng-show="sports.hasSelectedSports()" ng-click="sports.finish()">Next</button>
 	</div>
 
+	<div id="queue">
+		<div id="game-information">
+
+			<!-- SPORT SELECTION -->
+			<div class="hairline"></div>
+			<div class="top row">
+				<div id="selectedSports" class="col-md-5">
+
+					<!-- TODO : Replace remove with toggle? -->
+					<button class="btn" ng-repeat="sport in sports.getSelectedSports()" ng-click="sports.removeSport(sport)">{{sport.name}}  X</button>
+				</div>
+				<div class="details col-md-7">
+					<div class="city row">
+						<div class="col-md-2 vert">
+							City
+						</div>
+						<div class="col-md-10">
+							<input type="text" ng-model="gameLocation.city" class="form-control"/>
+						</div>
+					</div>
+					<div class="age row">
+						<div class="col-md-2 vert">
+							Age
+						</div>
+						<div class="col-md-1 small-label">
+							Min
+						</div>
+						<div class="col-md-4">
+							<div class="btn-group">
+								<button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+									{{players.minAge}}
+								</button>
+								<ul class="dropdown-menu dropdown-number" role="menu">
+									<li ng-repeat="age in agesMin()" ng-click="toggleMinAge(age)" ng-class="{selected: player.minAge == age}" class="menu-item">
+										{{age}}
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-1 small-label">
+							Max
+						</div>
+						<div class="col-md-4">
+							<div class="btn-group">
+								<button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+									{{players.maxAge}}
+								</button>
+								<ul class="dropdown-menu dropdown-number" role="menu">
+									<li ng-repeat="age in agesMax()" ng-click="toggleMaxAge(age)" ng-class="{selected: player.maxAge === age}" class="menu-item">
+										{{age}}
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="game-type row">
+						<div class="col-md-2 vert">
+
+						</div>
+
+						<div class="col-md-10 small-label checkbox-holder">
+							<label>
+								<input class="checkbox" type="checkbox" ng-model="competitive">Competitive
+							</label>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
 	<div id="sportPicker">
     	<div class="sportPanel" ng-repeat="sport in sports.getSports()" ng-class="{selected: sports.isSelected(sport)}" ng-click="sports.toggle(sport)">
     		<img class="sportIcon" ng-src="{{sport.icon}}"/>
     		<br>{{sport.name}}<br>
-    		<span class="description">
-	    		{{sport.description}}
-    		</span>
 	   </div>
 	</div>
 
-	<div id="selectedSports">
+	<!-- <div id="selectedSports">
 
-		<!-- TODO : Replace remove with toggle? -->
+		TODO : Replace remove with toggle?
 		<button class="btn" ng-repeat="sport in sports.getSelectedSports()" ng-click="sports.removeSport(sport)">{{sport.name}}  X</button>
-	</div>
+	</div> -->
 
 </div>

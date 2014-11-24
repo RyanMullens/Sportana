@@ -1,6 +1,8 @@
 app.controller("CreateGameController", function($http, $scope)
 {
 
+	// TODO : DRY this up!
+
 	$scope.allSports = [];
 	$scope.gameDate = new Date();
 	$scope.gameTime = {
@@ -75,7 +77,7 @@ app.controller("CreateGameController", function($http, $scope)
 		return result;
 	};
 
-	/********** AGE **********/
+	/********** AMOUNT **********/
 
 	$scope.playersMin = function() {
 		return $scope.playerAmounts("min");
@@ -221,6 +223,7 @@ app.controller("CreateGameController", function($http, $scope)
 						console.log(res.data);
 
 						// TODO : Send friend invites
+						// TODO : REDIRECT TO 'MY GAMES' PAGE
 
 					} else {
 						console.log(res.data.message);
