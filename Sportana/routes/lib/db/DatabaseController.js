@@ -1099,25 +1099,34 @@ exports.removeFriendRequest = function(username, friendLogin, callback) {
 	});
 };
 
-exports.waitForGame = function(login, sport, city, ageMin, ageMax, isCompetitive, callback) {
+exports.waitForGame = function(login, sports, city, ageMin, ageMax, isCompetitive, callback) {
   pg.connect(connString, function(err, client, done) {
     	if(err) {
     	  callback(err);
     	}
     	else {
+    	  var queriesCompleted = 0;
     	  var SQLQuery = "INSERT INTO SearchProfile(login, sport, location, minAge, maxAge, isCompetitive) VALUES ($1, $2, $3, $4, $5, $6)";
-    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive], function(err, result) {
-              done();
-              client.end();
-              // This cleans up connected clients to the database and allows subsequent requests to the database
-              pg.end();
-              if(err){
-          		callback(err);
-              }
-              else {
-          		callback(undefined);
-              }
-         });
+    	  console.log("Sports: " + sports);
+    	  for (var i = 0; i < sports.length; i++) {
+    	      var sport = sports[i].sport;
+    	      console.log("Sport: " + sport);
+	    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive], function(err, result) {
+               if(err){
+          	 	callback(err);
+               }
+               else {
+                queriesCompleted++;
+          		if (queriesCompleted >= sports.length) {
+          			done();
+               		client.end();
+               		// This cleans up connected clients to the database and allows subsequent requests to the database
+               		pg.end();
+               		callback(undefined);
+          		}
+               }
+              });
+           }
     }
   });
 };

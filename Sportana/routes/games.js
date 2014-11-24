@@ -141,7 +141,9 @@ router.post('/join', function(req, res) {
  *
  * REQUEST:
  * {
- *  "sport"        : string
+ *  "sports"       : [{
+ *    "sport"      : string
+ *  }]
  *	"city"         : string
  *	"ageMin"       : int
  *	"ageMax"       : int
@@ -156,12 +158,12 @@ router.post('/join', function(req, res) {
  *****************************************************
  */
 router.post('/queue', function(req, res) {
-	var sport = req.body.sport;
+	var sports = req.body.sports;
 	var city = req.body.city;
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	
+	var auth = req.get('SportanaAuthentication');	
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -170,7 +172,7 @@ router.post('/queue', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.waitForGame(sport, city, ageMin, ageMax, isCompetitive, function(err) {
+			dbc.waitForGame(username, sports, city, ageMin, ageMax, isCompetitive, function(err) {
 				if (err) {
 					response.message = err;
 					response.success = false;
