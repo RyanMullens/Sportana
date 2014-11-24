@@ -1092,3 +1092,26 @@ exports.getMessages = function(creator, gameID, callback) {
   });
 
 };
+
+exports.removeFriendRequest = function(username, friendLogin, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (userFrom=$2) AND (type=0)";
+			client.query(SQLQuery, [username, friendLogin], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+					callback(undefined);
+            	}
+             });
+		}
+	});
+};

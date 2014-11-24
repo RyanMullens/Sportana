@@ -101,4 +101,46 @@ router.delete('/:friendID', function (req, res) {
 	});
 });
 
+/**
+ *****************************************************
+ * DELETE /friends/request?friendID={user}
+ *
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ *  “message” : string    // empty on success
+ *  “success” : boolean
+ * }
+ *
+ *****************************************************
+ */
+router.delete('/request', function (req, res) {
+	var friendLogin = req.query.friendID;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.removeFriendRequest(username, friendLogin, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
 module.exports = router;
