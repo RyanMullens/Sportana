@@ -20,7 +20,8 @@ var authenticator = require('./authentication'); // Authentication Handler
  *  "minPlayers"    : int
  *  "maxPlayers"    : int
  *  "reservedSpots" : int
- *  "status"	    : int // 1: public, 0: not public
+ *  "public"	    : boolean
+ *  "competitive"   : boolean
  * }
  *
  * RESPONSE:
@@ -42,7 +43,8 @@ router.put('', function(req, res) {
 	var minPlayers = req.body.minPlayers;
 	var maxPlayers = req.body.maxPlayers;
 	var reservedSlots = req.body.reservedSpots;
-	var status = req.body.status;
+	var isPublic = req.body.public;
+	var isCompetitive = req.body.competitive;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, creator) {
 		var response ={};
@@ -52,16 +54,34 @@ router.put('', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, reservedSlots, status, function(err) {
+			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, isCompetitive, reservedSlots, isPublic, function(err) {
 				if (err) {
 					response.message = err;
 					response.success = false;
+					res.write(JSON.stringify(response));
+          			res.end();
 				} else {
 					var openSlots = maxPlayers - reservedSlots;
-					// TODO fill open spaces
+					if ((openSlots > 0) && (isPublic === 'true')) {
+						dbc.findUsersForGame(creator, sportID, location, minAge, maxAge, isCompetitive, openSlots, function(err) {
+							if (err) {
+								response.message = err;
+								response.success = false;
+							} else {
+								response.message = "";
+								response.success = true;
+							}
+							res.write(JSON.stringify(response));
+          					res.end();
+						});
+					} else {
+						response.message = "";
+						response.success = true;
+						res.write(JSON.stringify(response));
+          				res.end();
+					}
 				}
-				res.write(JSON.stringify(response));
-          		res.end();
+
 			});
 		}
 	});

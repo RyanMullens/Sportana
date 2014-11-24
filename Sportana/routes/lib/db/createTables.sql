@@ -116,7 +116,7 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS Notifications(
 userTo VARCHAR(50),
-userFrom VARCHAR(50) NOT NULL,
+userFrom VARCHAR(50),
 nid INT,
 type INT, -- 0: friend, 1: game, 2: queue, 3: game reminder
 timeSent TIMESTAMP,
