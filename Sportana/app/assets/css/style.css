@@ -280,6 +280,8 @@ body {
 
   #create-game .row {
     padding: 0;
+    margin-left: 0;
+    margin-right: 0;
   }
   #create-game .row > .details {
     height: 40;

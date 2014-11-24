@@ -1133,11 +1133,11 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
     	  client.query(SQLQuery, [creator], function(err, result) {
     	  	done();
               if(err){
-             	  client.end();     
+             	  client.end();
               	  pg.end();
           		  callback(err);
               }
-              else { 
+              else {
 			  var gameID = result.rows[0].gameid;
               SQLQuery = "INSERT INTO Notifications (userTo, type, timeSent, creator, gameID) " +
               			 "(SELECT SearchProfile.login, 1, $7, $8, $9 FROM SearchProfile " +
