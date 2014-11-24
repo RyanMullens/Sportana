@@ -164,6 +164,21 @@ body {
     font-weight: 200;
     color: #464648;
   }
+  #create-game .menu-item {
+    padding: 10 25;
+  }
+  #create-game .input {
+    padding: 0;
+    margin: 0;
+  }
+  #create-game .menu-item:hover {
+    background-color: #E1E2E4;
+  }
+
+  #create-game .selected {
+    background-color: #d7d7d7;
+  }
+
   #create-game .ddl-button-content {
     vertical-align: middle;
   }
@@ -179,19 +194,24 @@ body {
     font-weight: light;
     font-family: "HelveticaNeueThin", "HelveticaNeue-Thin", "Helvetica Neue Thin", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Arial", sans-serif; font-weight:200; font-stretch:normal;
   }
-  #create-game .dropdown-toggle {
-    width: 400;
+  #create-game .btn-sport {
+    width: 100%;
     height: 100%;
-    padding-left: 25;
-    padding-right: 25;
-    padding-top: 10;
-    padding-bottom: 10;
+    padding: 25 10;
   }
-  #create-game .dropdown-menu {
+  #create-game .dropdown-sport {
+    padding: 0;
+    margin-left: 15;
     width: 400;
     height: 300;
     overflow: scroll;
-    padding: 25;
+  }
+  #create-game .dropdown-number {
+    padding: 0;
+    margin-left: 15;
+    width: 50;
+    height: 160;
+    overflow: scroll;
   }
   #create-game .k-widget {
     font-size: 16pt;
@@ -200,13 +220,48 @@ body {
     margin-top:14;
     margin-bottom:16;
   }
+  #create-game .k-input {
+    text-align: center;
+  }
   #create-game h2 {
     font-size: 20pt;
     margin-top: 0;
   }
-  #create-game h3 {
+
+  #create-game .vert {
     font-size: 20pt;
-    display: inline;
+    line-height: 40px;
+    margin: 0px 0px;
+    padding: 0px 0px;
+  }
+  #create-game .small-label {
+    font-size: 15pt;
+    line-height: 40px;
+    font-weight: 100;
+    margin: 0px;
+  }
+  #create-game .checkbox {
+    line-height: 40px;
+    display:inline;
+    height: 100%;
+    margin: 0px 0px;
+    margin-right: 20px;
+    padding: 0px 0px;
+    vertical-align: middle;
+  }
+  #create-game label {
+    font-weight: 300;
+  }
+  #create-game .checkbox-holder {
+    line-height: 40px;
+    display:inline-block;
+    vertical-align: middle;
+  }
+
+  #create-game .small-label.checkbox-holder {
+    font-size: 15pt;
+    height: 40px;
+    margin: 0px;
   }
 
   #create-game .date-information {
@@ -219,30 +274,40 @@ body {
   }
   #create-game .top {
     width: 100%;
-    height: 150px;
+    height: 180px;
     margin: 40 auto;
     padding-left: 10;
     padding-right: 10;
   }
 
-  #create-game .location-information {
-    height: 100%;
-    display: inline;
-    white-space:nowrap;
+  #create-game .row {
+    padding: 0;
   }
-
-  #create-game .form-control {
-    font-size: 16pt;
-    display: inline;
-  }
-
-  #create-game .city {
-    position: absolute;
-    top: 0;
+  #create-game .row > .details {
+    height: 40;
   }
   #create-game .details {
-    position: absolute;
-    bottom: 0;
+    height: 100%;
+    padding: 0;
+  }
+  #create-game .form-control {
+    font-size: 16pt;
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0 0;
+  }
+  #create-game .number {
+    width: 100%;
+  }
+  #create-game .age {
+    margin-top: 10;
+  }
+  #create-game .player {
+    margin-top: 10;
+  }
+  #create-game .game-type {
+    margin-top: 10;
   }
 
   .hairline {
@@ -546,15 +611,15 @@ body {
 	margin-bottom: 20px;
 }
 
-#nav-middle-div 
+#nav-middle-div
 {
- margin-right: 175px; 
+ margin-right: 175px;
 }
 
-#nav-right-div 
+#nav-right-div
 {
- width: 175px; 
- float: right; 
+ width: 175px;
+ float: right;
 }
 
 

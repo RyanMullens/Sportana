@@ -136,6 +136,7 @@ var isFriend = function(username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 		if(err) {
+			client.end(); pg.end();
 			callback(undefined, {message: "error"});
 		}
 		else{
@@ -178,6 +179,7 @@ var isFriend = function(username, login, callback) {
 		 							   return;
 			 						   }
 			 					   }
+		 						   console.log("hello");
 							   	   //Requested
 		 						   var SQLQuery2 = "SELECT userTo, userFrom, nid, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
 		 						   client.query({ text : SQLQuery2,
@@ -189,6 +191,7 @@ var isFriend = function(username, login, callback) {
 		 									   callback(undefined, {message: "error"});
 		 								   }
 		 								   else{
+		 									   console.log("hi");
 		 									   for(var k = 0; k < result2.rows.length; k++){
 		 										   if(result2.rows[k]["userfrom"] === login){
 		 				 							   isFriend = 3;
@@ -612,41 +615,21 @@ exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameI
 	var now = timeHelper.getCurrentDateAndTime();
 	pg.connect(connString, function(err, client, done) {
     	if(err) {
-    	  callback(err, undefined);
+    	  callback(err);
     	}
     	else {
     	  var SQLQuery = "INSERT INTO Notifications(userTo, userFrom, type, timeSent, creator, gameID) VALUES "+
     	  "($1, $2, $3, $4, $5, $6)";
     	  client.query(SQLQuery, [friendLogin, username, type, now, gameCreator, gameID], function(err, result) {
               done();
-              //client.end();
+              client.end();
               // This cleans up connected clients to the database and allows subsequent requests to the database
-              //pg.end();
+              pg.end();
               if(err){
-            	  client.end();
-            	  pg.end();
-          		  callback(err, undefined);
+          		callback(err);
               }
               else {
-            	  if(type === 0){
-            		  var SQLQuery = "SELECT nid from Notifications where userTo = $1 AND userFrom = $2 and type = $3";
-            		  client.query(SQLQuery, [friendLogin, username, type], function(err, result1) {
-            			 done();
-            			 client.end();
-            			 pg.end();
-            			 if(err){
-            				 callback(err, undefined);
-            			 }
-            			 else{
-            				 callback(undefined, result1.rows[0]["nid"]);
-            			 }
-            		  });
-            	  }
-            	  else{
-            		  client.end();
-            		  pg.end();
-            		  callback(undefined, undefined);
-            	  }
+          		callback(undefined);
               }
          });
     }

@@ -11,30 +11,117 @@
       <!-- SPORT SELECTION -->
       <div class="hairline"></div>
       <div class="top row">
-
-        <div class="btn-group col-md-6">
-          <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+        <div class="btn-group col-md-5">
+          <button class="btn btn-default btn-sport dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
               <img class="sport-thumbnail ddl-button-content" ng-src="{{selectedSport.image}}"/>
               <span class="ddl-sport-name ddl-button-content">{{selectedSport.sport}}</span>
           </button>
-          <ul class="dropdown-menu" role="menu">
-            <li ng-repeat="sport in allSports track by $index" ng-click="toggle(sport)" ng-class="{selected: isSelected(sport)} menu-item">
+          <ul class="dropdown-menu dropdown-sport" role="menu">
+            <li ng-repeat="sport in allSports track by $index" ng-click="toggleSport(sport)" ng-class="{selected: isSelected(sport)}" class="menu-item">
               <img class="sport-thumbnail ddl-button-content" ng-src="{{sport.image}}"/>
-              <span class="ddl-sport-name ddl-button-content">{{sport.sport}}</span></br></br>
+              <span class="ddl-sport-name ddl-button-content">{{sport.sport}}</span>
             </li>
           </ul>
         </div>
-
-        <div class="location-information col-md-6">
-
-          <div class="city">
-          <h3>City</h3> <input type="text" ng-model="gameLocation.city" class="form-control"/>
+        <div class="details col-md-7">
+          <div class="city row">
+            <div class="col-md-2 vert">
+              City
+            </div>
+            <div class="col-md-10">
+              <input type="text" ng-model="gameLocation.city" class="form-control"/>
+            </div>
           </div>
-          <div class="details">
-          <h3>Details</h3> <textarea type="text" ng-model="gameLocation.details" class="form-control"/>
+          <div class="age row">
+            <div class="col-md-2 vert">
+              Age
+            </div>
+            <div class="col-md-1 small-label">
+              Min
+            </div>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+                  {{players.minAge}}
+                </button>
+                <ul class="dropdown-menu dropdown-number" role="menu">
+                  <li ng-repeat="age in agesMin()" ng-click="toggleMinAge(age)" ng-class="{selected: player.minAge == age}" class="menu-item">
+                    {{age}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-1 small-label">
+              Max
+            </div>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+                  {{players.maxAge}}
+                </button>
+                <ul class="dropdown-menu dropdown-number" role="menu">
+                  <li ng-repeat="age in agesMax()" ng-click="toggleMaxAge(age)" ng-class="{selected: player.maxAge === age}" class="menu-item">
+                    {{age}}
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
+          <div class="player row">
+            <div class="col-md-2 vert">
+              Players
+            </div>
+            <div class="col-md-1 small-label">
+              Min
+            </div>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+                  <span class="">{{players.minAmount}}</span>
+                </button>
+                <ul class="dropdown-menu dropdown-number" role="menu">
+                  <li ng-repeat="amount in playersMin()" ng-click="toggleMinAmount(amount)" ng-class="{selected: player.minAmount == amount}" class="menu-item">
+                    {{amount}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-1 small-label">
+              Max
+            </div>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
+                  {{players.maxAmount}}
+                </button>
+                <ul class="dropdown-menu dropdown-number" role="menu">
+                  <li ng-repeat="amount in playersMax()" ng-click="toggleMaxAmount(amount)" ng-class="{selected: player.maxAmount == amount}" class="menu-item">
+                    {{amount}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="game-type row">
+            <div class="col-md-2 vert">
+
+            </div>
+
+            <div class="col-md-5 small-label checkbox-holder">
+                <label>
+                  <input class="checkbox" type="checkbox" ng-model="competitive">Competitive
+                </label>
+            </div>
+
+            <div class="col-md-5 small-label checkbox-holder">
+              <label>
+                <input class="checkbox" type="checkbox" ng-model="public">Public
+              </label>
+            </div>
+          </div>
+
         </div>
-
       </div>
 
       <div class="hairline"></div>
@@ -57,21 +144,6 @@
       </div>
 
       <div class="hairline"></div>
-
-      <h2>Maximum number of players</h2>
-      <input type="text" ng-model="players.maxAmount" class="form-control"/>
-
-
-      <!-- <div class="btn-group">
-        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-          {{duration}}
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li ng-repeat="i in getNumber(5) track by \$index" ng-click="setDuration(\$index)">{{\$index}}</li>
-        </ul>
-      </div> -->
-
-
 
     </div>
 
