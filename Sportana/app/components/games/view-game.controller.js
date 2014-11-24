@@ -112,7 +112,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.joinGame = function(){
 		var that = this;
-		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameid})
+		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameID})
 		.success(function(data, status, headers, config){
 			var player = that.contains(that.getInvited(), that.getUser());
 			if(that.isInvited(that.getUser())){
@@ -157,11 +157,16 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		var that = this;
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
+			$http.post('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
+			.success(function(data, status, headers, config){
+			})
+			.error(function(data, status, headers, config) {
+				console.log('There was an error with posting the message');
+			});
 			that.getInvited().push(friend);
 			that.getFriends().splice(that.getFriends().indexOf(that.contains(that.getFriends(), friend.login)), 1);
 		}
 		this.getInvites().length = 0;
-		console.log(this.invites);
 		console.log('invites');
 		console.log(this.getInvites());
 		console.log('friend');
@@ -176,7 +181,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		var that = this;
 
 
-		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameid, message: post})
+		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameID, message: post})
 		.success(function(data, status, headers, config){
 			$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
 			$scope.message = '';
