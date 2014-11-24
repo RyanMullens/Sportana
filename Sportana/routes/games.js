@@ -10,16 +10,18 @@ var authenticator = require('./authentication'); // Authentication Handler
  * PUT	/games
  * REQUEST:
  * {
- * 	“sportID"    : string
- *  "gameDate" 	 : date // yyyy-mm-dd
- *  "startTime"  : time // hh:mm:ss
- *  "endTime"    : time // hh:mm:ss
- *  "location"   : string
- *  "minAge"	 : int
- *  "maxAge"	 : int
- *  "minPlayers" : int
- *  "maxPlayers" : int
- *  "status"	 : int // 1: public, 0: not public
+ * 	“sportID"       : string
+ *  "gameDate" 	    : date // yyyy-mm-dd
+ *  "startTime"     : time // hh:mm:ss
+ *  "endTime"       : time // hh:mm:ss
+ *  "location"      : string
+ *  "minAge"	    : int
+ *  "maxAge"	    : int
+ *  "minPlayers"    : int
+ *  "maxPlayers"    : int
+ *  "reservedSpots" : int
+ *  "public"	    : boolean
+ *  "competitive"   : boolean
  * }
  *
  * RESPONSE:
@@ -40,7 +42,9 @@ router.put('', function(req, res) {
 	var maxAge = req.body.maxAge;
 	var minPlayers = req.body.minPlayers;
 	var maxPlayers = req.body.maxPlayers;
-	var status = req.body.status;
+	var reservedSlots = req.body.reservedSpots;
+	var isPublic = req.body.public;
+	var isCompetitive = req.body.competitive;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, creator) {
 		var response ={};
@@ -50,16 +54,34 @@ router.put('', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, function(err) {
+			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, isCompetitive, reservedSlots, isPublic, function(err) {
 				if (err) {
 					response.message = err;
 					response.success = false;
+					res.write(JSON.stringify(response));
+          			res.end();
 				} else {
-					response.message = "";
-					response.success = true;
+					var openSlots = maxPlayers - reservedSlots;
+					if ((openSlots > 0) && (isPublic === 'true')) {
+						dbc.findUsersForGame(creator, sportID, location, minAge, maxAge, isCompetitive, openSlots, function(err) {
+							if (err) {
+								response.message = err;
+								response.success = false;
+							} else {
+								response.message = "";
+								response.success = true;
+							}
+							res.write(JSON.stringify(response));
+          					res.end();
+						});
+					} else {
+						response.message = "";
+						response.success = true;
+						res.write(JSON.stringify(response));
+          				res.end();
+					}
 				}
-				res.write(JSON.stringify(response));
-          		res.end();
+
 			});
 		}
 	});
@@ -124,12 +146,6 @@ router.post('/join', function(req, res) {
  *	"ageMin"       : int
  *	"ageMax"       : int
  *	"competitive"  : boolean
- *  "availability" :
- *  [{
- *	  "date"       : date
- *    "startTime"  : time
- *    "endTime"    : time
- *  }]
  * }
  *
  * RESPONSE:
@@ -145,11 +161,29 @@ router.post('/queue', function(req, res) {
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	var availability = req.body.availability;
-	response.success = false;
-	response.message = "Not yet implemented";
-	res.write(JSON.stringify(response));
-    res.end();
+	
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.waitForGame(sport, city, ageMin, ageMax, isCompetitive, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+	
 });
 
 /**

@@ -531,15 +531,15 @@ exports.removeFriend = function(username, friendLogin, callback) {
 	});
 };
 
-exports.createGame = function(email, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status, callback) {
+exports.createGame = function(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, isCompetitive, reservedSlots, status, callback) {
   pg.connect(connString, function(err, client, done) {
       if(err) {
       callback(err);
     }
     else {
-      var SQLQuery = "INSERT INTO Game(creator , gameDate, gameStart, gameEnd, sport , location , maxPlayers, minPlayers, reservedSpots, minAge, maxAge , isPublic) values "+
-      "($1 , $2,$3 , $4,$5 , $6,$7 , $8, $9 ,$10 , $11, $12)";
-      client.query(SQLQuery, [email, sportID, startTime, endTime, gameDate, location, minAge, maxAge, minPlayers, maxPlayers, status], function(err, result) {
+      var SQLQuery = "INSERT INTO Game(creator, sport, gameDate, gameStart, gameEnd, location, minPlayers, maxPlayers, reservedSpots, minAge, maxAge, isPublic, isCompetitive) values "+
+      "($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)";
+      client.query(SQLQuery, [creator, sportID, gameDate, startTime, endTime, location, minPlayers, maxPlayers, reservedSlots, minAge, maxAge, status, isCompetitive], function(err, result) {
               done();
               client.end();
               // This cleans up connected clients to the database and allows subsequent requests to the database
@@ -1074,4 +1074,92 @@ exports.getMessages = function(creator, gameID, callback) {
     }
   });
 
+};
+
+exports.removeFriendRequest = function(username, friendLogin, callback) {
+	pg.connect(connString, function(err, client, done) {
+	    if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (userFrom=$2) AND (type=0)";
+			client.query(SQLQuery, [friendLogin,username], function(err, result) {
+             	done();
+             	client.end();
+             	// This cleans up connected clients to the database and allows subsequent requests to the database
+        		pg.end();
+            	if(err){
+					callback(err);
+            	}
+            	else {
+					callback(undefined);
+            	}
+             });
+		}
+	});
+};
+
+exports.waitForGame = function(login, sport, city, ageMin, ageMax, isCompetitive, callback) {
+  pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "INSERT INTO SearchProfile(login, sport, location, minAge, maxAge, isCompetitive) VALUES ($1, $2, $3, $4, $5, $6)";
+    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive], function(err, result) {
+              done();
+              client.end();
+              // This cleans up connected clients to the database and allows subsequent requests to the database
+              pg.end();
+              if(err){
+          		callback(err);
+              }
+              else {
+          		callback(undefined);
+              }
+         });
+    }
+  });
+};
+
+exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, competitive, openSlots, callback) {
+	var now = timeHelper.getCurrentDateAndTime();
+	pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var SQLQuery = "SELECT max(gameID) AS gameid FROM Game WHERE Game.creator = $1";
+    	  client.query(SQLQuery, [creator], function(err, result) {
+    	  	done();
+              if(err){
+             	  client.end();     
+              	  pg.end();
+          		  callback(err);
+              }
+              else { 
+			  var gameID = result.rows[0].gameid;
+              SQLQuery = "INSERT INTO Notifications (userTo, type, timeSent, creator, gameID) " +
+              			 "(SELECT SearchProfile.login, 1, $7, $8, $9 FROM SearchProfile " +
+                		   "WHERE ((SearchProfile.sport=$1) OR (SearchProfile.sport IS NULL)) " +
+                		   "AND ((SearchProfile.location=$2) OR (SearchProfile.location IS NULL)) " +
+                		   "AND ((SearchProfile.minAge >= $3) OR (SearchProfile.minAge IS NULL)) " +
+               			   "AND ((SearchProfile.maxAge <= $4) OR (SearchProfile.maxAge IS NULL )) " +
+                		   "AND ((SearchProfile.isCompetitive = $5) OR (SearchProfile.isCompetitive IS NULL)) LIMIT $6)";
+              client.query(SQLQuery, [sportID, location, minAge, maxAge, competitive, openSlots, now, creator, gameID], function(err, result) {
+                done();
+                client.end();
+                // This cleans up connected clients to the database and allows subsequent requests to the database
+                pg.end();
+                if(err){
+          		  callback(err);
+                }
+                else {
+            	  callback(undefined);
+            	}
+	         });
+             }
+         });
+    }
+  });
 };
