@@ -18,6 +18,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	$scope.friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
 	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
 	];
+	$scope.invites = [];
 
 	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
 
@@ -71,6 +72,10 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		return players;
 	};
 
+	this.getInvites = function(){
+		return $scope.invites;
+	};
+
 	this.getInvited = function(){
 		return invited;
 	};
@@ -79,9 +84,9 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		return CurrentUser.getUser().id;
 	};
 
-	this.contains = function(type){
+	this.contains = function(type, login){
 		for(i = 0; i < type.length; i++){
-			if(this.getUser() === type[i].login){
+			if(login === type[i].login){
 				return type[i];
 			}
 		}
@@ -89,28 +94,30 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.isJoined = function(){
-		return !!this.contains(this.getPlayers());
+		return !!this.contains(this.getPlayers(), this.getUser());
 	};
 
 
-	this.isInvited = function(){
-		return !!this.contains(this.getInvited());
+	this.isInvited = function(id){
+		return !!this.contains(this.getInvited(), id);
 	};
+
 	this.isPublic = function(){
 		return this.getGame().isPublic;
 	};
 
 	this.leaveGame = function(){
-		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers())),1);
+		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers(), this.getUser())),1);
 	};
 
 	this.joinGame = function(){
-		that = this;
+		var that = this;
 		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameid})
 		.success(function(data, status, headers, config){
-			if(that.isInvited()){
-				players.push(that.contains(that.getInvited()));
-				that.getInvited().splice(that.getInvited().indexOf(that.contains(that.getInvited())),1);
+			var player = that.contains(that.getInvited(), that.getUser());
+			if(that.isInvited(that.getUser())){
+				players.push(player);
+				that.getInvited().splice(that.getInvited().indexOf(player),1);
 			}
 			else{
 				players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
@@ -122,15 +129,43 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.declineGame = function(){
-		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited())),1);
+		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited(), this.getUser())),1);
 	};
 /*
 	this.requestJoin = function(){
 
 	};
 	*/
+
+	this.isToggled = function(friend){
+		var index = this.getInvites().indexOf(friend);
+		if(index >= 0) return true;
+		else return false;
+	};
+
+	this.toggleInvite = function(friend){
+		var index = this.getInvites().indexOf(friend);
+		if(index === -1){
+			this.getInvites().push(friend);
+		}
+		else{
+			this.getInvites().splice(index, 1);
+		}
+	};
+
 	this.inviteFriends = function(){
-		console.log("does this work?");
+		var that = this;
+		for(var i = 0; i < this.getInvites().length; i++){
+			var friend = that.getInvites()[i];
+			that.getInvited().push(friend);
+			that.getFriends().splice(that.getFriends().indexOf(that.contains(that.getFriends(), friend.login)), 1);
+		}
+		this.getInvites().length = 0;
+		console.log(this.invites);
+		console.log('invites');
+		console.log(this.getInvites());
+		console.log('friend');
+		console.log(this.getFriends());
 	};
 
 	this.getMessages = function(){
@@ -138,9 +173,9 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.postMessage = function(post){
-		that = this;
+		var that = this;
 
-		
+
 		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameid, message: post})
 		.success(function(data, status, headers, config){
 			$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});

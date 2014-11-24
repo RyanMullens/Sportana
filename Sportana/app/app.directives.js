@@ -34,7 +34,7 @@ app.directive('popOver', function ($compile) {
     link: function (scope, element, attrs) {
       var popOverContent;
       if (scope.that) {
-        var html = "<div class='invite-popover'><div ng-repeat='friend in that.getFriends() track by $index' class='checkbox'><label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label></div><button type='button' class='btn btn-primary' ng-click='that.inviteFriends()'>Invite</button></div>";
+        var html = "<div class='invite-popover'><div ng-repeat='friend in that.getFriends() track by $index'><div ng-click='that.toggleInvite(friend)' ng-class='{selected: that.isToggled(friend)}'>{{friend.firstname}} {{friend.lastname}}</div></div><button type='button' class='btn btn-primary' ng-click='that.inviteFriends()'>Invite</button></div>";
         popOverContent = $compile(html)(scope);
       }
       var options = {

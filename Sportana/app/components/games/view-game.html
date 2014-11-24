@@ -1,8 +1,8 @@
 <div id="viewGame" ng-show="viewGame.isGameLoaded()">
-	<div class="alert alert-warning" ng-hide="viewGame.isPublic() || viewGame.isJoined() || viewGame.isInvited()">
+	<div class="alert alert-warning" ng-hide="viewGame.isPublic() || viewGame.isJoined() || viewGame.isInvited(viewGame.getUser())">
 		This game is private, please ask the creator to invite you if you wish to join.
 	</div>
-	<div ng-show="viewGame.isPublic() || viewGame.isJoined() || viewGame.isInvited()">
+	<div ng-show="viewGame.isPublic() || viewGame.isJoined() || viewGame.isInvited(viewGame.getUser())">
 		<h1 class="page-header" ng-init="game = viewGame.getGame()">Game Info</h1>
 		<div class="row">
 			<div class="col-md-6">
@@ -26,85 +26,52 @@
 					Current Players: ({{viewGame.getPlayers().length}})
 					<div class="btn-group" ng-show="viewGame.isJoined()">
 						<span class="btn btn-primary" pop-over that="viewGame.getThis()" title="Invite Friends">Invite</span>
-					<!--
-					<span class="btn btn-primary" pop-over items="items", title="Mode of transport">Invite</span>
-
-						<script type="text/javascript">
-							$(document).ready(function(){
-								$('[data-toggle="popover"]').popover();   
-							});
-						</script>
-					<button type="button" class="btn btn-primary" data-container="#viewGame .invite" data-toggle="popover" data-placement="right" data-html="true" data-content="
-					<form>
-						<div ng-repeat='friend in viewGame.getFriends() track by $index' class='checkbox'>
-							<label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label>
-						</div>							
-						<button type='button' class='btn btn-primary' ng-click='viewGame.inviteFriends()'>
-							Invite
-						</button>
-					</form>">
-					Invite
-				</button>
-						
-						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>	Invite 
-						</button>
-											
-						<div class="dropdown-menu">
-							<form>
-								<div ng-repeat="friend in viewGame.getFriends() track by $index" class="checkbox">
-									<label><input type="checkbox" value="{{friend.id}}">{{friend.firstname}} {{friend.lastname}}</label>
-								</div>							
-								<button type="button" class="btn btn-primary" ng-click="viewGame.inviteFriends()">
-									Invite
-								</button>
-							</form>
-						</div>
-					-->
-				</div>
-			</div>
-			<div class="row players">
-				<script type="text/javascript">
-					$(document).ready(function(){
-						$('[data-toggle="tooltip"]').tooltip();   
-					});
-				</script>
-				<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
-			</div>
-			<div class="row invited">
-				<a ng-repeat="player in viewGame.getInvites() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
-			</div>
-		</div>
-		<div class="col-md-6" ng-show="viewGame.isMessagesLoaded()">
-			<div class="messages-container">
-				<span class="alert alert-info" ng-hide="viewGame.isJoined()">
-					You must join the game to view and post messages.
-				</span>
-				<div class="row messages" ng-show="viewGame.isJoined()">
-					<div class="message" ng-repeat="message in viewGame.getMessages()">
-						<div class="from">
-							{{message.from}}
-						</div>
-						<div class="message">
-							{{message.message}}
-						</div>
-						<div class ="time">
-							{{message.time | date}}
-						</div>
 					</div>
-					<form class="enter-message">
-						<input type="text" placeholder="Enter your message..." maxlength="500" ng-model="message">
-						<button type="submit" ng-click="viewGame.postMessage(message)" class="btn btn-primary">Send</button>
-					</form>
+				</div>
+				<div class="row players">
+					<script type="text/javascript">
+						$(document).ready(function(){
+							$('[data-toggle="tooltip"]').tooltip();   
+						});
+					</script>
+					<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
+				</div>
+				
+				<div class="row invited">
+					<a ng-repeat="player in viewGame.getInvited() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
+				</div>
+				
+			</div>
+			<div class="col-md-6" ng-show="viewGame.isMessagesLoaded()">
+				<div class="messages-container">
+					<span class="alert alert-info" ng-hide="viewGame.isJoined()">
+						You must join the game to view and post messages.
+					</span>
+					<div class="row messages" ng-show="viewGame.isJoined()">
+						<div class="message" ng-repeat="message in viewGame.getMessages()">
+							<div class="from">
+								{{message.from}}
+							</div>
+							<div class="message">
+								{{message.message}}
+							</div>
+							<div class ="time">
+								{{message.time | date}}
+							</div>
+						</div>
+						<form class="enter-message">
+							<input type="text" placeholder="Enter your message..." maxlength="500" ng-model="message">
+							<button type="submit" ng-click="viewGame.postMessage(message)" class="btn btn-primary">Send</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
+		<div class="row">
+		<!-- <button type="button" class="btn btn-primary" ng-click="viewGame.requestJoin()" ng-show="!viewGame.isPublic() && !viewGame.isJoined() && !viewGame.isInvited(viewGame.getUser())">Request to Join</button> -->
+			<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="viewGame.isJoined()">Leave Game</button>
+			<button type="button" class="btn btn-success" ng-click="viewGame.joinGame()" ng-show="viewGame.isInvited(viewGame.getUser()) || (viewGame.isPublic() && !viewGame.isJoined())">Join Game</button>
+			<button type="button" class="btn btn-danger" ng-click="viewGame.declineGame()" ng-show="viewGame.isInvited(viewGame.getUser())">Decline</button>
+		</div>
 	</div>
-	<div class="row">
-		<!-- <button type="button" class="btn btn-primary" ng-click="viewGame.requestJoin()" ng-show="!viewGame.isPublic() && !viewGame.isJoined() && !viewGame.isInvited()">Request to Join</button> -->
-		<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="viewGame.isJoined()">Leave Game</button>
-		<button type="button" class="btn btn-success" ng-click="viewGame.joinGame()" ng-show="viewGame.isInvited() || (viewGame.isPublic() && !viewGame.isJoined())">Join Game</button>
-		<button type="button" class="btn btn-danger" ng-click="viewGame.declineGame()" ng-show="viewGame.isInvited()">Decline</button>
-	</div>
-</div>
 </div>
