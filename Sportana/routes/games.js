@@ -476,7 +476,17 @@ router.put('/queue', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			// DBC Call
+			dbc.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
 		}
 	});
 	

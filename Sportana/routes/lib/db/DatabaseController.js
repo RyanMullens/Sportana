@@ -1261,4 +1261,29 @@ exports.removeQueueProfiles(username, all, profiles, callback) {
   });
 };
 
+exports.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive, callback) {
+  pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var now = timeHelper.getCurrentDateAndTime();
+    	  var queriesCompleted = 0;
+    	  var SQLQuery = "UPDATE Queue SET location=$1, minAge=$2, maxAge=$3, isCompetitive=$4 WHERE Queue.login=$5 AND Queue.pid=$6";
+	    	  client.query(SQLQuery, [city, ageMin, ageMax, competitive, username, queueID], function(err, result) {
+	    	    done();
+               	client.end();
+               	// This cleans up connected clients to the database and allows subsequent requests to the database
+               	pg.end();
+               if(err){
+          	 	callback(err);
+               }
+               else {
+               	callback(undefined);
+               }
+              });
+           }
+    }
+  });
+};
 
