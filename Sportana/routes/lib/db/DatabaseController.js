@@ -1045,7 +1045,7 @@ exports.getMessages = function(creator, gameID, callback) {
     else {
     	var SQLQuery = "SELECT GameWallPost.post, GameWallPost.timePosted, Users.firstName, Users.lastName, Users.login " +
     				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) " +
-    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.pid";
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.timePosted DESC";
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {
@@ -1209,6 +1209,56 @@ exports.getQueueProfile(username, callback) {
       });
     }
   });
-
 };
+
+exports.removeQueueProfiles(username, all, profiles, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err);
+    }
+    else {
+    	if (all) {
+    	var SQLQuery = "DELETE FROM Queue WHERE Queue.login = $1";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err);
+        	}
+        	else {
+          		callback(undefined);
+        	}
+      });
+    	} else {
+    	  var queriesCompleted = 0;
+    	  var SQLQuery = "DELETE FROM Queue WHERE (Queue.login = $1) AND (Queue.pid = $2)";
+    	  for (var i = 0; i < profiles.length; i++) {
+    	      var id = profiles[i].queueID;
+	    	  client.query(SQLQuery, [username, id], function(err, result) {
+               if(err){
+          	 	callback(err);
+               }
+               else {
+                queriesCompleted++;
+          		if (queriesCompleted >= profiles.length) {
+          			done();
+               		client.end();
+               		// This cleans up connected clients to the database and allows subsequent requests to the database
+               		pg.end();
+               		callback(undefined);
+          		}
+               }
+              });
+           }
+    	}
+    }
+  });
+};
+
 

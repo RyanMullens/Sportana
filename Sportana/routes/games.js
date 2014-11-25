@@ -358,8 +358,9 @@ router.get('/queue', function (req, res) {
  * }
  *****************************************************
  */
-router.delete('/queue/:profileID', function (req, res) {
-	var pid = req.params.profileID;
+router.delete('/queue', function (req, res) {
+	var all = req.body.all;
+	var profiles = req.body.profiles;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
@@ -369,8 +370,17 @@ router.delete('/queue/:profileID', function (req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			// dbc call... table is SearchPreferences not queue - kinda confusing sorry
-			// look at createTables for the structure
+			dbc.removeQueueProfiles(username, all, profiles, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
 		}
 	});
 });
