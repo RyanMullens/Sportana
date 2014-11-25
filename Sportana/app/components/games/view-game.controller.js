@@ -22,8 +22,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	$scope.invites = [];
 
 	var invited = [];
-	
-	$(".panel-body").prop({ scrollTop: $(".panel-body").prop("scrollHeight") });
+
 
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
@@ -175,6 +174,8 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getMessages = function(){
+
+		$("#messages").scrollTop($("#messages")[0].scrollHeight);
 		return $scope.messages;
 	};
 
