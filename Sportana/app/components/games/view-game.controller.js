@@ -12,7 +12,8 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
-	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
+	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'},
+	{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}
 	];
 
 	$scope.friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
@@ -20,9 +21,9 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	];
 	$scope.invites = [];
 
-	var invited = [{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}];
-
-
+	var invited = [];
+	
+	$(".panel-body").prop({ scrollTop: $(".panel-body").prop("scrollHeight") });
 
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)

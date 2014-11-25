@@ -47,28 +47,44 @@
 					<span class="alert alert-info" ng-hide="viewGame.isJoined()">
 						You must join the game to view and post messages.
 					</span>
-					<div class="row messages" ng-show="viewGame.isJoined()">
-						<div class="message" ng-repeat="message in viewGame.getMessages()">
-							<div class="from">
-								{{message.from}}
-							</div>
-							<div class="message">
-								{{message.message}}
-							</div>
-							<div class ="time">
-								{{message.time | date}}
-							</div>
-						</div>
-						<form class="enter-message">
-							<input type="text" placeholder="Enter your message..." maxlength="500" ng-model="message">
-							<button type="submit" ng-click="viewGame.postMessage(message)" class="btn btn-primary">Send</button>
+					<div class="panel-body" ng-show="viewGame.isJoined()">
+						<ul id="messages">
+							<li class="message left clearfix" ng-repeat="message in viewGame.getMessages()">
+								<!--
+								<span class="chat-img pull-left">
+									PLACE IMAGE HERE 
+								</span>
+								-->
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="primary-font">{{message.from}}</strong> 
+										<small class="pull-right text-muted">
+											<span class="glyphicon glyphicon-time"></span>{{message.time | date}}
+										</small>
+									</div>
+									<p>
+										{{message.message}}
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- USE THIS FOR SCROLL TO BOTTOM: https://github.com/Luegg/angularjs-scroll-glue -->
+					<div class="panel-footer">
+						<form class="input-group">
+							<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." ng-model="message">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary btn-sm" ng-click="viewGame.postMessage(message)" id="btn-chat">
+									Send
+								</button>
+							</span>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-		<!-- <button type="button" class="btn btn-primary" ng-click="viewGame.requestJoin()" ng-show="!viewGame.isPublic() && !viewGame.isJoined() && !viewGame.isInvited(viewGame.getUser())">Request to Join</button> -->
+			<!-- <button type="button" class="btn btn-primary" ng-click="viewGame.requestJoin()" ng-show="!viewGame.isPublic() && !viewGame.isJoined() && !viewGame.isInvited(viewGame.getUser())">Request to Join</button> -->
 			<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="viewGame.isJoined()">Leave Game</button>
 			<button type="button" class="btn btn-success" ng-click="viewGame.joinGame()" ng-show="viewGame.isInvited(viewGame.getUser()) || (viewGame.isPublic() && !viewGame.isJoined())">Join Game</button>
 			<button type="button" class="btn btn-danger" ng-click="viewGame.declineGame()" ng-show="viewGame.isInvited(viewGame.getUser())">Decline</button>
