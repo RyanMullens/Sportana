@@ -1171,3 +1171,44 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
     }
   });
 };
+
+exports.getQueueProfile(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Queue.pid, Queue.sport, Queue.location, Queue.minAge, Queue.maxAge, Queue.isCompetitive FROM Queue " +
+    				   "WHERE (Queue.login = $1)";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var profiles = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var profile = {};
+          			profile.queueID = result.rows[i].pid;
+          			profile.sport = result.rows[i].sport;
+          			profile.city = result.rows[i].location;
+          			profile.ageMin = result.rows[i].minage;
+          			profile.ageMax = result.rows[i].maxage;
+          			profile.competitive = result.rows[i].iscompetitive;
+  					
+		  		}
+          		callback(undefined, profiles);
+        	}
+      });
+    }
+  });
+
+};
+
