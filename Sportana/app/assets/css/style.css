@@ -309,12 +309,15 @@ body {
   }
   #create-game .age {
     margin-top: 10;
+    width: 100%;
   }
   #create-game .player {
     margin-top: 10;
+    width: 100%;
   }
   #create-game .game-type {
     margin-top: 10;
+    width: 100%;
   }
 
   .hairline {

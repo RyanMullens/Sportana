@@ -1,90 +1,63 @@
 // Created by: @bread on 10/25
 app.controller("QueueSportController", function($location, QueueService, $http, $scope, $state)
 {
-	var sports = [
-		{icon: "/images/icon_73766.png", name: "Basketball", 	description: "A game about hoops and nets."},
-		{icon: "/images/icon_73766.png", name: "Baseball", 		description: "A game about bases."},
-		{icon: "/images/icon_73766.png", name: "Football", 		description: "A game about hands..."},
-		{icon: "/images/icon_73766.png", name: "Soccer", 			description: "A game about feet..."},
-		{icon: "/images/icon_73766.png", name: "Tennis", 			description: "A game about two-us."},
-		{icon: "/images/icon_73766.png", name: "Billiards", 	description: "A game about sticks and geometry."},
-		{icon: "/images/icon_73766.png", name: "Swimming", 		description: "Not a game.  Water thingy."},
-		{icon: "/images/icon_73766.png", name: "Hiking", 			description: "Moving up mountains."},
-		{icon: "/images/icon_73766.png", name: "Biking", 			description: "Moving up roads."},
-	];
 
-	var selectedSports = [];
+	$scope.queue = QueueService;
+	console.log($scope.queue);
+
+	var sports = $scope.queue.getSports();
+
+	var selectedSports = $scope.queue.getSelectedSports();
 
 	// When the page is loaded
 	this.init = function() {
-		selectedSports = QueueService.getSports();
+		$scope.queue.init();
 	}
 
 	// When moving to another section in the preferences
 	this.finish = function() {
-		QueueService.setSports(selectedSports);
-		$state.go('queueLocation');
-		this.selectedSports = [];
-    }
+		// TODO
+  }
 
     // When a Sport is selected
 	this.toggle = function(sport) {
-
-		var index = selectedSports.indexOf(sport);
-		if(index === -1) {
-			selectedSports.push(sport);
-		} else {
-			selectedSports.splice(index, 1);
-		}
-		return;
+		$scope.queue.toggle(sport);
 	}
 
 	this.getSelectedSports = function() {
-		return selectedSports;
+		return 	$scope.queue.getSelectedSports();
 	}
 
 	this.hasSelectedSports = function() {
-		return selectedSports.length > 0;
+		return 	$scope.queue.hasSelectedSports();
 	}
 
 	this.getSports = function() {
-		return sports;
+		return 	$scope.queue.sports;
 	}
 
 	this.isSelected = function(sport) {
-		return (selectedSports.indexOf(sport) != -1) ? true : false;
+		return 	$scope.queue.isSelected(sport);
 	}
 
 	this.addSport = function(sport) {
-		if (selectedSports.indexOf(sport) != -1) return;
-		selectedSports.push(sport);
+		$scope.queue.addSport(sport);
 	}
 
 	this.removeSport = function(sport) {
-		var index = selectedSports.indexOf(sport);
-		if(index === -1) return;
-		selectedSports.splice(index, 1);
+		$scope.queue.removeSport(sport);
 	}
 
 	/*******************************************************************************************/
 
-	$scope.gameDate = new Date();
-	$scope.gameTime = {
-		start: 	new Date(2999,01,01,12,00,00),
-		end: 		new Date(2999,01,01,15,00,00)
-	};
 	$scope.gameLocation = {
 		city: "Amherst"
 	};
 	$scope.players = {
 		minAge: "No Preference",
 		maxAge: "No Preference",
-		minAmount: "No Preference",
-		maxAmount: "No Preference"
 	};
 	$scope.competitive = false;
-	$scope.public = true;
-
 
 	/********** AGE **********/
 
@@ -141,61 +114,6 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 		return result;
 	};
 
-	/********** AMOUNT **********/
-
-	$scope.playersMin = function() {
-		return $scope.playerAmounts("min");
-	}
-	$scope.playersMax = function() {
-		return $scope.playerAmounts("max");
-	}
-
-	$scope.toggleMinAmount = function(amount) {
-		$scope.players.minAmount = amount;
-	};
-	$scope.toggleMaxAmount = function(amount) {
-		$scope.players.maxAmount = amount;
-	};
-
-	$scope.playerAmounts = function(type) {
-
-		var result = [];
-
-		result.push("No Preference");
-		for (var i = 2; i <= 9; i++) {
-			if(type == "max") {
-				if($scope.players.minAmount === "No Preference") {
-					result.push(i);
-				} else if(i >= $scope.players.minAmount) {
-					result.push(i);
-				}
-			} else {
-				if($scope.players.maxAmount === "No Preference") {
-					result.push(i);
-				} else if(i <= $scope.players.maxAmount) {
-					result.push(i);
-				}
-			}
-		}
-		for (var i = 10; i <= 20; i+=2) {
-			if(type == "max") {
-				if($scope.players.minAmount === "No Preference") {
-					result.push(i);
-				} else if(i >= $scope.players.minAmount) {
-					result.push(i);
-				}
-			} else {
-				if($scope.players.maxAmount === "No Preference") {
-					result.push(i);
-				} else if(i <= $scope.players.maxAmount) {
-					result.push(i);
-				}
-			}
-		}
-
-		return result;
-	};
-
 	$scope.isReady = function() {
 		return true;
 	};
@@ -204,23 +122,7 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 
 		if($scope.isReady()) {
 
-			Date.prototype.yyyymmdd = function() {
-				var yyyy = this.getFullYear().toString();
-				var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-				var dd  = this.getDate().toString();
-				return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
-			};
 
-			Date.prototype.hhmmss = function() {
-				var hh = this.getHours().toString();
-				var mm = this.getMinutes().toString();
-				var ss = this.getSeconds().toString();
-				return (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + ":" + (ss[1]?dd:"0"+ss[0]); // padding
-			};
-
-			var dateString = $scope.gameDate.yyyymmdd();
-			var startString = $scope.gameTime.start.hhmmss();
-			var endString = $scope.gameTime.end.hhmmss();
 
 			/**
 			*****************************************************
@@ -247,23 +149,17 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 			*****************************************************
 			*/
 
-			var gameInformation = {
+			var queuePreferences = {
 				sportID: 			$scope.selectedSport.sport,
-				gameDate: 		dateString,
-				startTime: 		startString,
-				endTime: 			endString,
 				location: 		$scope.gameLocation.city,
 				minAge: 			($scope.players.minAge === "No Preference") ? 16 : $scope.players.minAge,
 				maxAge: 			($scope.players.maxAge === "No Preference") ? 100 : $scope.players.maxAge,
-				minPlayers: 	($scope.players.minAmount === "No Preference") ? 2 : $scope.players.minAmount,
-				maxPlayers: 	($scope.players.maxAmount === "No Preference") ? 25 : $scope.players.maxAmount,
 				type: 				($scope.competitive) ? 0 : 1,
-				status: 			($scope.public) ? 1 : 0
 			};
 
-			console.log(gameInformation);
+			console.log(queuePreferences);
 
-			$http.put('/api/games', gameInformation)
+			$http.put('/api/games', queuePreferences)
 			.then(function (res) {
 				if(res.data.success) {
 					console.log(res.data);
