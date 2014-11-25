@@ -305,6 +305,21 @@ CREATE OR REPLACE FUNCTION update_searchProfileID()
 	   		RETURN NEW;
 	END;
 	$$ language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION add_participant_from_notification()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		IF (NEW.type = 1) THEN
+	   		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications)
+	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 2,
+	   				(SELECT COUNT(*) FROM GameWallPost WHERE (gameCreator=NEW.creator) AND (gameID=NEW.gameID)));
+		END IF;	   
+	   		RETURN NEW;
+	END;
+$$ language 'plpgsql';	
+	
 	
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
@@ -344,4 +359,9 @@ CREATE TRIGGER auto_increment_notificationID
 CREATE TRIGGER auto_increment_searchProfileID
 	BEFORE INSERT ON SearchProfile
 	FOR EACH ROW
-	EXECUTE PROCEDURE update_searchProfileID();  	
+	EXECUTE PROCEDURE update_searchProfileID();
+	
+CREATE TRIGGER add_participant_from_notification
+	BEFORE INSERT ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE add_participant_from_notification();		
