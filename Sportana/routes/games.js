@@ -136,60 +136,6 @@ router.post('/join', function(req, res) {
 
 /**
  *****************************************************
- * POST	/games/queue
- * Wait for a game
- *
- * REQUEST:
- * {
- *  "sports"       : [{
- *    "sport"      : string
- *  }]
- *	"city"         : string
- *	"ageMin"       : int
- *	"ageMax"       : int
- *	"competitive"  : boolean
- * }
- *
- * RESPONSE:
- * {
- * 	“message”  : string // empty on success
- * 	“success”  : boolean
- * }
- *****************************************************
- */
-router.post('/queue', function(req, res) {
-	var sports = req.body.sports;
-	var city = req.body.city;
-	var ageMin = req.body.ageMin;
-	var ageMax = req.body.ageMax;
-	var isCompetitive = req.body.competitive;
-	var auth = req.get('SportanaAuthentication');	
-	authenticator.deserializeUser(auth, function(err, username) {
-		var response ={};
-		if (err || (!username)) {
-			response.message = "Error with authentication";
-			response.success = false;
-          res.write(JSON.stringify(response));
-          res.end();
-		} else {
-			dbc.waitForGame(username, sports, city, ageMin, ageMax, isCompetitive, function(err) {
-				if (err) {
-					response.message = err;
-					response.success = false;
-				} else {
-					response.message = "";
-					response.success = true;
-				}
-				res.write(JSON.stringify(response));
-          		res.end();
-			});
-		}
-	});
-	
-});
-
-/**
- *****************************************************
  * GET	/games/messages?creator={creator}
  *					   &gameID={gameID}
  * Get messages in game wall
@@ -413,6 +359,115 @@ router.delete('/queue/:profileID', function (req, res) {
 			// look at createTables for the structure
 		}
 	});
+});
+
+/**
+ *****************************************************
+ * PUT	/games/queue
+ * Wait for a game
+ *
+ * REQUEST:
+ * {
+ *  "sports"       : [{
+ *    "sport"      : string
+ *  }]
+ *	"city"         : string
+ *	"ageMin"       : int
+ *	"ageMax"       : int
+ *	"competitive"  : boolean
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
+ * }
+ *****************************************************
+ */
+router.put('/queue', function(req, res) {
+	var sports = req.body.sports;
+	var city = req.body.city;
+	var ageMin = req.body.ageMin;
+	var ageMax = req.body.ageMax;
+	var isCompetitive = req.body.competitive;
+	var auth = req.get('SportanaAuthentication');	
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.waitForGame(username, sports, city, ageMin, ageMax, isCompetitive, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+	
+});
+
+
+/**
+ *****************************************************
+ * POST	/games/queue
+ * Update queueing preferences
+ *
+ * REQUEST:
+ * {
+ *  "sports"       : [{
+ *    "sport"      : string
+ *  }]
+ *	"city"         : string
+ *	"ageMin"       : int
+ *	"ageMax"       : int
+ *	"competitive"  : boolean
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”  : string // empty on success
+ * 	“success”  : boolean
+ * }
+ *****************************************************
+ */
+router.put('/queue', function(req, res) {
+	var sports = req.body.sports;
+	var city = req.body.city;
+	var ageMin = req.body.ageMin;
+	var ageMax = req.body.ageMax;
+	var isCompetitive = req.body.competitive;
+	var auth = req.get('SportanaAuthentication');	
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.waitForGame(username, sports, city, ageMin, ageMax, isCompetitive, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+	
 });
 
 module.exports = router;
