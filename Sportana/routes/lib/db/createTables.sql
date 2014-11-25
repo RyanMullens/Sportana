@@ -297,7 +297,7 @@ CREATE OR REPLACE FUNCTION add_participant_from_notification()
 	BEGIN
 		IF (NEW.type = 1 OR NEW.type = 2) THEN
 	   		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications)
-	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 2,
+	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 1,
 	   				(SELECT COUNT(*) FROM GameWallPost WHERE (gameCreator=NEW.creator) AND (gameID=NEW.gameID)));
 		END IF;	   
 	   		RETURN NEW;

@@ -555,6 +555,13 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
   });
 };
 
+/*
+ *  "players"       : [{
+ *	  "login"  : string
+ *    "name"   : string
+ *    "status" : int // 0: going, 1: queued (Sportana has added them to a game), 2: no response
+ *   }]
+ */
 exports.getGameInfo = function(gameCreator, gameID, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
@@ -593,6 +600,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
             callback(undefined, gameInfo);
+            // QUERY FOR PARTICIPANTS
           }
       });
     }

@@ -258,6 +258,11 @@ router.post('/messages', function(req, res) {
  *  "maxPlayers"    : int
  *  "reservedSpots" : int
  *  "isPublic"	 	: boolean
+ *  "players"       : [{
+ *	  "login"  : string
+ *    "name"   : string
+ *    "status" : int // 0: going, 1: queued (Sportana has added them to a game), 2: no response
+ *   }]
  * }
  *****************************************************
  */
