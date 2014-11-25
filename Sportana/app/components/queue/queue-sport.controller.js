@@ -2,51 +2,70 @@
 app.controller("QueueSportController", function($location, QueueService, $http, $scope, $state)
 {
 
-	$scope.queue = QueueService;
-	console.log($scope.queue);
-
-	var sports = $scope.queue.getSports();
-
-	var selectedSports = $scope.queue.getSelectedSports();
+	$scope.sports = [];
+	var selectedSports = [];
 
 	// When the page is loaded
 	this.init = function() {
-		$scope.queue.init();
+
+		QueueService.getSports()
+		.then(function (sports) {
+			$scope.sports = sports;
+		}, function (err) {
+
+			console.log("NO SPORTS FOUND! GASP!");
+
+		});
+		// selectedSports = QueueService.getSports();
 	}
 
 	// When moving to another section in the preferences
 	this.finish = function() {
-		// TODO
-  }
+		// QueueService.setSports(selectedSports);
+		// $state.go('queueLocation');
+		// this.selectedSports = [];
+	}
 
-    // When a Sport is selected
+	// When a Sport is selected
 	this.toggle = function(sport) {
-		$scope.queue.toggle(sport);
+
+		var index = selectedSports.indexOf(sport);
+		if(index === -1) {
+			selectedSports.push(sport);
+		} else {
+			selectedSports.splice(index, 1);
+		}
+		return;
 	}
 
 	this.getSelectedSports = function() {
-		return 	$scope.queue.getSelectedSports();
+		return selectedSports;
 	}
 
 	this.hasSelectedSports = function() {
-		return 	$scope.queue.hasSelectedSports();
+		return selectedSports.length > 0;
 	}
 
 	this.getSports = function() {
-		return 	$scope.queue.sports;
+		return sports;
 	}
 
 	this.isSelected = function(sport) {
-		return 	$scope.queue.isSelected(sport);
+		return (selectedSports.indexOf(sport) != -1) ? true : false;
 	}
 
 	this.addSport = function(sport) {
-		$scope.queue.addSport(sport);
+		if (selectedSports.indexOf(sport) != -1) return;
+		selectedSports.push(sport);
 	}
 
 	this.removeSport = function(sport) {
-		$scope.queue.removeSport(sport);
+		var index = selectedSports.indexOf(sport);
+		if(index === -1) return;
+		selectedSports.splice(index, 1);
 	}
+
+	this.init();
 
 	/*******************************************************************************************/
 

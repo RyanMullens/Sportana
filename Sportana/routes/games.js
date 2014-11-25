@@ -390,7 +390,7 @@ router.put('/queue', function(req, res) {
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	var auth = req.get('SportanaAuthentication');	
+	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -412,7 +412,7 @@ router.put('/queue', function(req, res) {
 			});
 		}
 	});
-	
+
 });
 
 
@@ -445,7 +445,7 @@ router.put('/queue', function(req, res) {
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	var auth = req.get('SportanaAuthentication');	
+	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -467,7 +467,7 @@ router.put('/queue', function(req, res) {
 			});
 		}
 	});
-	
+
 });
 
 module.exports = router;

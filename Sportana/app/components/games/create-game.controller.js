@@ -181,16 +181,18 @@ app.controller("CreateGameController", function($http, $scope)
 			* PUT	/games
 			* REQUEST:
 			* {
-			* 	“sportID"    : string
-			*  "gameDate" 	 : date // yyyy-mm-dd
-			*  "startTime"  : time // hh:mm:ss
-			*  "endTime"    : time // hh:mm:ss
-			*  "location"   : string
-			*  "minAge"	 : int
-			*  "maxAge"	 : int
-			*  "minPlayers" : int
-			*  "maxPlayers" : int
-			*  "status"	 : int // 1: public, 0: not public
+			* 	“sportID"       : string
+			*  "gameDate" 	    : date // yyyy-mm-dd
+			*  "startTime"     : time // hh:mm:ss
+			*  "endTime"       : time // hh:mm:ss
+			*  "location"      : string
+			*  "minAge"	    : int
+			*  "maxAge"	    : int
+			*  "minPlayers"    : int
+			*  "maxPlayers"    : int
+			*  "reservedSpots" : int
+			*  "public"	    : boolean
+			*  "competitive"   : boolean
 			* }
 			*
 			* RESPONSE:
@@ -211,8 +213,9 @@ app.controller("CreateGameController", function($http, $scope)
 				maxAge: 			($scope.players.maxAge === "No Preference") ? 100 : $scope.players.maxAge,
 				minPlayers: 	($scope.players.minAmount === "No Preference") ? 2 : $scope.players.minAmount,
 				maxPlayers: 	($scope.players.maxAmount === "No Preference") ? 25 : $scope.players.maxAmount,
-				type: 				($scope.competitive) ? 0 : 1,
-				status: 			($scope.public) ? 1 : 0
+				reservedSpots:0, // TODO : Allow player to set this.
+				competitive: 	($scope.competitive) ? 1 : 0,
+				public: 			($scope.public) ? 1 : 0
 			};
 
 			console.log(gameInformation);
@@ -222,8 +225,8 @@ app.controller("CreateGameController", function($http, $scope)
 					if(res.data.success) {
 						console.log(res.data);
 
-						// TODO : Send friend invites
-						// TODO : REDIRECT TO 'MY GAMES' PAGE
+						// TODO : Send friend invites : Delegated to @VIEW-GAME PAGE
+						// TODO : REDIRECT TO @VIEW-GAME PAGE
 
 					} else {
 						console.log(res.data.message);
