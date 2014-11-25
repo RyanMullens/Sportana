@@ -555,6 +555,13 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
   });
 };
 
+/*
+ *  "players"       : [{
+ *	  "login"  : string
+ *    "name"   : string
+ *    "status" : int // 0: going, 1: queued (Sportana has added them to a game), 2: no response
+ *   }]
+ */
 exports.getGameInfo = function(gameCreator, gameID, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
@@ -593,6 +600,7 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
             gameInfo.maxAge = result.rows[0].maxage;
             gameInfo.isPublic = result.rows[0].ispublic;
             callback(undefined, gameInfo);
+            // QUERY FOR PARTICIPANTS
           }
       });
     }
@@ -1045,7 +1053,7 @@ exports.getMessages = function(creator, gameID, callback) {
     else {
     	var SQLQuery = "SELECT GameWallPost.post, GameWallPost.timePosted, Users.firstName, Users.lastName, Users.login " +
     				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) " +
-    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.pid";
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.timePosted DESC";
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {
@@ -1171,3 +1179,119 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
     }
   });
 };
+
+exports.getQueueProfile(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+    	var SQLQuery = "SELECT Queue.pid, Queue.sport, Queue.location, Queue.minAge, Queue.maxAge, Queue.isCompetitive FROM Queue " +
+    				   "WHERE (Queue.login = $1)";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err, undefined);
+        	}
+        	else {
+          		var profiles = [];
+          		for( var i = 0; i < result.rows.length; i++ ) {
+          			var profile = {};
+          			profile.queueID = result.rows[i].pid;
+          			profile.sport = result.rows[i].sport;
+          			profile.city = result.rows[i].location;
+          			profile.ageMin = result.rows[i].minage;
+          			profile.ageMax = result.rows[i].maxage;
+          			profile.competitive = result.rows[i].iscompetitive;
+  					
+		  		}
+          		callback(undefined, profiles);
+        	}
+      });
+    }
+  });
+};
+
+exports.removeQueueProfiles(username, all, profiles, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err);
+    }
+    else {
+    	if (all) {
+    	var SQLQuery = "DELETE FROM Queue WHERE Queue.login = $1";
+    	client.query({ text : SQLQuery,
+                     values : [username]},
+        function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+         	 callback(err);
+        	}
+        	else {
+          		callback(undefined);
+        	}
+      });
+    	} else {
+    	  var queriesCompleted = 0;
+    	  var SQLQuery = "DELETE FROM Queue WHERE (Queue.login = $1) AND (Queue.pid = $2)";
+    	  for (var i = 0; i < profiles.length; i++) {
+    	      var id = profiles[i].queueID;
+	    	  client.query(SQLQuery, [username, id], function(err, result) {
+               if(err){
+          	 	callback(err);
+               }
+               else {
+                queriesCompleted++;
+          		if (queriesCompleted >= profiles.length) {
+          			done();
+               		client.end();
+               		// This cleans up connected clients to the database and allows subsequent requests to the database
+               		pg.end();
+               		callback(undefined);
+          		}
+               }
+              });
+           }
+    	}
+    }
+  });
+};
+
+exports.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive, callback) {
+  pg.connect(connString, function(err, client, done) {
+    	if(err) {
+    	  callback(err);
+    	}
+    	else {
+    	  var now = timeHelper.getCurrentDateAndTime();
+    	  var queriesCompleted = 0;
+    	  var SQLQuery = "UPDATE Queue SET location=$1, minAge=$2, maxAge=$3, isCompetitive=$4 WHERE Queue.login=$5 AND Queue.pid=$6";
+	    	  client.query(SQLQuery, [city, ageMin, ageMax, competitive, username, queueID], function(err, result) {
+	    	    done();
+               	client.end();
+               	// This cleans up connected clients to the database and allows subsequent requests to the database
+               	pg.end();
+               if(err){
+          	 	callback(err);
+               }
+               else {
+               	callback(undefined);
+               }
+              });
+           }
+    }
+  });
+};
+

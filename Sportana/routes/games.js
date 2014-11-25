@@ -258,6 +258,11 @@ router.post('/messages', function(req, res) {
  *  "maxPlayers"    : int
  *  "reservedSpots" : int
  *  "isPublic"	 	: boolean
+ *  "players"       : [{
+ *	  "login"  : string
+ *    "name"   : string
+ *    "status" : int // 0: going, 1: queued (Sportana has added them to a game), 2: no response
+ *   }]
  * }
  *****************************************************
  */
@@ -303,7 +308,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
  * 	“message”       : string // empty on success
  * 	“success”       : boolean
  *  "profiles"      : [{
- *    "profileID"   : int
+ *    "queueID"   : int
  *    "sport"       : string
  *	  "city"        : string
  *	  "ageMin"      : int
@@ -323,18 +328,32 @@ router.get('/queue', function (req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			// dbc call... table is SearchPreferences not queue - kinda confusing sorry
-			// look at createTables for the structure
+			dbc.getQueueProfile(username, function(err, profiles) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.profiles = profiles;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
 		}
 	});
 });
 
 /**
  *****************************************************
- * DELETE	/games/queue/{profileID}
- * Delete queue profile
+ * DELETE	/games/queue/
+ * Delete given queue profiles
  * REQUEST:
  * {
+ *	 "all"      : boolean // drop all queueing profiles from queue
+ *   "profiles" : [{
+ *		"queueID" : int
+ *   }]
  * }
  *
  * RESPONSE:
@@ -344,8 +363,9 @@ router.get('/queue', function (req, res) {
  * }
  *****************************************************
  */
-router.delete('/queue/:profileID', function (req, res) {
-	var pid = req.params.profileID;
+router.delete('/queue', function (req, res) {
+	var all = req.body.all;
+	var profiles = req.body.profiles;
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
@@ -355,8 +375,17 @@ router.delete('/queue/:profileID', function (req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			// dbc call... table is SearchPreferences not queue - kinda confusing sorry
-			// look at createTables for the structure
+			dbc.removeQueueProfiles(username, all, profiles, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
 		}
 	});
 });
@@ -423,9 +452,7 @@ router.put('/queue', function(req, res) {
  *
  * REQUEST:
  * {
- *  "sports"       : [{
- *    "sport"      : string
- *  }]
+ *  "queueID"	   : int
  *	"city"         : string
  *	"ageMin"       : int
  *	"ageMax"       : int
@@ -440,7 +467,7 @@ router.put('/queue', function(req, res) {
  *****************************************************
  */
 router.put('/queue', function(req, res) {
-	var sports = req.body.sports;
+	var queueID = req.body.queueID;
 	var city = req.body.city;
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
@@ -454,7 +481,7 @@ router.put('/queue', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.waitForGame(username, sports, city, ageMin, ageMax, isCompetitive, function(err) {
+			dbc.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive, function(err) {
 				if (err) {
 					response.message = err;
 					response.success = false;
