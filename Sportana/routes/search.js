@@ -82,6 +82,13 @@ router.get('/games', function(req, res) {
  *		"name"    : string
  *		"picture" : string
  *		"city"    : string
+ *      "favoriteSports" : [{
+ *			"sport" : string
+ *			"image" : string
+ *      }]
+ *     "timeliness"      : double
+ *     "friendliness"    : double
+ *	   "competitiveness" : double
  *   }]
  * }
  *****************************************************
