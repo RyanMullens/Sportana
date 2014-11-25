@@ -1045,7 +1045,7 @@ exports.getMessages = function(creator, gameID, callback) {
     else {
     	var SQLQuery = "SELECT GameWallPost.post, GameWallPost.timePosted, Users.firstName, Users.lastName, Users.login " +
     				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) " +
-    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.timePosted DESC";
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.pid";
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {

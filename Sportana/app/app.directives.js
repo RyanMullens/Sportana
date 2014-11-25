@@ -1,18 +1,18 @@
 app.directive('customPopover', function () {
-    return {
-        restrict: 'A',
-        template: '<span>{{label}}</span>',
-        link: function (scope, el, attrs) {
-            scope.label = attrs.popoverLabel;
+  return {
+    restrict: 'A',
+    template: '<span>{{label}}</span>',
+    link: function (scope, el, attrs) {
+      scope.label = attrs.popoverLabel;
 
-            $(el).popover({
-                trigger: 'click',
-                html: true,
-                content: attrs.popoverHtml,
-                placement: attrs.popoverPlacement
-            });
-        }
-    };
+      $(el).popover({
+        trigger: 'click',
+        html: true,
+        content: attrs.popoverHtml,
+        placement: attrs.popoverPlacement
+      });
+    }
+  };
 });
 app.directive('popOver', function ($compile) {
   /*
@@ -75,16 +75,16 @@ app.directive('popOver', function ($compile) {
 </form>
 */
 app.directive('tooltip', function(){
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs){
-            $(element).hover(function(){
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs){
+      $(element).hover(function(){
                 // on mouseenter
                 $(element).tooltip('show');
-            }, function(){
+              }, function(){
                 // on mouseleave
                 $(element).tooltip('hide');
-            });
-        }
-    };
+              });
+    }
+  };
 });
