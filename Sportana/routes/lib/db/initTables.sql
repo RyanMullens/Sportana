@@ -90,35 +90,20 @@ INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
 ('myoda' , 'jbond' , 1 , 'So are we going to play today?');
 
 INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('myoda' , 'Soccer' , 5 , 20 , 'umass');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'Football' , 10 , 45 , 'Mcguirk');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('bwayne' , 'Soccer' , 10 , 35 , 'umass');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('jbond' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('ckent' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO Queue(login , sport , minAge , maxAge , location) values
-('ckent' , 'Soccer' , 10 , 20 , 'umass');
-
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
 ('bwayne' , 'Soccer' , 10 , 20 , 'umass');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('bwayne' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('jbond' , 'Soccer' , 10 , 20 , 'umass');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('myoda' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('ckent' , 'Soccer' , 10 , 20 , 'umass');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('mscott' , 'Basketball' , 10 , 20 , 'Orchard Hill courts');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('bwayne' , 'Football' , 10 , 20 , 'Mcguirk');
-INSERT INTO SearchProfile(login , sport , minAge , maxAge , location) values
+INSERT INTO Queue(login , sport , minAge , maxAge , location) values
 ('mscott' , 'Football' , 10 , 20 , 'Mcguirk');
 
 INSERT INTO Times(login , dateAvailable , startTime , endTime) values

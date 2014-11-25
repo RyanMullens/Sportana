@@ -78,7 +78,7 @@ gameStart TIME,
 gameEnd TIME,
 sport VARCHAR(50),
 location VARCHAR(100),
-numParticipants INT,
+numParticipants INT DEFAULT 0,
 minPlayers INT,
 maxPlayers INT,
 reservedSpots INT,
@@ -161,25 +161,9 @@ sport VARCHAR(50),
 minAge INT,
 maxAge INT,
 location VARCHAR(100),
-PRIMARY KEY(login, sport),
-FOREIGN KEY (login)
-REFERENCES Users(login)
-ON DELETE NO ACTION
-ON UPDATE CASCADE,
-FOREIGN KEY (sport)
-REFERENCES Sport(sport)
-ON DELETE NO ACTION
-ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS SearchProfile(
-login VARCHAR(50),
-sport VARCHAR(50),
-minAge INT,
-maxAge INT,
-location VARCHAR(100),
 pid INT,
 isCompetitive BOOLEAN,
+timeQueued TIMESTAMP,
 PRIMARY KEY (login, pid),
 FOREIGN KEY (login)
 REFERENCES Users(login)
@@ -291,12 +275,12 @@ CREATE OR REPLACE FUNCTION update_unread_posts()
 	END;
 	$$ language 'plpgsql';	
 
-CREATE OR REPLACE FUNCTION update_searchProfileID()
+CREATE OR REPLACE FUNCTION update_queueID()
 	RETURNS TRIGGER AS $$
 	DECLARE
 		x int8;
 	BEGIN
-		x := (SELECT max(pid) FROM SearchProfile WHERE SearchProfile.login = NEW.login);
+		x := (SELECT max(pid) FROM Queue WHERE Queue.login = NEW.login);
 		IF (x > 0) THEN
 	   		NEW.pid = 1 + x;
 		ELSE
@@ -305,7 +289,49 @@ CREATE OR REPLACE FUNCTION update_searchProfileID()
 	   		RETURN NEW;
 	END;
 	$$ language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION add_participant_from_notification()
+	RETURNS TRIGGER AS $$
+	DECLARE
+		x int8;
+	BEGIN
+		IF (NEW.type = 1 OR NEW.type = 2) THEN
+	   		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications)
+	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 2,
+	   				(SELECT COUNT(*) FROM GameWallPost WHERE (gameCreator=NEW.creator) AND (gameID=NEW.gameID)));
+		END IF;	   
+	   		RETURN NEW;
+	END;
+$$ language 'plpgsql';		
+
+CREATE OR REPLACE FUNCTION remove_user_from_queue()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		IF (NEW.type = 2) THEN
+	   		DELETE FROM Queue WHERE ((Queue.login=NEW.userTo) AND 
+	   							     (Queue.sport=(SELECT Game.sport FROM Game
+	   							     			   WHERE Game.creator=NEW.creator AND
+	   							     			   Game.gameID=NEW.gameID)));
+		END IF;	   
+	   	RETURN NEW;
+	END;
+$$ language 'plpgsql';
 	
+CREATE RULE participant_on_duplicate_ignore AS ON INSERT TO Participant
+  WHERE EXISTS(SELECT 1 FROM Participant 
+                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID))
+  DO INSTEAD NOTHING;
+  
+CREATE RULE notification_on_duplicate_ignore AS ON INSERT TO Notifications
+  WHERE EXISTS(SELECT 1 FROM Notifications 
+                WHERE (userTo, type, creator, gameID)=(NEW.userTo, NEW.type, NEW.creator, NEW.gameID))
+  DO INSTEAD NOTHING;
+
+CREATE RULE queue_on_duplicate_ignore AS ON INSERT TO Queue
+  WHERE EXISTS(SELECT 1 FROM Queue 
+                WHERE (login, sport)=(NEW.login, NEW.sport))
+  DO INSTEAD NOTHING;
+
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
 	FOR EACH ROW
@@ -341,7 +367,17 @@ CREATE TRIGGER auto_increment_notificationID
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_notificationID();  	
 	
-CREATE TRIGGER auto_increment_searchProfileID
-	BEFORE INSERT ON SearchProfile
+CREATE TRIGGER auto_increment_queueID
+	BEFORE INSERT ON Queue
 	FOR EACH ROW
-	EXECUTE PROCEDURE update_searchProfileID();  	
+	EXECUTE PROCEDURE update_queueID();
+	
+CREATE TRIGGER add_participant_from_notification
+	BEFORE INSERT ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE add_participant_from_notification();
+	
+CREATE TRIGGER remove_from_queue
+	AFTER INSERT ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE remove_user_from_queue();		

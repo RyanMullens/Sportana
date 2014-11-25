@@ -1045,7 +1045,7 @@ exports.getMessages = function(creator, gameID, callback) {
     else {
     	var SQLQuery = "SELECT GameWallPost.post, GameWallPost.timePosted, Users.firstName, Users.lastName, Users.login " +
     				   "FROM GameWallPost INNER JOIN Users ON (GameWallPost.userPosting = Users.login) " +
-    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.timePosted DESC";
+    				   "WHERE (GameWallPost.gameCreator = $1) AND (GameWallPost.gameID = $2) ORDER BY GameWallPost.pid";
     	client.query({ text : SQLQuery,
                      values : [creator, gameID]},
         function (err, result) {
@@ -1099,25 +1099,33 @@ exports.removeFriendRequest = function(username, friendLogin, callback) {
 	});
 };
 
-exports.waitForGame = function(login, sport, city, ageMin, ageMax, isCompetitive, callback) {
+exports.waitForGame = function(login, sports, city, ageMin, ageMax, isCompetitive, callback) {
   pg.connect(connString, function(err, client, done) {
     	if(err) {
     	  callback(err);
     	}
     	else {
-    	  var SQLQuery = "INSERT INTO SearchProfile(login, sport, location, minAge, maxAge, isCompetitive) VALUES ($1, $2, $3, $4, $5, $6)";
-    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive], function(err, result) {
-              done();
-              client.end();
-              // This cleans up connected clients to the database and allows subsequent requests to the database
-              pg.end();
-              if(err){
-          		callback(err);
-              }
-              else {
-          		callback(undefined);
-              }
-         });
+    	  var now = timeHelper.getCurrentDateAndTime();
+    	  var queriesCompleted = 0;
+    	  var SQLQuery = "INSERT INTO Queue(login, sport, location, minAge, maxAge, isCompetitive, timeQueued) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+    	  for (var i = 0; i < sports.length; i++) {
+    	      var sport = sports[i].sport;
+	    	  client.query(SQLQuery, [login, sport, city, ageMin, ageMax, isCompetitive, now], function(err, result) {
+               if(err){
+          	 	callback(err);
+               }
+               else {
+                queriesCompleted++;
+          		if (queriesCompleted >= sports.length) {
+          			done();
+               		client.end();
+               		// This cleans up connected clients to the database and allows subsequent requests to the database
+               		pg.end();
+               		callback(undefined);
+          		}
+               }
+              });
+           }
     }
   });
 };
@@ -1140,12 +1148,12 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
               else {
 			  var gameID = result.rows[0].gameid;
               SQLQuery = "INSERT INTO Notifications (userTo, type, timeSent, creator, gameID) " +
-              			 "(SELECT SearchProfile.login, 1, $7, $8, $9 FROM SearchProfile " +
-                		   "WHERE ((SearchProfile.sport=$1) OR (SearchProfile.sport IS NULL)) " +
-                		   "AND ((SearchProfile.location=$2) OR (SearchProfile.location IS NULL)) " +
-                		   "AND ((SearchProfile.minAge >= $3) OR (SearchProfile.minAge IS NULL)) " +
-               			   "AND ((SearchProfile.maxAge <= $4) OR (SearchProfile.maxAge IS NULL )) " +
-                		   "AND ((SearchProfile.isCompetitive = $5) OR (SearchProfile.isCompetitive IS NULL)) LIMIT $6)";
+              			 "(SELECT Queue.login, 2, $7, $8, $9 FROM Queue " +
+                		   "WHERE ((Queue.sport=$1) OR (Queue.sport IS NULL)) " +
+                		   "AND ((Queue.location=$2) OR (Queue.location IS NULL)) " +
+                		   "AND ((Queue.minAge >= $3) OR (Queue.minAge IS NULL)) " +
+               			   "AND ((Queue.maxAge <= $4) OR (Queue.maxAge IS NULL )) " +
+                		   "AND ((Queue.isCompetitive = $5) OR (Queue.isCompetitive IS NULL)) ORDER BY Queue.timeQueued ASC LIMIT $6)";
               client.query(SQLQuery, [sportID, location, minAge, maxAge, competitive, openSlots, now, creator, gameID], function(err, result) {
                 done();
                 client.end();
