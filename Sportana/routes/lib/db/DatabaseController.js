@@ -1210,7 +1210,7 @@ exports.getQueueProfile(username, callback) {
           			profile.ageMin = result.rows[i].minage;
           			profile.ageMax = result.rows[i].maxage;
           			profile.competitive = result.rows[i].iscompetitive;
-  					
+
 		  		}
           		callback(undefined, profiles);
         	}
@@ -1294,4 +1294,3 @@ exports.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive,
     }
   });
 };
-

@@ -2,28 +2,67 @@
 app.controller("QueueSportController", function($location, QueueService, $http, $scope, $state)
 {
 
-	$scope.sports = [];
+	$scope.preferences = {};
+
+	// All Sports
+	var sports = [];
+	// Sports that are visibly selected
 	var selectedSports = [];
 
+	/**********************************************************************/
+
+	// The sports that existed in the preferences that were retrieved
+	$scope.existingSports = [];
+
+	// Sports that are added to the queueing preferences
+	$scope.addedSports = [];
+
+	// Sports that are removed from the queueing preferences
+	$scope.removedSports = [];
+
+	/**********************************************************************/
+
 	// When the page is loaded
-	this.init = function() {
+	this.initialize = function() {
 
 		QueueService.getSports()
 		.then(function (sports) {
+
 			$scope.sports = sports;
+
+			QueueService.getPreferences()
+			.then(function (preferences) {
+
+				if(preferences) {
+
+					$scope.preferences = preferences;
+
+					// Keep track of the existing sports
+					for(int i=0; i<preferences.profiles.length; i++) {
+
+						var p = preferences.profiles[i];
+						// $scope.existingSports[p.sport] = p.queueID;
+						$scope.existingSports.push(p);
+
+						var sport = $.grep($scope.sports, function(obj){ return p.sport === obj.sport; });
+						$scope.selectedSports.push(sport[0]);
+					}
+
+
+				} else {
+
+					// TODO : Initialize default preferences
+					$scope.preferences.city = "Anytown";
+					$scope.preferences.ageMin = "No Preference";
+					$scope.preferences.ageMax = "No Preference";
+					$scope.preferences.competitive = false;
+				}
+
+			});
 		}, function (err) {
-
-			console.log("NO SPORTS FOUND! GASP!");
-
+			console.log(err);
 		});
-		// selectedSports = QueueService.getSports();
-	}
 
-	// When moving to another section in the preferences
-	this.finish = function() {
-		// QueueService.setSports(selectedSports);
-		// $state.go('queueLocation');
-		// this.selectedSports = [];
 	}
 
 	// When a Sport is selected
@@ -65,19 +104,6 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 		selectedSports.splice(index, 1);
 	}
 
-	this.init();
-
-	/*******************************************************************************************/
-
-	$scope.gameLocation = {
-		city: "Amherst"
-	};
-	$scope.players = {
-		minAge: "No Preference",
-		maxAge: "No Preference",
-	};
-	$scope.competitive = false;
-
 	/********** AGE **********/
 
 	$scope.agesMin = function() {
@@ -88,10 +114,10 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 	}
 
 	$scope.toggleMinAge = function(age) {
-		$scope.players.minAge = age;
+		$scope.preferences.ageMin = age;
 	};
 	$scope.toggleMaxAge = function(age) {
-		$scope.players.maxAge = age;
+		$scope.preferences.ageMax = age;
 	};
 
 	$scope.ages = function(type) {
@@ -101,30 +127,30 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 		result.push("No Preference");
 		for (var i = 16; i <= 30; i++) {
 			if(type == "max") {
-				if($scope.players.minAge === "No Preference") {
+				if($scope.preferences.ageMin === "No Preference") {
 					result.push(i);
-				} else if(i >= $scope.players.minAge) {
+				} else if(i >= $scope.preferences.ageMin) {
 					result.push(i);
 				}
 			} else {
-				if($scope.players.maxAge === "No Preference") {
+				if($scope.preferences.ageMax === "No Preference") {
 					result.push(i);
-				} else if(i <= $scope.players.maxAge) {
+				} else if(i <= $scope.preferences.ageMax) {
 					result.push(i);
 				}
 			}
 		}
 		for (var i = 35; i <= 70; i+=5) {
 			if(type == "max") {
-				if($scope.players.minAge === "No Preference") {
+				if($scope.preferences.ageMin === "No Preference") {
 					result.push(i);
-				} else if(i >= $scope.players.minAge) {
+				} else if(i >= $scope.preferences.ageMin) {
 					result.push(i);
 				}
 			} else {
-				if($scope.players.maxAge === "No Preference") {
+				if($scope.preferences.ageMax === "No Preference") {
 					result.push(i);
-				} else if(i <= $scope.players.maxAge) {
+				} else if(i <= $scope.preferences.ageMax) {
 					result.push(i);
 				}
 			}
@@ -141,72 +167,59 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 
 		if($scope.isReady()) {
 
+			// TODO : OR - Drop from all queue and requeue with all selected sports...
+			// Add any newly selected sports to the preferences.
+			for(int i=0; i<selectedSports.length; i++) {
 
-
-			/**
-			*****************************************************
-			* PUT	/games
-			* REQUEST:
-			* {
-			* 	“sportID"    : string
-			*  "gameDate" 	 : date // yyyy-mm-dd
-			*  "startTime"  : time // hh:mm:ss
-			*  "endTime"    : time // hh:mm:ss
-			*  "location"   : string
-			*  "minAge"	 : int
-			*  "maxAge"	 : int
-			*  "minPlayers" : int
-			*  "maxPlayers" : int
-			*  "status"	 : int // 1: public, 0: not public
-			* }
-			*
-			* RESPONSE:
-			* {
-			* 	“message”             : string // empty on success
-			* 	“success”             : boolean
-			* }
-			*****************************************************
-			*/
-
-			var queuePreferences = {
-				sportID: 			$scope.selectedSport.sport,
-				location: 		$scope.gameLocation.city,
-				minAge: 			($scope.players.minAge === "No Preference") ? 16 : $scope.players.minAge,
-				maxAge: 			($scope.players.maxAge === "No Preference") ? 100 : $scope.players.maxAge,
-				type: 				($scope.competitive) ? 0 : 1,
-			};
-
-			console.log(queuePreferences);
-
-			$http.put('/api/games', queuePreferences)
-			.then(function (res) {
-				if(res.data.success) {
-					console.log(res.data);
-
-					// TODO : Send friend invites
-					// TODO : REDIRECT TO 'MY GAMES' PAGE
-
-				} else {
-					console.log(res.data.message);
+				var sport = $.grep($scope.existingSports, function(obj){ return selectedSports[i].sport === obj.sport; });
+				if(!sport) {
+					$scope.preferences.sports.push(selectedSports[i].sport);
 				}
-			});
+			}
+
+			var queueIDsToRemove = [];
+			for(int i=0; i<$scope.existingSports.length; i++) {
+
+				var s = $.grep(selectedSports, function(obj){ return $scope.existingSports[i].sport === obj.sport; });
+				if(!s) {
+					queueIDsToRemove.push($scope.existingSports[i].queueID);
+				}
+			}
+
+			console.log($scope.preferences);
+
+			if($scope.preferences.sports.length > 0) {
+				QueueService.joinQueue($scope.preferences).then(function (res) {
+					console.log(res);
+
+					if(queueIDsToRemove.length > 0) {
+						queueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
+							console.log(res);
+						}, function(err) {
+							console.log(err);
+						});
+					}
+
+				}, function (err) {
+					console.log(err);
+				});
+			} else {
+
+				if(queueIDsToRemove.length > 0) {
+					queueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
+						console.log(res);
+					}, function(err) {
+						console.log(err);
+					});
+				}
+
+			}
 
 		} else {
-			// Not ready to create a game.
+			// Not ready to create a game. Validation errors
 		}
 	};
 
+	this.initialize();
 
-	$http.get('/api/sports')
-	.success(function(res) {
-		$scope.allSports = res.sports;
-		console.log($scope.allSports);
-		$scope.selectedSport = $scope.allSports[1];
-	})
-	.error(function(res) {
-
-	});
-
-
-	this.init();
 });

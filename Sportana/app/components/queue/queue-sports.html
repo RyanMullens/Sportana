@@ -2,7 +2,7 @@
 
 	<div id="instructions">
 		Select your preferred sports.
-		<button class="btn" ng-show="sports.hasSelectedSports()" ng-click="sports.finish()">Next</button>
+		<button class="btn" ng-show="sports.hasSelectedSports()" ng-click="sports.updatePreferences()">Next</button>
 	</div>
 
 	<div id="queue">
@@ -22,7 +22,7 @@
 							City
 						</div>
 						<div class="col-md-10">
-							<input type="text" ng-model="gameLocation.city" class="form-control"/>
+							<input type="text" ng-model="preferences.city" class="form-control"/>
 						</div>
 					</div>
 					<div class="age row">
@@ -35,10 +35,10 @@
 						<div class="col-md-4">
 							<div class="btn-group">
 								<button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
-									{{players.minAge}}
+									{{preferences.ageMin}}
 								</button>
 								<ul class="dropdown-menu dropdown-number" role="menu">
-									<li ng-repeat="age in agesMin()" ng-click="toggleMinAge(age)" ng-class="{selected: player.minAge == age}" class="menu-item">
+									<li ng-repeat="age in agesMin()" ng-click="toggleMinAge(age)" ng-class="{selected: preferences.ageMin == age}" class="menu-item">
 										{{age}}
 									</li>
 								</ul>
@@ -50,10 +50,10 @@
 						<div class="col-md-4">
 							<div class="btn-group">
 								<button class="btn btn-default dropdown-toggle form-control number" type="button" data-toggle="dropdown" aria-expanded="false">
-									{{players.maxAge}}
+									{{preferences.ageMax}}
 								</button>
 								<ul class="dropdown-menu dropdown-number" role="menu">
-									<li ng-repeat="age in agesMax()" ng-click="toggleMaxAge(age)" ng-class="{selected: player.maxAge === age}" class="menu-item">
+									<li ng-repeat="age in agesMax()" ng-click="toggleMaxAge(age)" ng-class="{selected: preferences.ageMax === age}" class="menu-item">
 										{{age}}
 									</li>
 								</ul>
@@ -69,7 +69,7 @@
 
 						<div class="col-md-10 small-label checkbox-holder">
 							<label>
-								<input class="checkbox" type="checkbox" ng-model="competitive">Competitive
+								<input class="checkbox" type="checkbox" ng-model="preferences.competitive">Competitive
 							</label>
 						</div>
 

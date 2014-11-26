@@ -15,7 +15,7 @@ app.factory('QueueService', function($http) {
   * 	“message”       : string // empty on success
   * 	“success”       : boolean
   *  "profiles"      : [{
-  *    "profileID"   : int
+  *    "queueID"   : int
   *    "sport"       : string
   *	  "city"        : string
   *	  "ageMin"      : int
@@ -45,7 +45,7 @@ app.factory('QueueService', function($http) {
 
           for(int i=0; i<profiles; i++) {
             preferences.sports.push( {
-              profileID: profiles[i].profileID;
+              queueID: profiles[i].queueID;
               sport: profiles[i].sport;
             });
           }
@@ -61,6 +61,112 @@ app.factory('QueueService', function($http) {
       }
     });
   }
+
+  /**
+  *****************************************************
+  * PUT	/games/queue
+  * Wait for a game
+  *
+  * REQUEST:
+  * {
+  *  "sports"       : [{
+  *    "sport"      : string
+  *  }]
+  *	"city"         : string
+  *	"ageMin"       : int
+  *	"ageMax"       : int
+  *	"competitive"  : boolean
+  * }
+  *
+  * RESPONSE:
+  * {
+  * 	“message”  : string // empty on success
+  * 	“success”  : boolean
+  * }
+  *****************************************************
+  */
+
+  queueService.joinQueue = function(preferences) {
+    return $http.put('/api/games/queue', preferences)
+    .success(function(res) {
+      return res;
+    })
+    .error(function(err) {
+      // TODO : Error...
+      return err;
+    });
+  }
+
+  /**
+  *****************************************************
+  * DELETE	/games/queue/
+  * Delete given queue profiles
+  * REQUEST:
+  * {
+  *	 "all"      : boolean // drop all queueing profiles from queue
+  *   "profiles" : [{
+  *		"queueID" : int
+  *   }]
+  * }
+  *
+  * RESPONSE:
+  * {
+  * 	“message”       : string // empty on success
+  * 	“success”       : boolean
+  * }
+  *****************************************************
+  */
+
+  queueService.dropFromQueue = function() {
+    return $http.delete('/api/games/queue', {all: true})
+    .success(function(res) {
+      return res;
+    })
+    .error(function(err) {
+      // TODO : Error...
+      return err;
+    });
+  }
+
+  queueService.removeSportsFromPreferences = function(queueIDs) {
+
+    profiles = [];
+    for(int i=0; i<queueIDs.length; i++) {
+      profiles.push({queueID: queueIDs[i]});
+    }
+
+    return $http.delete('/api/games/queue', {all: true})
+    .success(function(res) {
+      return res;
+    })
+    .error(function(err) {
+      // TODO : Error...
+      return err;
+    });
+  }
+
+
+  /**
+  *****************************************************
+  * GET /sports
+  * Returns a list of all sports
+  *
+  * REQUEST:
+  * {
+  * }
+  *
+  * RESPONSE:
+  * {
+  *  “sports” : [{
+  * 	 	“sport”        :	string
+  * 	 	“image” 	   :  	string // url of photo
+  *  }]
+  *  “message” : string    // empty on success
+  *  “success” : boolean
+  * }
+  *
+  *****************************************************
+  */
 
   queueService.getSports = function() {
 
