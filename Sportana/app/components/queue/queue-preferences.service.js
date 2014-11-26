@@ -32,6 +32,7 @@ app.factory('QueueService', function($http) {
     .then(function (res) {
       if(res.data.success) {
 
+        console.log("getPreferences Data:");
         console.log(res.data);
         var preferences = {};
         preferences.sports = [];
@@ -91,6 +92,9 @@ app.factory('QueueService', function($http) {
   */
 
   queueService.joinQueue = function(preferences) {
+
+    console.log("HTTP PUT Preferences");
+    console.log(preferences);
     return $http.put('/api/games/queue', preferences)
     .success(function(res) {
       return res;

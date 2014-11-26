@@ -179,7 +179,7 @@ app.controller('QueueSportController', function($location, QueueService, $http, 
 				console.log(sport);
 				if(!sport || sport.length == 0) {
 					console.log("ADDING");
-					$scope.preferences.sports.push(selectedSports[i].sport);
+					$scope.preferences.sports.push({sport: selectedSports[i].sport});
 				}
 			}
 
@@ -204,10 +204,7 @@ app.controller('QueueSportController', function($location, QueueService, $http, 
 
 			if($scope.preferences.sports.length > 0) {
 
-				console.log("HERE WE GO!");
-
 				QueueService.joinQueue($scope.preferences).then(function (res) {
-					console.log(res);
 
 					if(queueIDsToRemove.length > 0) {
 						console.log(queueIDsToRemove);
