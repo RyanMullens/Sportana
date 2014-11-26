@@ -346,7 +346,7 @@ router.get('/queue', function (req, res) {
 
 /**
  *****************************************************
- * DELETE	/games/queue/
+ * POST	/games/queue/delete
  * Delete given queue profiles
  * REQUEST:
  * {
@@ -363,7 +363,7 @@ router.get('/queue', function (req, res) {
  * }
  *****************************************************
  */
-router.delete('/queue', function (req, res) {
+router.post('/queue/delete', function (req, res) {
 	var all = req.body.all;
 	var profiles = req.body.profiles;
 	var auth = req.get('SportanaAuthentication');
@@ -419,7 +419,7 @@ router.put('/queue', function(req, res) {
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	var auth = req.get('SportanaAuthentication');
+	var auth = req.get('SportanaAuthentication');	
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -441,7 +441,7 @@ router.put('/queue', function(req, res) {
 			});
 		}
 	});
-
+	
 });
 
 
@@ -472,7 +472,7 @@ router.put('/queue', function(req, res) {
 	var ageMin = req.body.ageMin;
 	var ageMax = req.body.ageMax;
 	var isCompetitive = req.body.competitive;
-	var auth = req.get('SportanaAuthentication');
+	var auth = req.get('SportanaAuthentication');	
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -494,7 +494,7 @@ router.put('/queue', function(req, res) {
 			});
 		}
 	});
-
+	
 });
 
 module.exports = router;
