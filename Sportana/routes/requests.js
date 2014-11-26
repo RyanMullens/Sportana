@@ -17,8 +17,8 @@ var authenticator = require('./authentication'); // Authentication Handler
  *
  * RESPONSE:
  * {
- * 	â€œmessageâ€�  : string    // empty on success
- * 	â€œsuccessâ€�  : boolean
+ * 	message  : string    // empty on success
+ * 	success  : boolean
  *  "requests" :
  *   [{
  *    "id"            : int
@@ -65,9 +65,9 @@ router.get('', function (req, res) {
  * PUT	/requests/game
  * REQUEST:
  * {
- * 	â€œuserToIDâ€�    : string
- *	â€œgameCreatorâ€� : string
- *	â€œgameIDâ€�      : int
+ * 	userToID    : string
+ *	gameCreator : string
+ *	gameID      : int
  * }
  *
  * RESPONSE:
@@ -153,13 +153,13 @@ router.put('/friend', function(req, res) {
  * POST	/requests/{requestID}
  * REQUEST:
  * {
- * 	â€œconfirmedâ€�: boolean
+ * 	confirmed: boolean
  * }
  *
  * RESPONSE:
  * {
- * 	â€œmessageâ€� : string    // empty on success
- * 	â€œsuccessâ€� : boolean
+ * 	message : string    // empty on success
+ * 	success : boolean
  * }
  *
  * NOTE: This will also remove the request from the database

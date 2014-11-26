@@ -877,7 +877,6 @@ exports.rate = function(UserObject, callback) {
 	});
 };
 
-
 exports.searchUsers = function(firstName, lastName, callback) {
   if (!firstName && !lastName) {
   	callback('No search parameters given', undefined);
@@ -887,7 +886,7 @@ exports.searchUsers = function(firstName, lastName, callback) {
       callback(err, undefined);
     }
     else {
-    	var SQLQuery = "SELECT Users.login, Users.firstName, Users.lastName, Users.profilePicture, Users.birthday, Users.city " +
+    	var SQLQuery = "SELECT Users.login, Users.firstName, Users.lastName, Users.profilePicture, Users.birthday, Users.city, Users.timeliness, Users.friendliness, Users.skillLevel " +
     				   "FROM Users ";
     	var searchValues = [];
     	if (firstName) {
@@ -928,6 +927,9 @@ exports.searchUsers = function(firstName, lastName, callback) {
   					user.lastName = result.rows[i].lastname;
   					user.city = result.rows[i].city;
   					user.age = timeHelper.makeAgeFromBirthday(result.rows[i].birthday);
+  					user.timeliness = result.rows[i].timeliness;
+  					user.friendliness = result.rows[i].friendliness;
+  					user.competitiveness = result.rows[i].skilllevel;
   					users.push(user);
 		  		}
           		callback(undefined, users);
