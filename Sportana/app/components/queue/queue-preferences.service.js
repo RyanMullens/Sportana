@@ -28,11 +28,11 @@ app.factory('QueueService', function($http) {
 
   queueService.getPreferences = function() {
 
-    $http.get('/api/queue')
+    return $http.get('/api/games/queue')
     .then(function (res) {
       if(res.data.success) {
 
-        console.log(res.data.profiles);
+        console.log(res.data);
         var preferences = {};
 
         var profiles = res.data.profiles;
@@ -43,12 +43,15 @@ app.factory('QueueService', function($http) {
           preferences.ageMax = profile[0].ageMax;
           preferences.competitive = profile[0].competitive;
 
-          for(int i=0; i<profiles; i++) {
+          for(var i=0; i<profiles.length; i++) {
             preferences.sports.push( {
-              queueID: profiles[i].queueID;
-              sport: profiles[i].sport;
+              queueID: profiles[i].queueID,
+              sport: profiles[i].sport
             });
           }
+
+          return preferences;
+
         } else {
 
           // TODO : Nothing to return...  What should I return to the controller requesting?
@@ -57,7 +60,7 @@ app.factory('QueueService', function($http) {
         return preferences;
 
       } else {
-        console.log(res.data.message);
+        console.log(res);
       }
     });
   }
@@ -131,7 +134,7 @@ app.factory('QueueService', function($http) {
   queueService.removeSportsFromPreferences = function(queueIDs) {
 
     profiles = [];
-    for(int i=0; i<queueIDs.length; i++) {
+    for(var i=0; i<queueIDs.length; i++) {
       profiles.push({queueID: queueIDs[i]});
     }
 
@@ -170,14 +173,14 @@ app.factory('QueueService', function($http) {
 
   queueService.getSports = function() {
 
-    return $http.get('/api/sports')
-    .success(function(res) {
-      return res.sports;
-    })
-    .error(function(err) {
-      // TODO : Error...
-      return err;
-    });
+    return $http.get('/api/sports');
+    // .success(function(res) {
+    //   return res.sports;
+    // })
+    // .error(function(err) {
+    //   // TODO : Error...
+    //   return err;
+    // });
   }
 
   return queueService;

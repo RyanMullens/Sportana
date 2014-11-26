@@ -1,11 +1,10 @@
-// Created by: @bread on 10/25
-app.controller("QueueSportController", function($location, QueueService, $http, $scope, $state)
+app.controller('QueueSportController', function($location, QueueService, $http, $scope, $state)
 {
-
+	// console.log($scope);
 	$scope.preferences = {};
 
 	// All Sports
-	var sports = [];
+	$scope.sports = [];
 	// Sports that are visibly selected
 	var selectedSports = [];
 
@@ -26,19 +25,20 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 	this.initialize = function() {
 
 		QueueService.getSports()
-		.then(function (sports) {
+		.then(function (res) {
 
-			$scope.sports = sports;
+			$scope.sports = res.data.sports;
 
 			QueueService.getPreferences()
 			.then(function (preferences) {
 
-				if(preferences) {
+				if(preferences && preferences.length > 0) {
 
+					console.log(preferences);
 					$scope.preferences = preferences;
 
 					// Keep track of the existing sports
-					for(int i=0; i<preferences.profiles.length; i++) {
+					for(var i=0; i<preferences.profiles.length; i++) {
 
 						var p = preferences.profiles[i];
 						// $scope.existingSports[p.sport] = p.queueID;
@@ -56,6 +56,7 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 					$scope.preferences.ageMin = "No Preference";
 					$scope.preferences.ageMax = "No Preference";
 					$scope.preferences.competitive = false;
+					$scope.preferences.sports = [];
 				}
 
 			});
@@ -86,7 +87,7 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 	}
 
 	this.getSports = function() {
-		return sports;
+		return $scope.sports;
 	}
 
 	this.isSelected = function(sport) {
@@ -115,10 +116,10 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 
 	$scope.toggleMinAge = function(age) {
 		$scope.preferences.ageMin = age;
-	};
+	}
 	$scope.toggleMaxAge = function(age) {
 		$scope.preferences.ageMax = age;
-	};
+	}
 
 	$scope.ages = function(type) {
 
@@ -157,43 +158,59 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 		}
 
 		return result;
-	};
+	}
 
 	$scope.isReady = function() {
 		return true;
-	};
+	}
 
-	$scope.updatePreferences = function () {
+	this.updatePreferences = function () {
+
+		console.log("UPDATING PREFS");
 
 		if($scope.isReady()) {
 
 			// TODO : OR - Drop from all queue and requeue with all selected sports...
 			// Add any newly selected sports to the preferences.
-			for(int i=0; i<selectedSports.length; i++) {
+			console.log("TO ADD");
+			for(var i=0; i<selectedSports.length; i++) {
 
-				var sport = $.grep($scope.existingSports, function(obj){ return selectedSports[i].sport === obj.sport; });
-				if(!sport) {
+				var sport = $.grep($scope.existingSports, function(obj){ console.log(selectedSports[i].sport);return selectedSports[i].sport === obj.sport; });
+				console.log(sport);
+				if(!sport || sport.length == 0) {
+					console.log("ADDING");
 					$scope.preferences.sports.push(selectedSports[i].sport);
 				}
 			}
 
+			console.log("TO REMOVE");
+
 			var queueIDsToRemove = [];
-			for(int i=0; i<$scope.existingSports.length; i++) {
+			for(var i=0; i<$scope.existingSports.length; i++) {
 
 				var s = $.grep(selectedSports, function(obj){ return $scope.existingSports[i].sport === obj.sport; });
-				if(!s) {
+				console.log(s);
+				if(!s || s.length == 0) {
+					console.log("REMOVING");
 					queueIDsToRemove.push($scope.existingSports[i].queueID);
 				}
 			}
 
+			$scope.preferences.city = "Anytown";
+			$scope.preferences.ageMin = ($scope.preferences.ageMin == "No Preference") ? 16 : $scope.preferences.ageMin;
+			$scope.preferences.ageMax = ($scope.preferences.ageMax == "No Preference") ? 999 : $scope.preferences.ageMax;
+
 			console.log($scope.preferences);
 
 			if($scope.preferences.sports.length > 0) {
+
+				console.log("HERE WE GO!");
+
 				QueueService.joinQueue($scope.preferences).then(function (res) {
 					console.log(res);
 
 					if(queueIDsToRemove.length > 0) {
-						queueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
+						QueueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
 							console.log(res);
 						}, function(err) {
 							console.log(err);
@@ -206,7 +223,7 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 			} else {
 
 				if(queueIDsToRemove.length > 0) {
-					queueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
+					QueueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
 						console.log(res);
 					}, function(err) {
 						console.log(err);
@@ -218,7 +235,7 @@ app.controller("QueueSportController", function($location, QueueService, $http, 
 		} else {
 			// Not ready to create a game. Validation errors
 		}
-	};
+	}
 
 	this.initialize();
 

@@ -118,46 +118,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
    views: {
     "content@main": {
       templateUrl: "/components/queue/queue-sports.html",
-      controller: "QueueSportController as sports"
+      controller: "QueueSportController as queue"
     }
   }
 })
-  .state("app.queue.preferences", {
-    views: {
-      "content@main": {
-        templateUrl: "/components/queue/queue-preferences.html",
-        controller: "PreferencesController as preferences"
-      }
-    }
-  })
-
-  .state("app.queue.content", {
-    views: {
-      "content@main": {
-        templateUrl: "/components/queue/queue-content.html"
-      }
-    }
-  })
-  .state("app.queue.content.sports", {
-    url: "/queue/preferences/sports" ,
-    views: {
-      "content@main": {
-        templateUrl: "/components/queue/queue-sports.html",
-        controller: "QueueSportController as sports"
-      }
-    }
-  })
-
-  .state("app.queue.content.location", {
-    url: "/queue/preferences/location" ,
-    views: {
-      "content@mainmain": {
-        templateUrl: "/components/queue/queue-location.html",
-        controller: "QueueLocationController as location"
-      }
-    }
-  })
-
+  
   .state("app.viewGame", {
    url: "/game/:creatorId/:gameId" ,
    views: {

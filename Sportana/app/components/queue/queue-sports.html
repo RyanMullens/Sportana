@@ -2,7 +2,7 @@
 
 	<div id="instructions">
 		Select your preferred sports.
-		<button class="btn" ng-show="sports.hasSelectedSports()" ng-click="sports.updatePreferences()">Next</button>
+		<button class="btn" ng-show="queue.hasSelectedSports()" ng-click="queue.updatePreferences()">Next</button>
 	</div>
 
 	<div id="queue">
@@ -14,7 +14,7 @@
 				<div id="selectedSports" class="col-md-5">
 
 					<!-- TODO : Replace remove with toggle? -->
-					<button class="btn" ng-repeat="sport in sports.getSelectedSports()" ng-click="sports.removeSport(sport)">{{sport.name}}  X</button>
+					<button class="btn" ng-repeat="sport in queue.getSelectedSports()" ng-click="queue.removeSport(sport)">{{sport.name}}  X</button>
 				</div>
 				<div class="details col-md-7">
 					<div class="city row">
@@ -83,16 +83,16 @@
 	</div>
 
 	<div id="sportPicker">
-    	<div class="sportPanel" ng-repeat="sport in sports.getSports()" ng-class="{selected: sports.isSelected(sport)}" ng-click="sports.toggle(sport)">
-    		<img class="sportIcon" ng-src="{{sport.icon}}"/>
-    		<br>{{sport.name}}<br>
+    	<div class="sportPanel" ng-repeat="sport in queue.getSports()" ng-class="{selected: queue.isSelected(sport)}" ng-click="queue.toggle(sport)">
+    		<img class="sportIcon" ng-src="{{sport.image}}"/>
+    		<br>{{sport.sport}}<br>
 	   </div>
 	</div>
 
 	<!-- <div id="selectedSports">
 
 		TODO : Replace remove with toggle?
-		<button class="btn" ng-repeat="sport in sports.getSelectedSports()" ng-click="sports.removeSport(sport)">{{sport.name}}  X</button>
+		<button class="btn" ng-repeat="sport in queue.getSelectedSports()" ng-click="queue.removeSport(sport)">{{sport.name}}  X</button>
 	</div> -->
 
 </div>
