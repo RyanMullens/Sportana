@@ -1182,7 +1182,7 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
   });
 };
 
-exports.getQueueProfile(username, callback) {
+exports.getQueueProfile = function(username, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
       callback(err, undefined);
@@ -1221,7 +1221,7 @@ exports.getQueueProfile(username, callback) {
   });
 };
 
-exports.removeQueueProfiles(username, all, profiles, callback) {
+exports.removeQueueProfiles = function(username, all, profiles, callback) {
   pg.connect(connString, function (err, client, done) {
     if (err) {
       callback(err);
@@ -1271,7 +1271,7 @@ exports.removeQueueProfiles(username, all, profiles, callback) {
   });
 };
 
-exports.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive, callback) {
+exports.adjustQueueProfile = function(username, queueID, city, ageMin, ageMax, competitive, callback) {
   pg.connect(connString, function(err, client, done) {
     	if(err) {
     	  callback(err);
@@ -1286,13 +1286,12 @@ exports.adjustQueueProfile(username, queueID, city, ageMin, ageMax, competitive,
                	// This cleans up connected clients to the database and allows subsequent requests to the database
                	pg.end();
                if(err){
-          	 	callback(err);
+          	 	    callback(err);
                }
                else {
                	callback(undefined);
                }
-              });
-           }
-    }
+            });
+      }
   });
 };
