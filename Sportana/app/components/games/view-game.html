@@ -47,7 +47,7 @@
 					<span class="alert alert-info" ng-hide="viewGame.isJoined()">
 						You must join the game to view and post messages.
 					</span>
-					<div class="panel-body" ng-show="viewGame.isJoined()">
+					<div class="panel-body" ng-show="viewGame.isJoined()" scroll-glue>
 						<ul id="messages">
 							<li class="message left clearfix" ng-repeat="message in viewGame.getMessages()">
 								<!--
