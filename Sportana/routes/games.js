@@ -346,7 +346,7 @@ router.get('/queue', function (req, res) {
 
 /**
  *****************************************************
- * DELETE	/games/queue/
+ * POST	/games/queue/delete
  * Delete given queue profiles
  * REQUEST:
  * {
@@ -363,8 +363,7 @@ router.get('/queue', function (req, res) {
  * }
  *****************************************************
  */
-router.delete('/queue', function (req, res) {
-	console.log(req);
+router.post('/queue/delete', function (req, res) {
 	var all = req.body.all;
 	var profiles = req.body.profiles;
 	var auth = req.get('SportanaAuthentication');
