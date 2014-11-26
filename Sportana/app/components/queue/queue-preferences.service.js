@@ -34,14 +34,15 @@ app.factory('QueueService', function($http) {
 
         console.log(res.data);
         var preferences = {};
+        preferences.sports = [];
 
         var profiles = res.data.profiles;
         if(profiles.length > 0) {
 
-          preferences.city = profile[0].city;
-          preferences.ageMin = profile[0].ageMin;
-          preferences.ageMax = profile[0].ageMax;
-          preferences.competitive = profile[0].competitive;
+          preferences.city = profiles[0].city;
+          preferences.ageMin = profiles[0].ageMin;
+          preferences.ageMax = profiles[0].ageMax;
+          preferences.competitive = profiles[0].competitive;
 
           for(var i=0; i<profiles.length; i++) {
             preferences.sports.push( {
@@ -138,7 +139,13 @@ app.factory('QueueService', function($http) {
       profiles.push({queueID: queueIDs[i]});
     }
 
-    return $http.delete('/api/games/queue', {all: true})
+    req = {};
+    req.all = false;
+    req.profiles = profiles;
+    console.log("REQ");
+    console.log(req);
+
+    return $http.post('/api/games/queue/delete', req)
     .success(function(res) {
       return res;
     })

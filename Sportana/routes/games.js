@@ -364,6 +364,7 @@ router.get('/queue', function (req, res) {
  *****************************************************
  */
 router.delete('/queue', function (req, res) {
+	console.log(req);
 	var all = req.body.all;
 	var profiles = req.body.profiles;
 	var auth = req.get('SportanaAuthentication');

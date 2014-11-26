@@ -32,20 +32,20 @@ app.controller('QueueSportController', function($location, QueueService, $http, 
 			QueueService.getPreferences()
 			.then(function (preferences) {
 
-				if(preferences && preferences.length > 0) {
+				if(preferences && preferences.sports.length > 0) {
 
 					console.log(preferences);
 					$scope.preferences = preferences;
 
 					// Keep track of the existing sports
-					for(var i=0; i<preferences.profiles.length; i++) {
+					for(var i=0; i<preferences.sports.length; i++) {
 
-						var p = preferences.profiles[i];
+						var p = preferences.sports[i];
 						// $scope.existingSports[p.sport] = p.queueID;
 						$scope.existingSports.push(p);
 
 						var sport = $.grep($scope.sports, function(obj){ return p.sport === obj.sport; });
-						$scope.selectedSports.push(sport[0]);
+						selectedSports.push(sport[0]);
 					}
 
 
@@ -210,6 +210,7 @@ app.controller('QueueSportController', function($location, QueueService, $http, 
 					console.log(res);
 
 					if(queueIDsToRemove.length > 0) {
+						console.log(queueIDsToRemove);
 						QueueService.removeSportsFromPreferences(queueIDsToRemove).then( function(res) {
 							console.log(res);
 						}, function(err) {

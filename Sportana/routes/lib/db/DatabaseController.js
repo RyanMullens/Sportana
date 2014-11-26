@@ -1199,7 +1199,6 @@ exports.getQueueProfile = function(username, callback) {
         	client.end();
         	// This cleans up connected clients to the database and allows subsequent requests to the database
         	pg.end();
-        	console.log(result);
         	if (err) {
          	 callback(err, undefined);
         	}
@@ -1213,7 +1212,7 @@ exports.getQueueProfile = function(username, callback) {
           			profile.ageMin = result.rows[i].minage;
           			profile.ageMax = result.rows[i].maxage;
           			profile.competitive = result.rows[i].iscompetitive;
-					profiles.push(profile);
+                profiles.push(profile);
 		  		}
           		callback(undefined, profiles);
         	}
