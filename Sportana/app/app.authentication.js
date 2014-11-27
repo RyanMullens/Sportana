@@ -7,6 +7,12 @@ app.constant('AUTH_EVENTS', {
   notAuthorized: 'auth-not-authorized'
 });
 
+app.constant('QUEUE_CONST', {
+  edit: 'MODE_EDIT',
+  normal: 'MODE_MATCHES'
+});
+
+
 app.run(function ($rootScope, $state, $location, AUTH_EVENTS, AuthenticationService, CurrentUser) {
 
   // Check authentication status on every transition

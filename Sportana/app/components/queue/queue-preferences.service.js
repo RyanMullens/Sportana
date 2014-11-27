@@ -32,8 +32,6 @@ app.factory('QueueService', function($http) {
     .then(function (res) {
       if(res.data.success) {
 
-        console.log("getPreferences Data:");
-        console.log(res.data);
         var preferences = {};
         preferences.sports = [];
 
@@ -93,8 +91,6 @@ app.factory('QueueService', function($http) {
 
   queueService.joinQueue = function(preferences) {
 
-    console.log("HTTP PUT Preferences");
-    console.log(preferences);
     return $http.put('/api/games/queue', preferences)
     .success(function(res) {
       return res;
@@ -126,7 +122,7 @@ app.factory('QueueService', function($http) {
   */
 
   queueService.dropFromQueue = function() {
-    return $http.delete('/api/games/queue', {all: true})
+    return $http.post('/api/games/queue/delete', {all: true}) // Need to pass empty profiles?
     .success(function(res) {
       return res;
     })
@@ -146,8 +142,6 @@ app.factory('QueueService', function($http) {
     req = {};
     req.all = false;
     req.profiles = profiles;
-    console.log("REQ");
-    console.log(req);
 
     return $http.post('/api/games/queue/delete', req)
     .success(function(res) {
@@ -183,15 +177,7 @@ app.factory('QueueService', function($http) {
   */
 
   queueService.getSports = function() {
-
     return $http.get('/api/sports');
-    // .success(function(res) {
-    //   return res.sports;
-    // })
-    // .error(function(err) {
-    //   // TODO : Error...
-    //   return err;
-    // });
   }
 
   return queueService;
