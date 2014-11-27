@@ -10,6 +10,20 @@ app.controller('QueueSportController', function(QUEUE_CONST, $location, QueueSer
 
 	$scope.hasPrefs = false;
 
+	var resetEmptyQueue = function() {
+
+		$scope.existingSports = [];
+		$scope.preferences.city = "Anytown";
+		$scope.preferences.ageMin = "No Preference";
+		$scope.preferences.ageMax = "No Preference";
+		$scope.preferences.competitive = false;
+		$scope.mode = QUEUE_CONST.normal;
+		$scope.hasPrefs = false;
+		$scope.preferences.sports = [];
+
+		selectedSports = [];
+	}
+
 	// When the page is loaded
 	this.initialize = function() {
 
@@ -40,14 +54,7 @@ app.controller('QueueSportController', function(QUEUE_CONST, $location, QueueSer
 
 
 				} else {
-
-					// TODO : Initialize default preferences
-					$scope.preferences.city = "Anytown";
-					$scope.preferences.ageMin = "No Preference";
-					$scope.preferences.ageMax = "No Preference";
-					$scope.preferences.competitive = false;
-					$scope.hasPrefs = false;
-					$scope.preferences.sports = [];
+					resetEmptyQueue();
 				}
 
 				$scope.mode = QUEUE_CONST.normal;
@@ -305,11 +312,7 @@ app.controller('QueueSportController', function(QUEUE_CONST, $location, QueueSer
 	// @ONCLICK
 	$scope.dropFromQueue = function() {
 		QueueService.dropFromQueue().then(function(res) {
-
-			// TODO Reset the local preferences to undefined
-			$scope.hasPrefs = false;
-			$scope.setInstructions();
-
+			resetEmptyQueue();
 		}, function(err) {
 			console.log(err);
 		});
