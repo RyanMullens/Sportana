@@ -33,4 +33,4 @@ module.config([ "$provide", function($provide){
 }]);
 
 
-var app = angular.module('app',['ui.bootstrap','ngRoute','ui.router', 'ngCookies', 'kendo.directives']);
+var app = angular.module('app',['ui.bootstrap','ngRoute','ui.router', 'ngCookies', 'kendo.directives', 'luegg.directives']);

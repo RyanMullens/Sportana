@@ -4,14 +4,14 @@
 
   <ul class="nav nav-sidebar">
     <li><a ng-click="setTab('none')" ui-sref="app.home">Dashboard</a></li>
-    <li><a ng-click="setTab('none')" ui-sref="app.user({userId:'{{getLoggedUser()}}'})">Profile</a></li>
+    <li><a ng-click="setTab('none')" ui-sref="app.user({userId:'{{getLoggedUser()}}'})"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profile</a></li>
     <li><a ng-click="setTab('games')">Games</a></li>
     <ul ng-show="isTabShown('games')">
       <li><a ui-sref="app.queue">Join Game</a></li>
       <li><a ui-sref="app.createGame">Create Game</a></li>
       <li><a ui-sref="app.games">My Games</a>
       </ul>
-      <li><a ui-sref="app.friends">Friends</a></li>
+      <li><a ui-sref="app.friends"><span class="glyphicon icon-group"></span> Friends</a></li>
     </ul>
 
     <ul class="nav nav-sidebar">
