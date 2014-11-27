@@ -47,38 +47,39 @@
 					<span class="alert alert-info" ng-hide="viewGame.isJoined()">
 						You must join the game to view and post messages.
 					</span>
-					<div class="panel-body" ng-show="viewGame.isJoined()" scroll-glue>
-						<ul id="messages">
-							<li class="message left clearfix" ng-repeat="message in viewGame.getMessages()">
-								<!--
-								<span class="chat-img pull-left">
-									PLACE IMAGE HERE 
-								</span>
-								-->
-								<div class="chat-body clearfix">
-									<div class="header">
-										<strong class="primary-font">{{message.from}}</strong> 
-										<small class="pull-right text-muted">
-											<span class="glyphicon glyphicon-time"></span>{{message.time | date}}
-										</small>
+					<div ng-show="viewGame.isJoined()">
+						<div class="panel-body" scroll-glue>
+							<ul id="messages">
+								<li class="message left clearfix" ng-repeat="message in viewGame.getMessages()">
+									<!--
+									<span class="chat-img pull-left">
+										PLACE IMAGE HERE 
+									</span>
+									-->
+									<div class="chat-body clearfix">
+										<div class="header">
+											<strong class="primary-font">{{message.from}}</strong> 
+											<small class="pull-right text-muted">
+												<span class="glyphicon glyphicon-time"></span>{{message.time | date}}
+											</small>
+										</div>
+										<p>
+											{{message.message}}
+										</p>
 									</div>
-									<p>
-										{{message.message}}
-									</p>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<!-- USE THIS FOR SCROLL TO BOTTOM: https://github.com/Luegg/angularjs-scroll-glue -->
-					<div class="panel-footer">
-						<form class="input-group">
-							<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." ng-model="message">
-							<span class="input-group-btn">
-								<button type="submit" class="btn btn-primary btn-sm" ng-click="viewGame.postMessage(message)" id="btn-chat">
-									Send
-								</button>
-							</span>
-						</form>
+								</li>
+							</ul>
+						</div>
+						<div class="panel-footer">
+							<form class="input-group">
+								<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." ng-model="message">
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-primary btn-sm" ng-click="viewGame.postMessage(message)" id="btn-chat">
+										Send
+									</button>
+								</span>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
