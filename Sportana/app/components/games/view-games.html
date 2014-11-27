@@ -1,29 +1,48 @@
 <h1 class="page-header">View Games</h1>
 <div id="viewGames">
-	<div ng-show="viewGames.hasNotifications()" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
-	<div class="row notifications" ng-show="viewGames.hasNotifications">
-		<div class="row notification" ng-repeat="notification in viewGames.getNotifications()">
-			<div class="row">
-				<span class="col-md-3"><img class="sport" ng-src='{{notification.sportImg}}' /> {{notification.sport}}</span>
-				<span class="col-md-3"><a class="btn btn-primary" ui-sref="app.viewGame({creatorId: notification.creator, gameId: notification.gameID})">View Game</a></span>
-				<span class="col-md-3">Location: {{notification.location}}</span>
-				<span class="col-md-3">Date: {{notification.gameDate}}<br>
-				Time: {{notification.gameStart}} - {{notification.gameEnd}}</span>
-			</div>
-			<div class="row">
-				<span class="col-md-3">Players Going: {{notification.playersJoined}}</span>
-				<span class="col-md-3">Players Invited: {{notification.playersInvited}}</span>
-				<span class="col-md-3">Invited By: <a ui-sref="app.user({userId: notification.invitedBy})">{{notification.invitedBy}}</a></span>
-				<span class="col-md-3"><button type="button" ng-click="viewGames.acceptGame(notification, true)" class="btn btn-success">Accept</button><button type="button" ng-click="viewGames.acceptGame(notification, false)" class="btn btn-danger">Decline</button></span>
+	<div class="notifications">
+		<div ng-show="viewGames.hasNotifications()" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
+		<div ng-show="viewGames.hasNotifications">
+			<h2>My Notifications</h2>
+			<div class="row notification btn btn-default" ng-repeat="notification in viewGames.getNotifications()">
+				<div class="row">
+					<span class="col-md-3">
+						<img class="sport" ng-src='{{notification.sportImg}}' /> {{notification.sport}}
+					</span>
+					<span class="col-md-3">
+						<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: notification.creator, gameId: notification.gameID})">View Game</a>
+					</span>
+					<span class="col-md-3">
+						Location: {{notification.location}}
+					</span>
+					<span class="col-md-3">Date: {{notification.gameDate}}<br>
+						Time: {{notification.gameStart}} - {{notification.gameEnd}}
+					</span>
+				</div>
+				<div class="row">
+					<span class="col-md-3">
+						Players Going: {{notification.playersJoined}}
+					</span>
+					<span class="col-md-3">
+						Players Invited: {{notification.playersInvited}}
+					</span>
+					<span class="col-md-3">
+						Invited By: <a ui-sref="app.user({userId: notification.invitedBy})">{{notification.invitedBy}}</a>
+					</span>
+					<span class="col-md-3">
+						<button type="button" ng-click="viewGames.acceptGame(notification, true)" class="btn btn-success">Accept</button>
+						<button type="button" ng-click="viewGames.acceptGame(notification, false)" class="btn btn-danger">Decline</button>
+					</span>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="games" ng-show="viewGames.hasGames()">
-		<div class=""></div>
-		<div class="game" ng-repeat="game in viewGames.getGames()" >
+	<div class="row games" ng-show="viewGames.hasGames()">
+		<h2>My Games</h2>
+		<div class="game btn btn-default" ng-repeat="game in viewGames.getGames()" >
 			<div class="row">
 				<span class="col-md-3"><img class="sport" ng-src='{{game.sportImg}}' /> {{game.sport}}</span>
-				
+
 
 				<span class="col-md-3">Location: {{game.location}}</span>
 				<span class="col-md-3">Date: {{game.date}}<br>Time: {{game.time}}</span>
@@ -35,3 +54,4 @@
 			</div>
 		</div>
 	</div>
+</div>
