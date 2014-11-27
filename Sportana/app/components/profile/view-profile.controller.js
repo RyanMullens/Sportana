@@ -6,6 +6,8 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 
 	$scope.user = {};
 
+	$scope.photoSelected = false;
+	this.photoEditing = false;
 
 	this.editing = false;
 	$scope.loaded = false;
@@ -473,6 +475,70 @@ $scope.deleteFavoriteSport = function(sport)
 }
 
 /*END SPORTS*/
+
+
+
+this.setPhotoEdit = function(b)
+{
+	this.photoEditing = b;
+}
+
+this.isPhotoEditing = function()
+{
+	return this.photoEditing;
+}
+
+this.isPhotoSelected = function()
+{
+	return $scope.photoSelected;
+}
+
+$scope.fileNameChanged = function()
+{
+	$scope.photoSelected = document.getElementById('file').files.length > 0;
+	$scope.$apply();
+}
+
+/*Photo Upload*/
+
+$scope.addPhoto = function()
+{
+  var f = document.getElementById('file').files[0],
+      r = new FileReader();
+  r.onloadend = function(e){
+    var data = e.target.result;
+    console.log("Weee uploading");
+
+    console.log('file is ' + JSON.stringify(f));
+
+    var fd = new FormData();
+        fd.append('file', data);
+        $http.post('/api/users/photoUpload', fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        })
+        .success(function(){
+        	console.log("done...");
+        })
+
+
+
+    /*$http.uploadFile({
+        url: '/api/users/photoUpload',
+        file: data
+      })
+
+    $http.post('/api/users/photoUpload',{ 'img' : data  })
+		.success(function(data, status, headers, config)
+		{
+			console.log(data);
+		});*/
+
+    //send you binary data via $http or $resource or do anything else with it
+  }
+  
+  r.readAsArrayBuffer(f);
+}
 
 
 

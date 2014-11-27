@@ -8,6 +8,8 @@ var dbc = require('./lib/db/DatabaseController.js'); // Database Controller
 
 var authenticator = require('./authentication'); // Authentication Handler
 
+var formidable = require('formidable');
+
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
@@ -104,6 +106,21 @@ router.delete('/deleteFavoriteSport/:sport', function(req, res) {
 
 /* POST edits profile picture */
 // TO-DO
+router.post('/photoUpload', function(req, res) {
+
+	var form = new formidable.IncomingForm();
+
+	form.keepExtensions = true;
+	form.uploadDir = "app/assets/img/users";
+
+    form.parse(req, function(err, fields, files) 
+    {
+    	var urlPart = files.upload.path.split("/");
+    	var fileName = urlPart[urlPart.length-1];
+    	console.log(fileName);
+    	res.send("Weee");
+    });
+});
 
 /* POST rates users */
 // API says this is a PUT, I think either would be fine - POST might make more sense if we can change ratings at some point
