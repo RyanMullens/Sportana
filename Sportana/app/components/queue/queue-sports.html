@@ -10,7 +10,7 @@
 		<button class="btn" ng-show="isEditMode()" ng-click="updatePreferences()">Save</button>
 		<button class="btn" ng-show="isEditMode()" ng-click="cancelPreferenceChanges()">Cancel</button>
 
-		<button class="btn" ng-show="!isEditMode() && hasPreferences()" ng-click="dropFromQueue()">Drop Queue</button>
+		<button class="btn" ng-show="!isEditMode() && hasPreferences" ng-click="dropFromQueue()">Drop Queue</button>
 
 	</div>
 
@@ -93,7 +93,7 @@
 		</div>
 
 		<div id="sportPicker">
-	    	<div class="sportPanel" ng-repeat="sport in queue.getSports()" ng-class="{selected: queue.isSelected(sport)}" ng-click="queue.toggle(sport)">
+	    	<div class="sportPanel" ng-repeat="sport in sports" ng-class="{selected: queue.isSelected(sport)}" ng-click="queue.toggle(sport)">
 	    		<img class="sportIcon" ng-src="{{sport.image}}"/>
 	    		<br>{{sport.sport}}<br>
 		   </div>
@@ -102,7 +102,7 @@
 
 	<div id="view-queue-normal" ng-hide="isEditMode()">
 
-		<div id="queue-preferences-overview" ng-show="hasPreferences()" class="{minimized: isViewingMatches()}">
+		<div id="queue-preferences-overview" ng-show="hasPreferences" class="{minimized: isViewingMatches()}">
 
 			<ul>
 				<li ng-repeat="sport in preferences.sports" class="queue-sport-tag">
