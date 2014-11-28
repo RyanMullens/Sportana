@@ -28,7 +28,7 @@ build/Release
 node_modules
 
 #Blocks all user pics from being brought over...
-Sportana/app/assets/img/users
+app/assets/img/users
 
 # Users Environment Variables
 .lock-wscript
