@@ -6,15 +6,15 @@
 					<div class="col-md-3">
 						<div class="profileImageHolder">
 							<img class="profileImage img-thumbnail" ng-src="{{viewProfile.getProfilePicture()}}"></img>
-							<div ng-show="viewProfile.isSelf()" ng-click="viewProfile.setPhotoEdit(true)" class="profileUploadBar">
+							<div ng-show="viewProfile.isSelf()" ng-click="viewProfile.startPhoto()" class="profileUploadBar">
 								<span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Change
 							</div>
 						</div>
 						<div ng-show="viewProfile.isPhotoEditing()">
 							<input type="file" id="file" onchange="angular.element(this).scope().fileNameChanged()"/>
 							<div>
-								<button class="btn btn-success"  ng-show="viewProfile.isPhotoSelected()" ng-click="addPhoto()">Upload</button>
-								<button class="btn btn-danger" ng-click="viewProfile.setPhotoEdit(false)">Cancel</button>
+								<button class="btn btn-success"  ng-show="viewProfile.isPhotoSelected()" ng-click="addPhoto()">Save</button>
+								<button class="btn btn-danger" ng-click="viewProfile.cancelPhoto()">Cancel</button>
 							</div>
 						</div>
 					</div>	

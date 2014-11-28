@@ -27,5 +27,8 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 
+#Blocks all user pics from being brought over...
+Sportana/app/assets/img/users
+
 # Users Environment Variables
 .lock-wscript

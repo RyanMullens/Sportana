@@ -7,7 +7,7 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	$scope.user = {};
 
 	$scope.photoSelected = false;
-	this.photoEditing = false;
+	$scope.photoEditing = false;
 
 	this.editing = false;
 	$scope.loaded = false;
@@ -34,7 +34,7 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
     		
     		$scope.user = data;
     		$scope.loaded = true;
-
+    		$scope.oldTempPic = $scope.user.profilepicture;
     		//Hack to prevent empty sport from showing
     		/*if($scope.user.sportsArray.length == 1 && $scope.user.sportsArray[0].sportName == null)
     		{
@@ -478,14 +478,30 @@ $scope.deleteFavoriteSport = function(sport)
 
 
 
-this.setPhotoEdit = function(b)
+this.startPhoto = function()
 {
-	this.photoEditing = b;
+	$scope.photoEditing = true;
+}
+
+this.cancelPhoto = function()
+{
+	if($scope.oldTempPic != undefined)
+	{
+		$scope.user.profilepicture = $scope.oldTempPic;
+	}
+
+	$scope.photoEditing = false;
+	$scope.clearPhotoLoad();
+}
+
+$scope.clearPhotoLoad = function()
+{
+	$('#file').val(""); 
 }
 
 this.isPhotoEditing = function()
 {
-	return this.photoEditing;
+	return $scope.photoEditing;
 }
 
 this.isPhotoSelected = function()
@@ -496,7 +512,18 @@ this.isPhotoSelected = function()
 $scope.fileNameChanged = function()
 {
 	$scope.photoSelected = document.getElementById('file').files.length > 0;
-	$scope.$apply();
+
+
+	var $file = document.getElementById('file').files[0]
+    if (document.getElementById('file').files[0] != undefined && window.FileReader && $file.type.indexOf('image') > -1) {
+        var fileReader = new FileReader();
+        fileReader.readAsDataURL($file);
+
+        fileReader.onload = function(e) {
+        	$scope.user.profilepicture = e.target.result;
+        	$scope.$apply();
+        }
+    }    
 }
 
 /*Photo Upload*/
@@ -505,9 +532,6 @@ $scope.addPhoto = function()
 {
   var f = document.getElementById('file').files[0],
       r = new FileReader();
-    console.log("Weee uploading");
-
-    console.log('file is ' + JSON.stringify(f));
 
     var fd = new FormData();
         fd.append('file', f);
@@ -517,16 +541,24 @@ $scope.addPhoto = function()
         })
         .success(function(data, status, headers, config)
 		{
-			console.log(data);
-
 			if(data != undefined)
 			{
 				if(data.success)
 				{
+					$scope.oldTempPic = $scope.user.profilepicture;
 					$scope.user.profilepicture = data.img;
+					$scope.photoEditing = false;
+					$scope.clearPhotoLoad();
+					return;
 				}
 			}
 
+			if($scope.oldTempPic != undefined)
+			{
+				$scope.user.profilepicture = $scope.oldTempPic;
+			}
+
+			alert("Failed to upload image :(");
 		});
 
 
