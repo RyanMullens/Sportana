@@ -338,7 +338,7 @@ CREATE TRIGGER update_notifications
 	EXECUTE PROCEDURE update_notifications();  
 
 CREATE TRIGGER update_friendliness_timeliness_skillLevel
-	AFTER INSERT ON Ratings
+	AFTER INSERT OR UPDATE ON Ratings
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_friendliness_timeliness_skillLevel();  
 

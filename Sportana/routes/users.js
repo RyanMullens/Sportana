@@ -90,7 +90,7 @@ router.post('/addFavoriteSport', function(req, res) {
 });
 
 /* DELETE deletes a favorite sport, one at a time */
-router.delete('/deleteFavoriteSport/:sport', function(req, res) {
+router.put('/deleteFavoriteSport/', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};
@@ -100,7 +100,7 @@ router.delete('/deleteFavoriteSport/:sport', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			var sport = req.params.sport;
+			var sport = req.body.sport;
 			dbc.deleteFavoriteSport(username, sport, function(err, data){
 				res.send(JSON.stringify(data));
 			});
@@ -165,7 +165,7 @@ router.post('/photoUpload', function(req, res) {
 });
 
 /* POST rates users */
-// API says this is a PUT, I think either would be fine - POST might make more sense if we can change ratings at some point
+// Must rate all 3 fields though.
 router.post('/ratings', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
@@ -175,19 +175,20 @@ router.post('/ratings', function(req, res) {
 			response.success = false;
           res.write(JSON.stringify(response));
           res.end();
-		} else {
+		} else { 
+	var username = 'bwayne';
 			var userRated = req.body.userRated;
 			var friendliness = req.body.friendliness;
 			var timeliness = req.body.timeliness;
 			var skilllevel = req.body.skilllevel;
-			if(username != "" && userRated != "" && friendliness != "" && timeliness != "" && skilllevel != ""){
-				var userObject = {
-						rater: username, userRated: userRated,
-						friendliness: friendliness, timeliness: timeliness, skilllevel: skilllevel
-						};
-			}
+			var userObject = {
+				userRated: userRated, rater: username, 
+				friendliness: friendliness, timeliness: timeliness, skilllevel: skilllevel
+				};
 			dbc.rate(userObject, function(err, data){
-				res.send(JSON.stringify(data));
+				var json = JSON.stringify(data);
+				res.write(json);
+				res.end();
 			});
 		}
 	});

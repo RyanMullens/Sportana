@@ -131,12 +131,41 @@ var ConcatSports = function(obj, callback){
 	}
 }
 
+var hasRated = function(username, login, callback){
+	console.log("hasRated called");
+	pg.connect(connString, function(err, client, done){
+		if(err){ pg.end(); callback(undefined, {message: "error"}); }
+		else{
+			var myRatings = [];
+			var SQLQuery = "SELECT friendliness, timeliness, skilllevel from Ratings where userrated = $1 AND rater = $2";
+			client.query({ text : SQLQuery, values : [login, username]},
+				function(err, result){
+				done(); //client.end();
+				pg.end();
+				if(err){ callback({message: "error"}); return;}
+				else{
+					if(result.rows[0]){
+						myRatings.push({friendliness: result.rows[0]["friendliness"], timeliness: result.rows[0]["timeliness"], skilllevel: result.rows[0]["skilllevel"]});
+						callback(myRatings);
+						return;
+					}
+					else{
+						myRatings.push({friendliness: 0, timeliness: 0, skilllevel: 0});
+						callback(myRatings);
+						return;
+					}
+				}
+			});
+		}
+	});
+}
+
 var isFriend = function(username, login, callback) {
 	console.log("isFriend called");
 	pg.connect(connString, function(err, client, done) {
 		var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 		if(err) {
-			client.end(); pg.end();
+			pg.end();
 			callback(undefined, {message: "error"});
 		}
 		else{
@@ -179,7 +208,6 @@ var isFriend = function(username, login, callback) {
 		 							   return;
 			 						   }
 			 					   }
-		 						   console.log("hello");
 							   	   //Requested
 		 						   var SQLQuery2 = "SELECT userTo, userFrom, nid, type FROM Notifications WHERE userto = $1 AND type = " + '0' + "";
 		 						   client.query({ text : SQLQuery2,
@@ -191,7 +219,6 @@ var isFriend = function(username, login, callback) {
 		 									   callback(undefined, {message: "error"});
 		 								   }
 		 								   else{
-		 									   console.log("hi");
 		 									   for(var k = 0; k < result2.rows.length; k++){
 		 										   if(result2.rows[k]["userfrom"] === login){
 		 				 							   isFriend = 3;
@@ -264,6 +291,11 @@ exports.getUserProfile = function (username, login, callback) {
 			            				temp = concated;
 			            			});
 			            			result.rows[0] = temp;
+
+			            			hasRated(username, login, function(myRatings){
+			            				result.rows[0]["myRatings"] = myRatings;
+			            			});
+			            			
 			            			isFriend(username, login, function(err, value, nid){
 			            				if(err){
 			            					callback(undefined, {message: "error"});
@@ -401,22 +433,62 @@ exports.addFavoriteSport = function (username, sport, callback) {
 			callback(undefined, {message: "error"});
 		}
 		else {
-			var SQLQuery = "INSERT INTO FavoriteSports (login, sport) VALUES ($1, $2)";
-				client.query({ text : SQLQuery,
-							   values : [username, sport]},
-					function(err, result){
+			var SQLQuery = "Select sport from favoritesports where login = $1";
+			client.query({ text: SQLQuery, values : [username]},
+				function(err, result){
 					done();
-					client.end();
-					pg.end();
 					if(err){
-						callback(undefined, {message: "could not insert"});
-						}
-					else{
-						callback(undefined, {message: "success"});
+						client.end(); pg.end();
+						callback(undefined, {message: "error"});
 					}
-			});
-		}
-	});
+					else{
+						var boolean = false;
+						for(var i = 0; i < result.rows.length; i++)
+							if(result.rows[i]["sport"] == sport)
+								boolean = true;
+						if(!boolean){
+						var SQLQuery = "INSERT INTO FavoriteSports (login, sport) VALUES ($1, $2)";
+							client.query({ text : SQLQuery,
+										   values : [username, sport]},
+								function(err, result){
+								done();
+								if(err){
+									client.end(); pg.end();
+									callback(undefined, {message: "Insert error"});
+									}
+								else{
+									var SQLQuery = "SELECT Sport.sport, Sport.ImageURL from Sport left join FavoriteSports ON favoritesports.sport = sport.sport WHERE favoritesports.login = $1";
+									client.query({ text : SQLQuery, values : [username]},
+										function(err, result){
+											done();
+											client.end(); pg.end();
+											if(err){
+												callback(undefined, {message: "error"});
+											}
+											else{
+												var sportsArray = [];
+												for(i = 0; i < result.rows.length; i++){
+													if(result.rows[i]["sport"] == sport)
+														sportsArray.push({sportsName: result.rows[i]["sport"], sportImage: result.rows[i]["imageurl"]});
+												}
+												if(sportsArray.length < 1)
+													callback(undefined, {message: "error"});
+												var obj = {message: "success", sportsArray: sportsArray};
+												callback(undefined, obj);
+											}
+										}
+									)
+								}		
+							});
+						}
+						else{
+							client.end(); pg.end();
+							callback(undefined, {message: "Exists"})
+						}
+					}
+				});
+			}
+		});
 }
 
 exports.deleteFavoriteSport = function (username, sport, callback) {
@@ -442,6 +514,47 @@ exports.deleteFavoriteSport = function (username, sport, callback) {
 		}
 	});
 }
+
+exports.rate = function(UserObject, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "WITH upsert AS (UPDATE Ratings SET friendliness=$3, timeliness=$4, skilllevel=$5 WHERE userrated=$1 AND rater=$2 RETURNING *) " +
+					"INSERT INTO Ratings (userrated, rater, friendliness, timeliness, skilllevel) SELECT $1, $2, $3, $4, $5 WHERE NOT EXISTS (SELECT * FROM upsert)";
+			
+			client.query({ text : SQLQuery, values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
+				function(err, result){
+				done();
+				if(err){
+					console.log("insert/update error");
+					client.end(); pg.end();
+					callback(undefined, {message: "insert/update error"});
+					}
+				else{
+					console.log("successful insert/update");
+					var SQLQuery = "SELECT round(Users.friendliness*100)/100 as friendliness, " +
+							"round(Users.timeliness*100)/100 as timeliness, " +
+							"round(Users.skilllevel*100)/100 as skilllevel " +
+							"FROM Users WHERE Users.login = $1";
+					client.query({ text: SQLQuery, values : [UserObject.userRated]},
+						function(err, result){
+							done();	client.end(); pg.end();
+							if(err){
+								callback(undefined, {message: "error"});
+							}
+							else{
+								console.log(result.rows[0]);
+								callback(undefined, result.rows[0]);
+							}
+					});
+				}
+			});
+		}
+	});
+}
+
 
 /**
  *****************************************************
@@ -874,30 +987,6 @@ exports.getRequests = function(username, callback) {
       });
     }
   });
-};
-
-exports.rate = function(UserObject, callback) {
-	pg.connect(connString, function(err, client, done) {
-		if(err) {
-			callback(undefined, {message: "error"});
-		}
-		else {
-			var SQLQuery = "INSERT INTO Ratings(userRated, rater, friendliness, timeliness, skilllevel) VALUES ($1, $2, $3, $4, $5)";
-			client.query({ text : SQLQuery,
- 			   values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
- 			function(err, result){
-			 	done();
-			 	client.end();
-			 	pg.end();
-			 	if(err){
-			 		callback(undefined, {message: "insert error"});
-			 	}
-			 	else {
-			 		callback(undefined, {message: "success"});
-			 	}
- 			   });
-		}
-	});
 };
 
 exports.searchUsers = function(firstName, lastName, callback) {
