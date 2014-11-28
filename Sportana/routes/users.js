@@ -10,6 +10,10 @@ var authenticator = require('./authentication'); // Authentication Handler
 
 var formidable = require('formidable');
 
+//For password-reset
+var Mailgun = require('mailgun-js');
+
+
 /* GET retrieves a user profile */
 router.get('/:login', function(req, res) {
 	var auth = req.get('SportanaAuthentication');
@@ -194,11 +198,45 @@ router.put('/password-reset', function (req, res) {
 	var login = email[0];
 	var emailSuffix = email[1];
 
-	res.send("not finished yet");
-	//call function
+		//Your api key, from Mailgun’s Control Panel
+	var api_key = 'key-82764a94438e77d6e3647f63555d8f51';
+
+	//Your domain, from the Mailgun Control Panel
+	var domain = 'sportana.ryanmullens.me';
+
+	//Your sending email address
+	var from_who = 'Kiwi@sportana.ryanmullens.me';
+
+	//Who we're sending to
+	var to_who = req.body.email;
+
+
+
+	 //We pass the api_key and domain to the wrapper, or it won't be able to identify + send emails
+    var mailgun = new Mailgun({apiKey: api_key, domain: domain});
+
+    var data = {
+    //Specify email data
+      from: from_who,
+    //The email to contact
+      to: to_who,
+    //Subject and text data  
+      subject: 'Reset Sportana Password',
+      html: 'Hey there... Sorry about you Alzheimer\'s. <a href="https://google.com">Click here</a> to reset your password.'
+    }
+
+    //Invokes the method to send emails given the above data with the helper library
+    mailgun.messages().send(data, function (err, body) 
+    {
+    		res.send("Done!");
+    		console.log(err);
+    		console.log(body);
+    });
 });
 
-router.post('/account/password', function (req, res) {
+
+router.post('/account/password', function (req, res) 
+{
 	res.send("not finished yet");
 });
 
