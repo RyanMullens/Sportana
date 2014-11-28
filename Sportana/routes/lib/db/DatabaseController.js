@@ -372,6 +372,30 @@ exports.editCity = function (username, city, callback) {
 	});
 }
 
+exports.editPicture = function (username, picture, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(undefined, {message: "error"});
+		}
+		else {
+			var SQLQuery = "UPDATE Users SET profilepicture=$1 where login=$2";
+				client.query({ text : SQLQuery,
+							   values : [picture, username]},
+					function(err, result){
+					done();
+					client.end();
+					pg.end();
+					if(err){
+						callback({message: "could not update"}, {success:false});
+						}
+					else{
+						callback(undefined, {success:true,message: "success"});
+					}
+			});
+		}
+	});
+}
+
 exports.addFavoriteSport = function (username, sport, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {

@@ -505,21 +505,29 @@ $scope.addPhoto = function()
 {
   var f = document.getElementById('file').files[0],
       r = new FileReader();
-  r.onloadend = function(e){
-    var data = e.target.result;
     console.log("Weee uploading");
 
     console.log('file is ' + JSON.stringify(f));
 
     var fd = new FormData();
-        fd.append('file', data);
+        fd.append('file', f);
         $http.post('/api/users/photoUpload', fd, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         })
-        .success(function(){
-        	console.log("done...");
-        })
+        .success(function(data, status, headers, config)
+		{
+			console.log(data);
+
+			if(data != undefined)
+			{
+				if(data.success)
+				{
+					$scope.user.profilepicture = data.img;
+				}
+			}
+
+		});
 
 
 
@@ -535,9 +543,6 @@ $scope.addPhoto = function()
 		});*/
 
     //send you binary data via $http or $resource or do anything else with it
-  }
-  
-  r.readAsArrayBuffer(f);
 }
 
 

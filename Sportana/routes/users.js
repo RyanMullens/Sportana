@@ -107,19 +107,57 @@ router.delete('/deleteFavoriteSport/:sport', function(req, res) {
 /* POST edits profile picture */
 // TO-DO
 router.post('/photoUpload', function(req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) 
+	{
+		var form = new formidable.IncomingForm();
 
-	var form = new formidable.IncomingForm();
+		form.keepExtensions = true;
+		form.uploadDir = "app/assets/img/users";
 
-	form.keepExtensions = true;
-	form.uploadDir = "app/assets/img/users";
+	    form.parse(req, function(err, fields, files) 
+	    {
+	    	//console.log(files);
+	    	
+	    	if(files.file != undefined && files.file.path != undefined)
+	    	{
+	    		var urlPart = files.file.path.split("/");
+	    		var fileName = urlPart[urlPart.length-1];
+	    		//console.log(fileName);
 
-    form.parse(req, function(err, fields, files) 
-    {
-    	var urlPart = files.upload.path.split("/");
-    	var fileName = urlPart[urlPart.length-1];
-    	console.log(fileName);
-    	res.send("Weee");
-    });
+	    		var dbFinalPath = "/assets/img/users/" + fileName;
+
+	    		//TODO update db entry
+	    		//TODO pass back correct img?
+
+	    		dbc.editPicture(username, dbFinalPath, function(err, data){
+					
+					if(data.success)
+					{
+			    		var obj = {};
+			    		obj.error = undefined;
+			    		obj.img = dbFinalPath;
+			    		obj.success = true;
+
+			    		res.send(obj);
+			    	}else{
+			    		var obj = {};
+			    		obj.error = "Database failure...";
+			    		obj.img = undefined;
+			    		obj.success = false;
+			    		res.send(obj);
+			    	}
+	    		});
+	    	}else{
+	    		var obj = {};
+	    		obj.error = "Improper uploading...";
+	    		obj.img = undefined;
+	    		obj.success = false;
+	    		res.send(obj);
+	    	}
+	    	
+	    });
+	});
 });
 
 /* POST rates users */
