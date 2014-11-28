@@ -58,6 +58,9 @@ body {
   }
 
   /* Sidebar navigation */
+  .nav-sidebar li{
+    list-style: none;
+  }
   .nav-sidebar > li > a {
     padding-right: 20px;
     padding-left: 20px;
@@ -92,6 +95,10 @@ body {
   /****  END SIDEBAR ****/
 
   /****  START FRIENDS ****/
+
+  #friends{
+    margin:0 10px;
+  }
 
   .friend{
     display: block;
@@ -137,6 +144,9 @@ body {
   #viewGames .game .player, #viewGame .player{
     width:auto;
     height:100px;
+  }
+  #viewGame{
+    margin: 0 20px;
   }
   #viewGame .players{
     height:100px;
