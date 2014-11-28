@@ -236,14 +236,13 @@ exports.getUserProfile = function (username, login, callback) {
 					else{
 					  //if(result.rows[0] !== undefined){
 					  var SQLQuery = "SELECT Users.login, Users.emailSuffix, Users.firstname, Users.lastname, Users.profilePicture, Users.city, Users.birthday, " +
-						"Users.friendliness, Users.timeliness, Users.skilllevel, " +
+						"round(Users.friendliness*100)/100 as friendliness, round(Users.timeliness*100)/100 as timeliness, round(Users.skilllevel*100)/100 as skilllevel, " +
 						"FavoriteSports.sport, Sport.imageURL " +
 						"FROM Users " +
-						"LEFT JOIN Ratings ON Users.login = Ratings.userRated " +
 						"LEFT JOIN FavoriteSports ON Users.login = FavoriteSports.login " +
 						"LEFT JOIN Sport ON FavoriteSports.sport = Sport.sport " +
 						"WHERE Users.login = $1 " +
-						"GROUP BY Users.login, Ratings.friendliness, Ratings.timeliness, Ratings.skilllevel, FavoriteSports.sport, Sport.imageURL";
+						"GROUP BY Users.login, FavoriteSports.sport, Sport.imageURL";
 
 						client.query({ text : SQLQuery,
 			            			   values : [login]},
