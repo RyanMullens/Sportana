@@ -176,7 +176,6 @@ router.post('/ratings', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else { 
-	var username = 'bwayne';
 			var userRated = req.body.userRated;
 			var friendliness = req.body.friendliness;
 			var timeliness = req.body.timeliness;

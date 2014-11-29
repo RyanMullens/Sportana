@@ -225,6 +225,11 @@ this.saveRate = function()
 		.success(function(data, status, headers, config)
 		{
 			console.log(data);
+
+			$scope.user.friendliness = data.friendliness;
+			$scope.user.skilllevel = data.skilllevel;
+			$scope.user.timeliness = data.timeliness;
+
 			thisTemp.rating = false;
 		})
 		.error(function(data, status, headers, config) 
