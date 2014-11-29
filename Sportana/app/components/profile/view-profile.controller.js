@@ -16,7 +16,6 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	this.tempCity = "";
 
 	this.rating = false;
-	this.tempRating = {friendliness : 1, timeliness:1, skilllevel:1};
 
 	userId = $stateParams.userId;
 	if(!userId) {
@@ -25,6 +24,8 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
 	}
 
 	$scope.user = {};
+
+	var that = this;
 
 	$http.get('/api/users/' + userId)
 		.success(function(data, status, headers, config)
@@ -35,20 +36,13 @@ app.controller("ViewProfileController", function($http, $state, $stateParams, $s
     		$scope.user = data;
     		$scope.loaded = true;
     		$scope.oldTempPic = $scope.user.profilepicture;
-    		//Hack to prevent empty sport from showing
-    		/*if($scope.user.sportsArray.length == 1 && $scope.user.sportsArray[0].sportName == null)
+    		
+
+    		if(data != undefined && data.myRatings.length > 0)
     		{
-    			$scope.user.sportsArray = [];
-    		}	*/
-
-
-    		/*$scope.user.favoriteSports = [{"sportName":"Frisbee","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Soccer","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Baseball","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}
-							,{"sportName":"Hockey","sportImage":"/assets/img/icon_73766.png"}];*/
-
+				that.rateValues = [data.myRatings[0].friendliness,data.myRatings[0].timeliness,data.myRatings[0].skilllevel];
+				that.tempRateValues = [data.myRatings[0].friendliness,data.myRatings[0].timeliness,data.myRatings[0].skilllevel];
+			}
 		})
 		.error(function(data, status, headers, config) {
     		console.log('There was an error retrieving user profile');
@@ -363,7 +357,7 @@ this.pendingFriend = function()
 
 
 /*START RATING*/
-//Will refactor into directive when i have free time 
+//Will refactor into directive when i have free time(aka never... lol) 
 
 this.rateValues = [0,0,0];
 this.tempRateValues = [0,0,0];
