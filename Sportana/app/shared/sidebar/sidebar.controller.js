@@ -7,7 +7,7 @@ app.controller("SidebarController", function($scope, $location, sidebarService, 
 	this.showMenu = false;
 
 	$scope.isActive = function (viewLocation) {
-		return viewLocation === $location.path();
+		return viewLocation === this.currentTab;
 	};
 
 	$scope.setTab = function(newTab)
