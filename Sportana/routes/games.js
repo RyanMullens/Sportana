@@ -88,6 +88,55 @@ router.put('', function(req, res) {
 
 });
 
+
+/**
+ *****************************************************
+ * GET	/games/
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”    	: string // empty on success
+ * 	“success”    	: boolean
+ *  "creator"    	: string
+ *  "gameID"        : int
+ *  "gameDate" 	 	: date // yyyy-mm-dd
+ *  "gameStart"  	: time // hh:mm:ss
+ *  "location"   	: string
+ * 	“sport"      	: string
+ * }
+ *****************************************************
+ */
+router.get('', function (req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+		  response.message = "Error with authentication";
+		  response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getGamesList(username, function(err, jsonGameInfo) {
+				if (err) {
+					response.success = false;
+					response.message = err;
+				} else {
+					response = jsonGameInfo;
+					response.success = true;
+					response.message = "";
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
+
+
 /**
  *****************************************************
  * POST	/games/join
@@ -294,6 +343,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 		}
 	});
 });
+
 
 /**
  *****************************************************

@@ -71,6 +71,7 @@ body {
 
   .nav-sidebar a {
     color: #C4C5C8;
+    text-decoration: none;
   }
 
   .nav-sidebar .active a {
@@ -129,6 +130,9 @@ body {
 
   /****  START VIEWGAMES AND GAME ****/
 
+  #viewGames .btn{
+    text-align: initial;
+  }
   #viewGames .notifications, #viewGames .games{
     max-height:450px;
     overflow-y: scroll;

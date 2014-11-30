@@ -107,6 +107,55 @@ router.put('/game', function(req, res) {
 
 /**
  *****************************************************
+ * GET	/games/
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”    	: string // empty on success
+ * 	“success”    	: boolean
+ *  "creator"    	: string
+ *  "gameID"        : int
+ *  "gameDate" 	 	: date // yyyy-mm-dd
+ *  "gameStart"  	: time // hh:mm:ss
+ *  "location"   	: string
+ * 	“sport"      	: string
+ *  "invitedBy"		: string
+ * }
+ *****************************************************
+ */
+
+router.get('/games', function(req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getGamesNotifications(username, function(err, jsonGameInfo) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response = jsonGameInfo;
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+          		console.log(response);
+			});
+		}
+	});
+});
+
+/**
+ *****************************************************
  * PUT	/requests/friend
  * REQUEST:
  * {

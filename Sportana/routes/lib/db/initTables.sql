@@ -81,6 +81,8 @@ INSERT INTO Notifications(userTo , userFrom , type) values
 ('jbond' , 'bwayne' , 0);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 ('myoda' , 'bwayne' , 2 , 'mscott' , 1);
+INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
+('myoda' , 'bwayne' , 1 , 'ckent' , 1);
 
 INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
 ('ckent' , 'jbond' , 1 , 'This game is going to be awesome!');

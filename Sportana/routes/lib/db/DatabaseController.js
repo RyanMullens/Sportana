@@ -743,6 +743,67 @@ exports.getGameInfo = function(gameCreator, gameID, callback) {
   });
 };
 
+exports.getGamesList = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+      var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport "+
+      					"From Game as g, Participant as p " +
+      					"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator ";
+      client.query(SQLQuery, [username], function (err, result) {
+          // Ends the "transaction":
+          done();
+          // Disconnects from the database:
+          client.end();
+          // This cleans up connected clients to the database and allows subsequent requests to the database
+          pg.end();
+          if (err) {
+           callback(err, undefined);
+          }
+          else {
+          	if (!result.rows[0]) {
+          		callback("No result found", undefined);
+          	}
+
+            callback(undefined, result.rows);
+          }
+      });
+    }
+  });
+};
+
+exports.getGamesNotifications = function(username, callback) {
+  pg.connect(connString, function (err, client, done) {
+    if (err) {
+      callback(err, undefined);
+    }
+    else {
+      var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy "+
+      					"From Game as g, Notifications as n " +
+      					"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator ";
+      client.query(SQLQuery, [username], function (err, result) {
+          // Ends the "transaction":
+          done();
+          // Disconnects from the database:
+          client.end();
+          // This cleans up connected clients to the database and allows subsequent requests to the database
+          pg.end();
+          if (err) {
+           callback(err, undefined);
+          }
+          else {
+          	if (!result.rows[0]) {
+          		callback("No result found", undefined);
+          	}
+            callback(undefined, result.rows);
+          }
+      });
+    }
+  });
+};
+
 exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameID, callback) {
 	var type;
 	if (reqType === "friend") {

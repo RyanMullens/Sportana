@@ -1,32 +1,31 @@
 'use strict';
 app.controller("ViewGamesController", function($http, $scope){
 
-	var games = [
-	{gameID: 1, creator: 'mscott', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
-	playersJoined: 5,date: 'October 30 2014', 
-	time: '5:30pm', location: 'Amherst', players: ['/assets/img/profile.png','/assets/img/profile.png','/assets/img/profile.png']}
-	];
-
-/*
-	var notifications = [
-	{id: 1, creator: 'jbond', sport: 'Football', sportImg: '/assets/img/icon_73766.png', 
-	invitedBy: 'jbond', playersJoined: 5, playersInvited: 4, 
-	date: 'October 30 2014', time: '5:30pm', location: 'Amherst'},
-	{id: 1, creator: 'ckent', sport: 'Football', sportImg: '/assets/img/icon_73766.png',
-	invitedBy: 'myoda', playersJoined: 5, playersInvited: 4, 
-	date: 'October 30 2014', time: '5:30pm', location: 'Amherst'}
-	];
-	*/
+	$scope.games = [];
 	$scope.notifications = [];
 
 	var that = this;
-	$http.get('/api/requests/').
+	$http.get('/api/requests/games').
 	success(function(data, status, headers, config) {
-		console.log(data.requests);
-		for(var i = 0; i < data.requests.length; i++){
-			that.httpGetGame(data.requests[i].gameCreator, data.requests[i].gameID);
-		}
 		
+		console.log(data);
+		for(var notification in data){
+			data[notification].sportImg = '/assets/img/sports/' + data[notification].sport.toLowerCase() + '.png';
+		}
+		$scope.notifications = data;
+		
+	}).
+	error(function(data, status, headers, config) {
+		console.log('there was an error');
+	});
+
+	$http.get('/api/games/').
+	success(function(data, status, headers, config) {
+		for(var game in data){
+			data[game].sportImg = '/assets/img/sports/' + data[game].sport.toLowerCase() + '.png';
+		}
+		console.log(data);
+		$scope.games = data;
 	}).
 	error(function(data, status, headers, config) {
 		console.log('there was an error');
@@ -45,11 +44,11 @@ app.controller("ViewGamesController", function($http, $scope){
 	};
 
 	this.hasGames = function(){
-		return games.length;
+		return $scope.games.length > 0;
 	};
 
 	this.getGames = function(){
-		return games;
+		return $scope.games;
 	};
 
 	this.acceptGame = function(notification, accepted){
@@ -68,7 +67,7 @@ app.controller("ViewGamesController", function($http, $scope){
 		});
 
 		if(accepted){
-			games.push(notification);
+			$scope.games.push(notification);
 
 		}
 		$scope.notifications.splice($scope.notifications.indexOf(notification),1);
