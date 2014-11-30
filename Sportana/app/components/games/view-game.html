@@ -34,7 +34,7 @@
 							$('[data-toggle="tooltip"]').tooltip();   
 						});
 					</script>
-					<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.img}}"/></a>
+					<a ng-repeat="player in viewGame.getPlayers() track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.profilepicture}}"/></a>
 				</div>
 				
 				<div class="row invited">

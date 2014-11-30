@@ -6,16 +6,17 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 	*/
 	$scope.game = {};
-	$scope.messages;
+	$scope.players = [];
+	$scope.messages = [];
 	$scope.gameLoaded = false;
 	$scope.messagesLoaded = true;
-
+/*
 	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
 	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
 	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'},
 	{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}
 	];
-
+*/
 	$scope.friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
 	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
 	];
@@ -30,6 +31,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
 		console.log(data);
 		$scope.game = data;
+		$scope.players = data.players;
 		$scope.gameLoaded = true;
 	})
 	.error(function(data, status, headers, config) {
@@ -69,7 +71,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getPlayers = function(){
-		return players;
+		return $scope.players;
 	};
 
 	this.getInvites = function(){
@@ -85,7 +87,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.contains = function(type, login){
-		for(i = 0; i < type.length; i++){
+		for(var i = 0; i < type.length; i++){
 			if(login === type[i].login){
 				return type[i];
 			}
@@ -116,11 +118,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		.success(function(data, status, headers, config){
 			var player = that.contains(that.getInvited(), that.getUser());
 			if(that.isInvited(that.getUser())){
-				players.push(player);
+				$scope.players.push(player);
 				that.getInvited().splice(that.getInvited().indexOf(player),1);
 			}
 			else{
-				players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
+				$scope.players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
 			}
 		})
 		.error(function(data, status, headers, config) {
