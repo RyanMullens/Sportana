@@ -22,7 +22,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	];
 	$scope.invites = [];
 
-	var invited = [];
+	$scope.invited = [];
 
 
 
@@ -32,6 +32,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		console.log(data);
 		$scope.game = data;
 		$scope.players = data.players;
+		$scope.invited = data.invited;
 		$scope.gameLoaded = true;
 	})
 	.error(function(data, status, headers, config) {
@@ -47,7 +48,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving messages');
 	});
-
 
 	this.isGameLoaded = function(){
 		return $scope.gameLoaded;
@@ -79,7 +79,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getInvited = function(){
-		return invited;
+		return $scope.invited;
 	};
 
 	this.getUser = function(){
@@ -159,7 +159,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		var that = this;
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
-			$http.post('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
+			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
 			.success(function(data, status, headers, config){
 			})
 			.error(function(data, status, headers, config) {

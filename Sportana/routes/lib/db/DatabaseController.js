@@ -691,34 +691,63 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
 	});
 };
 
-/* Get the players for this game
-            var SQLQuery = 	"SELECT u.login, u.firstname, u.lastname, u.profilepicture " +
-            "FROM Participant as p, Users as u " + 
-            "WHERE p.creator = $1 and p.gameid = $2 and p.login = u.login";
-            client.query({ text : SQLQuery,
-            	values : [that.gameInfo.gameID , that.gameInfo.gameCreator]},
-            	function (err, result) {
-			          // Ends the "transaction":
-			          done();
-			          // Disconnects from the database:
-			          client.end();
-			          // This cleans up connected clients to the database and allows subsequent requests to the database
-			          pg.end();
-			          if (err) {
-			          	callback(err, undefined);
-			          }
-			          else {
-			          	if (!result.rows[0]) {
-			          		callback("No result found", undefined);
-			          	}
+/**
+ *****************************************************
+ * getInvited
+ *
+ * Get the invited users for a given game
+ *
+ *
+ * Returns:
+ * requests:
+ *   [{
+ *    "id"            : int
+ *    "login" 	  : string // users login
+ *    "firstName"  : string // users name
+ *    "lastName"  : string // users name
+ *    "profilepicture" : string // url
+ *   }]
+ *****************************************************
+ */
+ var getInvited = function(gameInfo, callback) {
+ 	pg.connect(connString, function (err, client, done) {
+ 		if (err) {
+ 			callback(err, undefined);
+ 		}
+ 		else {
+ 			var SQLQuery = "SELECT n.nid, u.login, u.firstname, u.lastname, u.profilepicture " +
+ 			"FROM Notifications as n, Users as u " +
+ 			"WHERE n.creator = $1 AND n.gameid = $2 AND n.userTo = u.login";
+ 			client.query({ text : SQLQuery,
+ 				values : [gameInfo.creator, gameInfo.gameID]},
+ 				function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+        		callback(err, undefined);
+        		console.log(result);
+        	}
+        	else {
+        		if (!result.rows[0]) {
+        			gameInfo.invited = [];
+        		}
+        		else{
+        			gameInfo.invited = result.rows;
+        		}
+        		console.log(result);
+        		console.log(gameInfo);
 
-			          	that.gameInfo.players = result.row[0];
+        		callback(undefined, gameInfo);
+        	}
+        });
+ 		}
+ 	});
+};
 
-			          	callback(undefined, that.gameInfo);
-			          }
-			      });
-
-*/
 var getGamePlayers = function(gameInfo, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) {
@@ -744,9 +773,8 @@ var getGamePlayers = function(gameInfo, callback) {
 						else{
 							gameInfo.players = result.rows;
 						}
-						console.log(gameInfo);
 
-						callback(undefined, gameInfo);
+						getInvited(gameInfo, callback);
 
 					}
 				});
@@ -1106,6 +1134,7 @@ exports.getAllSports = function(callback) {
 }
 });
 };
+
 
 exports.searchUsers = function(firstName, lastName, callback) {
 	if (!firstName && !lastName) {
