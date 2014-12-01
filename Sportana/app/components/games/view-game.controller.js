@@ -13,7 +13,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	$scope.friends = [];
 	$scope.invites = [];
 	$scope.invited = [];
-
+console.log(CurrentUser.getUser());
 
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
@@ -147,6 +147,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.inviteFriends = function(){
 		var that = this;
+
+		console.log('invites');
+		console.log(this.getInvites());
+		console.log('friend');
+		console.log(this.getFriends());
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})

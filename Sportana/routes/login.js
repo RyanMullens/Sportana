@@ -49,6 +49,7 @@ router.post('', function(req, res) {
     	  	response.firstName = user.firstName;
     	  	response.lastName = user.lastName;
     	  	response.numNotifications = user.numNotifications;
+            response.profilePicture = user.profilePicture;
     	  }
     	  var json = JSON.stringify(response);
           res.write(json);

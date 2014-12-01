@@ -10,7 +10,7 @@ exports.getLogin = function(login, password, callback) {
 			callback(err);
 		}
 		else {
-			var SQLQuery = "SELECT Users.password, Users.firstName, Users.lastName, Users.numNotifications FROM Users " +
+			var SQLQuery = "SELECT Users.password, Users.firstName, Users.lastName, Users.numNotifications, Users.profilePicture FROM Users " +
 			"WHERE Users.login = $1";
 			client.query({ text : SQLQuery,
 				values : [login]},
@@ -34,6 +34,7 @@ exports.getLogin = function(login, password, callback) {
         		theUser.firstName = result.rows[0].firstname;
         		theUser.lastName = result.rows[0].lastname;
         		theUser.numNotifications = result.rows[0].numnotifications;
+        		theUser.profilePicture = result.rows[0].profilepicture;
         		callback(undefined, theUser, true);
         	} else {
         		callback(undefined, undefined, false);
