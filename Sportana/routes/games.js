@@ -328,7 +328,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.getGameInfo(gameCreator, gameID, function(err, jsonGameInfo) {
+			dbc.getGameInfo(gameCreator, gameID, username, function(err, jsonGameInfo) {
 				if (err) {
 					response.success = false;
 					response.message = err;

@@ -693,7 +693,7 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
 
 /**
  *****************************************************
- * getInvited
+ * getFriendsToInvite
  *
  * Get the invited users for a given game
  *
@@ -709,7 +709,46 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
  *   }]
  *****************************************************
  */
- var getInvited = function(gameInfo, callback) {
+
+ var getFriendsToInvite = function(gameInfo, username, callback) {
+ 	pg.connect(connString, function (err, client, done) {
+ 		if (err) {
+ 			callback(err, undefined);
+ 		}
+ 		else {
+ 			var SQLQuery = "SELECT u.login, u.firstname, u.lastname, u.profilepicture " +
+ 			"FROM Participant as p, Users as u, Friends as f " +
+ 			"WHERE f.usera = $1 AND p.gameid = $2 AND p.creator = $3 AND f.userb != p.login AND f.userb = u.login";
+ 			client.query({ text : SQLQuery,
+ 				values : [username, gameInfo.gameID, gameInfo.creator]},
+ 				function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+        		callback(err, undefined);
+        		console.log(result);
+        	}
+        	else {
+        		if (!result.rows[0]) {
+        			gameInfo.friends = [];
+        		}
+        		else{
+        			gameInfo.friends = result.rows;
+        		}
+        		console.log(username);
+        		console.log(gameInfo);
+        		callback(undefined, gameInfo);
+        	}
+        });
+ 		}
+ 	});
+};
+
+ var getInvited = function(gameInfo, username, callback) {
  	pg.connect(connString, function (err, client, done) {
  		if (err) {
  			callback(err, undefined);
@@ -738,17 +777,15 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
         		else{
         			gameInfo.invited = result.rows;
         		}
-        		console.log(result);
-        		console.log(gameInfo);
 
-        		callback(undefined, gameInfo);
+        		getFriendsToInvite(gameInfo, username, callback);
         	}
         });
  		}
  	});
 };
 
-var getGamePlayers = function(gameInfo, callback) {
+var getGamePlayers = function(gameInfo, username, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) {
 			callback(err, undefined);
@@ -774,7 +811,7 @@ var getGamePlayers = function(gameInfo, callback) {
 							gameInfo.players = result.rows;
 						}
 
-						getInvited(gameInfo, callback);
+						getInvited(gameInfo, username, callback);
 
 					}
 				});
@@ -788,7 +825,7 @@ var getGamePlayers = function(gameInfo, callback) {
  *    "status" : int // 0: going, 1: queued (Sportana has added them to a game), 2: no response
  *   }]
  */
- exports.getGameInfo = function(gameCreator, gameID, callback) {
+ exports.getGameInfo = function(gameCreator, gameID, username, callback) {
  	pg.connect(connString, function (err, client, done) {
  		if (err) {
  			callback(err, undefined);
@@ -823,7 +860,7 @@ var getGamePlayers = function(gameInfo, callback) {
  						gameInfo.maxAge = result.rows[0].maxage;
  						gameInfo.isPublic = result.rows[0].ispublic;
 
- 						getGamePlayers(gameInfo, callback);
+ 						getGamePlayers(gameInfo, username, callback);
 
  					}
  				});
