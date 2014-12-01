@@ -13,7 +13,16 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	$scope.friends = [];
 	$scope.invites = [];
 	$scope.invited = [];
-console.log(CurrentUser.getUser());
+	$scope.user = (function(){
+		var userInfo = CurrentUser.getUser();
+		return {
+			login: userInfo.id,
+			firstname: userInfo.firstName,
+			lastname: userInfo.lastName,
+			profilepicture: userInfo.profilePicture
+		};
+	}());
+	console.log($scope.user);
 
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
