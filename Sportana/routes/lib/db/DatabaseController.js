@@ -717,8 +717,9 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
  		}
  		else {
  			var SQLQuery = "SELECT u.login, u.firstname, u.lastname, u.profilepicture " +
- 			"FROM Participant as p, Users as u, Friends as f " +
- 			"WHERE f.usera = $1 AND p.gameid = $2 AND p.creator = $3 AND f.userb != p.login AND f.userb = u.login";
+ 			"FROM Users as u, Friends as f  WHERE f.usera = $1 AND f.userb = u.login AND " +
+ 			"NOT EXISTS (SELECT * FROM Notifications as n WHERE n.gameid = $2 AND n.creator = $3 AND f.userb = n.userto) AND "+
+ 			"NOT EXISTS (SELECT * FROM Participant p WHERE p.gameid = $2 AND p.creator = $3 AND f.userb = p.login)";
  			client.query({ text : SQLQuery,
  				values : [username, gameInfo.gameID, gameInfo.creator]},
  				function (err, result) {
@@ -748,18 +749,18 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
  	});
 };
 
- var getInvited = function(gameInfo, username, callback) {
- 	pg.connect(connString, function (err, client, done) {
- 		if (err) {
- 			callback(err, undefined);
- 		}
- 		else {
- 			var SQLQuery = "SELECT n.nid, u.login, u.firstname, u.lastname, u.profilepicture " +
- 			"FROM Notifications as n, Users as u " +
- 			"WHERE n.creator = $1 AND n.gameid = $2 AND n.userTo = u.login";
- 			client.query({ text : SQLQuery,
- 				values : [gameInfo.creator, gameInfo.gameID]},
- 				function (err, result) {
+var getInvited = function(gameInfo, username, callback) {
+	pg.connect(connString, function (err, client, done) {
+		if (err) {
+			callback(err, undefined);
+		}
+		else {
+			var SQLQuery = "SELECT n.nid, u.login, u.firstname, u.lastname, u.profilepicture " +
+			"FROM Notifications as n, Users as u " +
+			"WHERE n.creator = $1 AND n.gameid = $2 AND n.userTo = u.login";
+			client.query({ text : SQLQuery,
+				values : [gameInfo.creator, gameInfo.gameID]},
+				function (err, result) {
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
@@ -781,8 +782,8 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
         		getFriendsToInvite(gameInfo, username, callback);
         	}
         });
- 		}
- 	});
+		}
+	});
 };
 
 var getGamePlayers = function(gameInfo, username, callback) {
