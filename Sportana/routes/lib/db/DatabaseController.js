@@ -778,6 +778,28 @@ exports.getGamesList = function(username, callback) {
   });
 };
 
+exports.removePlayer = function(username, gameID, creator, callback) {
+	pg.connect(connString, function (err, client, done) {
+		if (err) {
+			callback(err, undefined);
+		}
+		else {
+			var SQLQuery = 	"DELETE FROM Participant WHERE login = $1 AND gameid = $2 AND creator = $3";
+			client.query(SQLQuery, [username, gameID, creator], function (err, result) {
+				done();
+				client.end();
+				pg.end();
+				if (err) {
+					callback(err, undefined);
+				}
+				else {
+					callback(undefined, result);
+				}
+			});
+		}
+	});
+};
+
 exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameID, callback) {
 	var type;
 	if (reqType === "friend") {
@@ -878,6 +900,7 @@ exports.removeRequest = function(username, requestID, callback) {
 	});
 };
 
+<<<<<<< HEAD
 exports.joinGame = function(username, gameCreator, gameID, callback) {
 		pg.connect(connString, function(err, client, done) {
     	if(err) {
@@ -888,6 +911,18 @@ exports.joinGame = function(username, gameCreator, gameID, callback) {
     	  client.query(SQLQuery, [username, gameCreator, gameID], function(err, result) {
               done();
               client.end();
+=======
+var joinGame = function(username, gameCreator, gameID, callback) {
+	pg.connect(connString, function(err, client, done) {
+		if(err) {
+			callback(err);
+		}
+		else {
+			var SQLQuery = "INSERT INTO Participant(login, creator, gameID, status) VALUES ($1, $2, $3, 0)";
+			client.query(SQLQuery, [username, gameCreator, gameID], function(err, result) {
+				done();
+				client.end();
+>>>>>>> 4326321544c230fd1f922ba9e6179aa8fe6db618
               // This cleans up connected clients to the database and allows subsequent requests to the database
               pg.end();
               if(err){
@@ -900,6 +935,8 @@ exports.joinGame = function(username, gameCreator, gameID, callback) {
     }
   });
 };
+
+exports.joinGame = joinGame;
 
 exports.joinQueue = function(username, gameCreator, gameID, callback) {
 	pg.connect(connString, function(err, client, done) {

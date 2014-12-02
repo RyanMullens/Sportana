@@ -102,35 +102,51 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.leaveGame = function(){
-		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers(), this.getUser())),1);
+		var that = this;
+		$http.post('/api/games/leave', {creator: that.getGame().creator, gameID: that.getGame().gameID})
+		.success(function(data, status, headers, config){
+			that.getPlayers().splice(that.getPlayers().indexOf(that.contains(that.getPlayers(), that.getUser())),1);
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with leaving the game');
+		});
 	};
 
 	this.joinGame = function(){
 		var that = this;
 		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameID})
 		.success(function(data, status, headers, config){
-			var player = that.contains(that.getInvited(), that.getUser());
-			if(that.isInvited(that.getUser())){
-				that.getPlayers().push(player);
-				that.getInvited().splice(that.getInvited().indexOf(player),1);
-			}
-			else{
-				that.getPlayers().push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
-			}
+			that.getPlayers().push($scope.user);
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with joining the game');
 		});
 	};
 
-	this.declineGame = function(){
-		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited(), this.getUser())),1);
+	this.acceptGame = function(){
+		var that = this;
+		var player = that.contains(that.getInvited(), that.getUser());
+		$http.post('/api/requests/' + player.nid, {confirmed: 'true'})
+		.success(function(data, status, headers, config){
+			that.getPlayers().push(player);
+			that.getInvited().splice(that.getInvited().indexOf(player),1);
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with accepting the game');
+		});
 	};
-/*
-	this.requestJoin = function(){
 
+	this.declineGame = function(){
+		var that = this;
+		var player = that.contains(that.getInvited(), that.getUser());
+		$http.post('/api/requests/' + player.nid, {confirmed: 'false'})
+		.success(function(data, status, headers, config){
+			that.getInvited().splice(that.getInvited().indexOf(player),1);
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with leaving the game');
+		});
 	};
-	*/
 
 	this.isToggled = function(friend){
 		var index = this.getInvites().indexOf(friend);
