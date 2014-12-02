@@ -43,26 +43,25 @@ app.controller("ViewGamesController", function($http, $scope){
 		return $scope.games;
 	};
 
-	this.acceptGame = function(notification, accepted){
-		this.acceptGame = $http.post('api/requests/'+notification.id, {confirmed:accepted+''}).
-		success(function(data, status, headers, config) {
-		}).
-		error(function(data, status, headers, config) {
-			console.log("There was an error with accepting the game");
-		});
-
-		$http.post('/api/games/join', {creator: notification.gameCreator, gameID: notification.gameID})
+	this.acceptGame = function(notification){
+		$http.post('/api/requests/' + player.nid, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
+			$scope.games.push(notification);
+			$scope.notifications.splice($scope.notifications.indexOf(notification),1);
 		})
 		.error(function(data, status, headers, config) {
-			console.log('There was an error with joining the game');
+			console.log('There was an error with accepting the game');
 		});
+	};
 
-		if(accepted){
-			$scope.games.push(notification);
-
-		}
-		$scope.notifications.splice($scope.notifications.indexOf(notification),1);
+	this.declineGame = function(notification){
+		$http.post('/api/requests/' + notfication.id, {confirmed: 'false'})
+		.success(function(data, status, headers, config){
+			$scope.notifications.splice($scope.notifications.indexOf(notification),1);
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with leaving the game');
+		});
 	};
 
 	this.hasNotifications = function(){
