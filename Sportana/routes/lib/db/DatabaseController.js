@@ -926,6 +926,28 @@ exports.getGamesNotifications = function(username, callback) {
 	});
 };
 
+exports.removePlayer = function(username, gameID, creator, callback) {
+	pg.connect(connString, function (err, client, done) {
+		if (err) {
+			callback(err, undefined);
+		}
+		else {
+			var SQLQuery = 	"DELETE FROM Participant WHERE login = $1 AND gameid = $2 AND creator = $3";
+			client.query(SQLQuery, [username, gameID, creator], function (err, result) {
+				done();
+				client.end();
+				pg.end();
+				if (err) {
+					callback(err, undefined);
+				}
+				else {
+					callback(undefined, result);
+				}
+			});
+		}
+	});
+};
+
 exports.addRequest = function(username, friendLogin, reqType, gameCreator, gameID, callback) {
 	var type;
 	if (reqType === "friend") {
@@ -1026,7 +1048,7 @@ exports.removeRequest = function(username, requestID, callback) {
 	});
 };
 
-exports.joinGame = function(username, gameCreator, gameID, callback) {
+var joinGame = function(username, gameCreator, gameID, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
 			callback(err);
@@ -1048,6 +1070,8 @@ exports.joinGame = function(username, gameCreator, gameID, callback) {
 		}
 	});
 };
+
+exports.joinGame = joinGame;
 
 exports.joinQueue = function(username, gameCreator, gameID, callback) {
 	pg.connect(connString, function(err, client, done) {
