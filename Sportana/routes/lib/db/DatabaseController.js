@@ -741,8 +741,6 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
         		else{
         			gameInfo.friends = result.rows;
         		}
-        		console.log(username);
-        		console.log(gameInfo);
         		callback(undefined, gameInfo);
         	}
         });
