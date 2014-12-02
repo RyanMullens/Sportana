@@ -2,7 +2,7 @@
 <div id="viewGames">
 	<div class="notifications">
 		<div ng-show="viewGames.hasNotifications()" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
-		<div ng-show="viewGames.hasNotifications">
+		<div ng-show="viewGames.hasNotifications()">
 			<h2>My Notifications</h2>
 			<div class="row notification btn btn-default" ng-repeat="notification in viewGames.getNotifications()">
 				<div class="row">

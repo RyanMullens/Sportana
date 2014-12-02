@@ -5,25 +5,21 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 	*/
-	$scope.game = {};
-	$scope.players = [];
+	$scope.game = {players: [], invited: [], friends: []};
 	$scope.messages = [];
 	$scope.gameLoaded = false;
 	$scope.messagesLoaded = true;
-/*
-	var players = [{login: 'bwayne', firstname:'Bruce', lastname:'Wayne', img: 'http://cdn.wegotthiscovered.com/wp-content/uploads/THE-DARK-KNIGHT.jpeg'},
-	{login: 'jbond', firstname: 'James', lastname: 'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
-	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'},
-	{login: 'myoda', firstname: 'Master', lastname: 'Yoda', img: 'http://static.comicvine.com/uploads/scale_medium/0/2532/156856-39717-yoda.jpg'}
-	];
-*/
-	$scope.friends = [{login: 'jbond', firstname:'James', lastname:'Bond', img: 'http://cbsnews1.cbsistatic.com/hub/i/r/2012/10/13/09d9d6e1-a645-11e2-a3f0-029118418759/thumbnail/620x350/2edfb0193dd29f2393297d20949a5109/JamesBondWide.jpg'},
-	{login: 'ckent', firstname: 'Clark', lastname: 'Kent', img: 'http://www.scifinow.co.uk/wp-content/uploads/2014/07/Batman-V-Superman2.jpg'}
-	];
 	$scope.invites = [];
-
-	var invited = [];
-
+	$scope.user = (function(){
+		var userInfo = CurrentUser.getUser();
+		return {
+			login: userInfo.id,
+			firstname: userInfo.firstName,
+			lastname: userInfo.lastName,
+			profilepicture: userInfo.profilePicture
+		};
+	}());
+	console.log($scope.user);
 
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
@@ -31,7 +27,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
 		console.log(data);
 		$scope.game = data;
-		$scope.players = data.players;
 		$scope.gameLoaded = true;
 	})
 	.error(function(data, status, headers, config) {
@@ -48,7 +43,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		console.log('There was an error retrieving messages');
 	});
 
-
 	this.isGameLoaded = function(){
 		return $scope.gameLoaded;
 	};
@@ -58,8 +52,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getThis = function(){
-		var that = this;
-		return that;
+		return this;
 	};
 
 	this.getGame = function(){
@@ -67,11 +60,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getFriends = function(){
-		return $scope.friends;
+		return $scope.game.friends;
 	};
 
 	this.getPlayers = function(){
-		return $scope.players;
+		return $scope.game.players;
 	};
 
 	this.getInvites = function(){
@@ -79,7 +72,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getInvited = function(){
-		return invited;
+		return $scope.game.invited;
 	};
 
 	this.getUser = function(){
@@ -118,11 +111,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		.success(function(data, status, headers, config){
 			var player = that.contains(that.getInvited(), that.getUser());
 			if(that.isInvited(that.getUser())){
-				$scope.players.push(player);
+				that.getPlayers().push(player);
 				that.getInvited().splice(that.getInvited().indexOf(player),1);
 			}
 			else{
-				$scope.players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
+				that.getPlayers().push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
 			}
 		})
 		.error(function(data, status, headers, config) {
@@ -157,9 +150,14 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.inviteFriends = function(){
 		var that = this;
+
+		console.log('invites');
+		console.log(this.getInvites());
+		console.log('friend');
+		console.log(this.getFriends());
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
-			$http.post('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
+			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
 			.success(function(data, status, headers, config){
 			})
 			.error(function(data, status, headers, config) {
@@ -176,8 +174,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getMessages = function(){
-
-		$("#messages").scrollTop($("#messages")[0].scrollHeight);
 		return $scope.messages;
 	};
 

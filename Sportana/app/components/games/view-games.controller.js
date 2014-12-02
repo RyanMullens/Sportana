@@ -7,12 +7,16 @@ app.controller("ViewGamesController", function($http, $scope){
 	var that = this;
 	$http.get('/api/requests/games').
 	success(function(data, status, headers, config) {
-		
-		console.log(data);
-		for(var notification in data){
-			data[notification].sportImg = '/assets/img/sports/' + data[notification].sport.toLowerCase() + '.png';
+		if(data.success){
+			console.log(data);
+			for(var notification in data){
+				data[notification].sportImg = '/assets/img/sports/' + data[notification].sport.toLowerCase() + '.png';
+			}
+			$scope.notifications = data;
 		}
-		$scope.notifications = data;
+		else{
+			console.log("No notifications were found");
+		}
 		
 	}).
 	error(function(data, status, headers, config) {
@@ -30,18 +34,6 @@ app.controller("ViewGamesController", function($http, $scope){
 	error(function(data, status, headers, config) {
 		console.log('there was an error');
 	});
-
-	this.httpGetGame = function(gameCreator, gameID){
-		$http.get('/api/games/' + gameCreator + '/' + gameID)
-		.success(function(data, status, headers, config){
-			data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
-			$scope.notifications.push(data);
-			console.log($scope.notifications);
-		})
-		.error(function(data, status, headers, config) {
-			console.log('There was an error retrieving game information');
-		});
-	};
 
 	this.hasGames = function(){
 		return $scope.games.length > 0;
