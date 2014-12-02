@@ -692,6 +692,41 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
 	});
 };
 
+exports.editPassword = function (username, password, callback) {
+    pg.connect(connString, function(err, client, done) {
+        if(err) {
+            callback(undefined, {message: "error"});
+        }
+        else {
+            var SQLQuery = "SELECT Users.password FROM Users WHERE Users.login = $1";
+            client.query({ text : SQLQuery, values : [username]},
+                function(err, result){
+                done();
+                if(result.rows && result.rows[0]["password"] != password && password != ''){
+                    var SQLQuery = "UPDATE Users SET password = $2 WHERE login = $1";
+                        client.query({ text : SQLQuery,
+                                       values : [username, password]},
+                            function(err, result){
+                            done();
+                            client.end();
+                            pg.end();
+                            if(err){
+                                callback(undefined, {message: "error"});
+                                }
+                            else{
+                                callback(undefined, {message: "success"});
+                            }
+                    });
+                }
+                else{
+                    client.end(); pg.end();
+                    callback(undefined, {message: "Password is same as current. Error"});
+                }
+            });
+        }
+    });
+}
+
 /**
  *****************************************************
  * getFriendsToInvite

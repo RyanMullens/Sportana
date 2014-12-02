@@ -234,10 +234,24 @@ router.put('/password-reset', function (req, res) {
     });
 });
 
-
-router.post('/account/password', function (req, res) 
-{
-	res.send("not finished yet");
+router.post('/editPassword', function (req, res) {
+    var auth = req.get('SportanaAuthentication');
+    authenticator.deserializeUser(auth, function(err, username) {
+    var response = {};
+    if (err || (!username)) {
+        response.message = "Error with authentication";
+        response.success = false;
+      res.write(JSON.stringify(response));
+      res.end();
+    } else { 
+        var password = req.body.password;
+        dbc.editPassword(username, password, function(err, data){
+            var json = JSON.stringify(data);
+            res.write(json);
+            res.end();
+        });
+    }
+});
 });
 
 router.post('/account/status', function (req, res) {
