@@ -1,2 +1,18 @@
 <h1 class="page-header">Settings</h1>
-<body><p>temporarily commented out the actual db connection and json return because we're still working on db</p></body>
+
+
+<div ng-show="wasPassChanged()" class="alert alert-success" role="alert">
+  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+  Password Changed Successfully! :D
+</div>
+<div ng-show="wasError()" class="alert alert-danger" role="alert">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  {{errorMessage}}
+</div>
+
+Change Password
+<input type="password" ng-model="password" placeholder='Password'></input> 
+<input type="password" ng-model="passwordVerify" placeholder='Verify Password'></input> 
+<button ng-click="updatePassword()" ng-disabled='!arePasswordsSame()' class="btn btn-primary">Change</button>
+
+
