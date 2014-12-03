@@ -197,7 +197,7 @@ CREATE OR REPLACE FUNCTION update_gameID()
 	   		NEW.gameID = 1 + x;
 		ELSE
 	   		NEW.gameID = 1;
-		END IF;	   
+		END IF;
 		RETURN NEW;
 	END;
 	$$ language 'plpgsql';
@@ -321,6 +321,14 @@ CREATE OR REPLACE FUNCTION remove_user_from_queue()
 	   	RETURN NEW;
 	END;
 $$ language 'plpgsql';
+
+CREATE OR REPLACE FUNCTION add_creator_to_participants()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications) VALUES (NEW.creator, NEW.creator, NEW.gameID, 0, 0);
+	RETURN NEW;
+	END;
+$$ language 'plpgsql';	
 	
 CREATE RULE participant_on_duplicate_ignore AS ON INSERT TO Participant
   WHERE EXISTS(SELECT 1 FROM Participant 
@@ -362,20 +370,25 @@ CREATE TRIGGER auto_increment_gameID
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_gameID();         
 
+CREATE TRIGGER add_creator_to_participants
+	AFTER INSERT ON Game
+	FOR EACH ROW
+	EXECUTE PROCEDURE add_creator_to_participants();
+
 CREATE TRIGGER auto_increment_gameWallPostID
 	BEFORE INSERT ON GameWallPost
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_gameWallPostID();  
+		
+CREATE TRIGGER auto_increment_queueID
+	BEFORE INSERT ON Queue
+	FOR EACH ROW
+	EXECUTE PROCEDURE update_queueID();
 	
 CREATE TRIGGER auto_increment_notificationID
 	BEFORE INSERT ON Notifications
 	FOR EACH ROW
 	EXECUTE PROCEDURE update_notificationID();  	
-	
-CREATE TRIGGER auto_increment_queueID
-	BEFORE INSERT ON Queue
-	FOR EACH ROW
-	EXECUTE PROCEDURE update_queueID();
 	
 CREATE TRIGGER add_participant_from_notification
 	BEFORE INSERT ON Notifications
