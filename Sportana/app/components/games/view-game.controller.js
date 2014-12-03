@@ -90,7 +90,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	this.getInvited = function(){
 		return $scope.game.invited;
 	};
-*/
+	*/
 	$scope.getUser = function(){
 		return $scope.user;
 	};
@@ -147,7 +147,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			$scope.getUser().status = 0;
 			that.getPlayers().push($scope.getUser());
 
-		console.log($scope.getUser());
+			console.log($scope.getUser());
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with joining the game');
@@ -207,7 +207,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
 			.success(function(data, status, headers, config){
 				that.getFriends().splice(that.getFriends().indexOf(friend), 1);
-				friend.status = 2;
+				friend.status = 1;
 				that.getPlayers().push(friend);
 			})
 			.error(function(data, status, headers, config) {
