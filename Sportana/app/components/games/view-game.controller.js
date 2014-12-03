@@ -206,14 +206,13 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			var friend = that.getInvites()[i];
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
 			.success(function(data, status, headers, config){
-				that.getFriends().splice(that.getFriends().indexOf(friend), 1);
-				friend.status = 1;
-				that.getPlayers().push(friend);
 			})
 			.error(function(data, status, headers, config) {
 				console.log('There was an error with posting the message');
 			});
-			
+			that.getFriends().splice(that.getFriends().indexOf(friend), 1);
+			friend.status = 1;
+			that.getPlayers().push(friend);
 		}
 		this.getInvites().length = 0;
 		console.log('invites');
