@@ -25,11 +25,16 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	$http.get('/api/games/').
 	success(function(data, status, headers, config) {
-		for(var game in data){
-			data[game].sportImg = '/assets/img/sports/' + data[game].sport.toLowerCase() + '.png';
+		if(data.success){
+			for(var game in data){
+				data[game].sportImg = '/assets/img/sports/' + data[game].sport.toLowerCase() + '.png';
+			}
+			console.log(data);
+			$scope.games = data;
 		}
-		console.log(data);
-		$scope.games = data;
+		else{
+			console.log("No games were found");
+		}
 	}).
 	error(function(data, status, headers, config) {
 		console.log('there was an error');

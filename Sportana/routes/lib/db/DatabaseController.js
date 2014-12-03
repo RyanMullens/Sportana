@@ -754,7 +754,7 @@ exports.editPassword = function (username, password, callback) {
  		else {
  			var SQLQuery = "SELECT u.login, u.firstname, u.lastname, u.profilepicture " +
  			"FROM Users as u, Friends as f  WHERE f.usera = $1 AND f.userb = u.login AND " +
- 			"NOT EXISTS (SELECT * FROM Notifications as n WHERE n.gameid = $2 AND n.creator = $3 AND f.userb = n.userto) AND "+
+ 			//"NOT EXISTS (SELECT * FROM Notifications as n WHERE n.gameid = $2 AND n.creator = $3 AND f.userb = n.userto) AND "+
  			"NOT EXISTS (SELECT * FROM Participant p WHERE p.gameid = $2 AND p.creator = $3 AND f.userb = p.login)";
  			client.query({ text : SQLQuery,
  				values : [username, gameInfo.gameID, gameInfo.creator]},
@@ -782,7 +782,7 @@ exports.editPassword = function (username, password, callback) {
  		}
  	});
 };
-
+/*
 var getInvited = function(gameInfo, username, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) {
@@ -819,14 +819,14 @@ var getInvited = function(gameInfo, username, callback) {
 		}
 	});
 };
-
+*/
 var getGamePlayers = function(gameInfo, username, callback) {
 	pg.connect(connString, function (err, client, done) {
 		if (err) {
 			callback(err, undefined);
 		}
 		else {
-			var SQLQuery = 	"SELECT u.login, u.firstname, u.lastname, u.profilepicture " +
+			var SQLQuery = 	"SELECT u.login, u.firstname, u.lastname, u.profilepicture, p.status " +
 			"FROM Participant as p, Users as u " + 
 			"WHERE p.gameid = $1 and p.creator = $2 and p.login = u.login";
 			client.query({ text : SQLQuery, 
@@ -846,7 +846,7 @@ var getGamePlayers = function(gameInfo, username, callback) {
 							gameInfo.players = result.rows;
 						}
 
-						getInvited(gameInfo, username, callback);
+						getFriendsToInvite(gameInfo, username, callback);
 
 					}
 				});
@@ -896,7 +896,6 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						gameInfo.isPublic = result.rows[0].ispublic;
 
  						getGamePlayers(gameInfo, username, callback);
-
  					}
  				});
 }
