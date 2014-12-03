@@ -185,6 +185,52 @@ router.post('/join', function(req, res) {
 
 /**
  *****************************************************
+ * POST	/games/queue/delete
+ * Delete given queue profiles
+ * REQUEST:
+ * {
+ *	 "all"      : boolean // drop all queueing profiles from queue
+ *   "profiles" : [{
+ *		"queueID" : int
+ *   }]
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	“message”       : string // empty on success
+ * 	“success”       : boolean
+ * }
+ *****************************************************
+ */
+router.post('/leave', function (req, res) {
+	var gameID = req.body.gameID;
+	var creator = req.body.creator;
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response ={};
+		if (err || (!username)) {
+		  response.message = "Error with authentication";
+		  response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.removePlayer(username, gameID, creator, function(err) {
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
+
+/**
+ *****************************************************
  * GET	/games/messages?creator={creator}
  *					   &gameID={gameID}
  * Get messages in game wall

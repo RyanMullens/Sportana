@@ -5,26 +5,45 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	sportimg: '/assets/img/sports/baseball.png', numparticipants: 10, minplayers: 5,
 	maxplayers: 15, reservedspots: 3, minage: 14, maxage:25, ispublic:false};
 	*/
-	$scope.game = {};
-	$scope.players = [];
+	$scope.game = {players: [], invited: [], friends: []};
 	$scope.messages = [];
 	$scope.gameLoaded = false;
 	$scope.messagesLoaded = true;
-	$scope.friends = [];
 	$scope.invites = [];
-	$scope.invited = [];
+	$scope.user = (function(){
+		var userInfo = CurrentUser.getUser();
+		return {
+			login: userInfo.id,
+			firstname: userInfo.firstName,
+			lastname: userInfo.lastName,
+			profilepicture: userInfo.profilePicture,
+			status: -1
+		};
+	}());
+	console.log($scope.user);
 
-
+	$scope.contains = function(type, login){
+		for(var i = 0; i < type.length; i++){
+			if(login === type[i].login){
+				return type[i];
+			}
+		}
+		return false;
+	};
 
 	$http.get('/api/games/' + $stateParams.creatorId + '/' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-		data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
-		console.log(data);
-		$scope.game = data;
-		$scope.players = data.players;
-		$scope.invited = data.invited;
-		$scope.friends = data.friends;
-		$scope.gameLoaded = true;
+		if(data.success){
+			data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
+			console.log(data);
+			$scope.game = data;
+			var tempUser = $scope.contains($scope.game.players, $scope.user.login);
+			if(tempUser){
+				$scope.user = tempUser;
+			}
+			$scope.gameLoaded = true;
+		}
+		else console.log("This game does not exist");
 	})
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving game information');
@@ -57,77 +76,107 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	};
 
 	this.getFriends = function(){
-		return $scope.friends;
+		return $scope.game.friends;
 	};
 
 	this.getPlayers = function(){
-		return $scope.players;
+		return $scope.game.players;
 	};
 
 	this.getInvites = function(){
 		return $scope.invites;
 	};
-
+/*
 	this.getInvited = function(){
-		return $scope.invited;
+		return $scope.game.invited;
+	};
+	*/
+	$scope.getUser = function(){
+		return $scope.user;
 	};
 
-	this.getUser = function(){
-		return CurrentUser.getUser().id;
-	};
 
-	this.contains = function(type, login){
-		for(var i = 0; i < type.length; i++){
-			if(login === type[i].login){
-				return type[i];
-			}
+	//this is for ng-repeat filter
+	$scope.isJoined = function(player){
+		if(player){
+			return player.status === 0;
 		}
-		return false;
+		else return false;
 	};
 
-	this.isJoined = function(){
+/*	//this is for all the ng-show/hide
+	this.isJoined = function(user){
 		return !!this.contains(this.getPlayers(), this.getUser());
 	};
-
-
+	*/
+	//this is for ng-repeat filter
+	$scope.isInvited = function(player){
+		if(player){
+			return player.status === 1;
+		}
+		else return false;
+	};
+/*
+	//this is for all the ng-show/hide
 	this.isInvited = function(id){
 		return !!this.contains(this.getInvited(), id);
 	};
-
+	*/
 	this.isPublic = function(){
 		return this.getGame().isPublic;
 	};
 
 	this.leaveGame = function(){
-		this.getPlayers().splice(this.getPlayers().indexOf(this.contains(this.getPlayers(), this.getUser())),1);
+		var that = this;
+		$http.post('/api/games/leave', {creator: that.getGame().creator, gameID: that.getGame().gameID})
+		.success(function(data, status, headers, config){
+			that.getPlayers().splice(that.getPlayers().indexOf($scope.getUser()),1);
+			$scope.getUser().status = -1;
+			console.log(that.getPlayers());
+			console.log($scope.isJoined($scope.getUser()));
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with leaving the game');
+		});
 	};
 
 	this.joinGame = function(){
 		var that = this;
 		$http.post('/api/games/join', {creator: that.getGame().creator, gameID: that.getGame().gameID})
 		.success(function(data, status, headers, config){
-			var player = that.contains(that.getInvited(), that.getUser());
-			if(that.isInvited(that.getUser())){
-				$scope.players.push(player);
-				that.getInvited().splice(that.getInvited().indexOf(player),1);
-			}
-			else{
-				$scope.players.push({login: that.getUser(), firstname: 'John', lastname: 'Doe', img: '/assets/img/profile.png'});
-			}
+			$scope.getUser().status = 0;
+			that.getPlayers().push($scope.getUser());
+
+			console.log($scope.getUser());
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with joining the game');
 		});
 	};
 
-	this.declineGame = function(){
-		this.getInvited().splice(this.getInvited().indexOf(this.contains(this.getInvited(), this.getUser())),1);
-	};
-/*
-	this.requestJoin = function(){
+	this.acceptGame = function(){
+		var that = this;
 
+		$http.post('/api/requests/' + player.nid, {confirmed: 'true'})
+		.success(function(data, status, headers, config){
+			$scope.getUser().status = 0;
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with accepting the game');
+		});
 	};
-	*/
+
+	this.declineGame = function(){
+		var that = this;
+		$http.post('/api/requests/' + player.nid, {confirmed: 'false'})
+		.success(function(data, status, headers, config){
+			that.getPlayers().splice(that.getPlayers().indexOf($scope.getUser()),1);
+			$scope.getUser().status = -1;
+		})
+		.error(function(data, status, headers, config) {
+			console.log('There was an error with leaving the game');
+		});
+	};
 
 	this.isToggled = function(friend){
 		var index = this.getInvites().indexOf(friend);
@@ -143,10 +192,16 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		else{
 			this.getInvites().splice(index, 1);
 		}
+		console.log(friend);
 	};
 
 	this.inviteFriends = function(){
 		var that = this;
+
+		console.log('invites');
+		console.log(this.getInvites());
+		console.log('friend');
+		console.log(this.getFriends());
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
@@ -155,19 +210,19 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			.error(function(data, status, headers, config) {
 				console.log('There was an error with posting the message');
 			});
-			that.getInvited().push(friend);
-			that.getFriends().splice(that.getFriends().indexOf(that.contains(that.getFriends(), friend.login)), 1);
+			that.getFriends().splice(that.getFriends().indexOf(friend), 1);
+			friend.status = 1;
+			that.getPlayers().push(friend);
 		}
 		this.getInvites().length = 0;
 		console.log('invites');
 		console.log(this.getInvites());
 		console.log('friend');
 		console.log(this.getFriends());
+		console.log(this.getPlayers());
 	};
 
 	this.getMessages = function(){
-
-		$("#messages").scrollTop($("#messages")[0].scrollHeight);
 		return $scope.messages;
 	};
 
@@ -177,7 +232,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameID, message: post})
 		.success(function(data, status, headers, config){
-			$scope.messages.push({from: that.getUser(), message: post, time: Date.now()});
+			$scope.messages.push({from: $scope.getUser().login, message: post, time: Date.now()});
 			$scope.message = '';
 		})
 		.error(function(data, status, headers, config) {

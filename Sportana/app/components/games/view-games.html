@@ -2,7 +2,7 @@
 <div id="viewGames">
 	<div class="notifications">
 		<div ng-show="viewGames.hasNotifications()" class="alert alert-info" role="alert">You have {{viewGames.hasNotifications()}} notifications</div>
-		<div ng-show="viewGames.hasNotifications">
+		<div ng-show="viewGames.hasNotifications()">
 			<h2>My Notifications</h2>
 			<div class="row notification btn btn-default" ng-repeat="notification in viewGames.getNotifications()">
 				<div class="row">
@@ -26,8 +26,8 @@
 						Invited By: <a ui-sref="app.user({userId: notification.invitedby})">{{notification.invitedby}}</a>
 					</div>
 					<div class="col-md-3">
-						<button type="button" ng-click="viewGames.acceptGame(notification, true)" class="btn btn-success">Accept</button>
-						<button type="button" ng-click="viewGames.acceptGame(notification, false)" class="btn btn-danger">Decline</button>
+						<button type="button" ng-click="viewGames.acceptGame(notification)" class="btn btn-success">Accept</button>
+						<button type="button" ng-click="viewGames.declineGame(notification)" class="btn btn-danger">Decline</button>
 					</div>
 				</div>
 			</div>

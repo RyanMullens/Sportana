@@ -150,7 +150,6 @@ router.get('/games', function(req, res) {
 				}
 				res.write(JSON.stringify(response));
           		res.end();
-          		console.log(response);
 			});
 		}
 	});

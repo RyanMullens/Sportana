@@ -14,7 +14,8 @@ app.factory('AuthenticationService', function ($http, Session, CurrentUser) {
             id: res.data.login,
             firstName: res.data.firstName,
             lastName: res.data.lastName,
-            numNotifications: res.data.numNotifications
+            numNotifications: res.data.numNotifications,
+            profilePicture: res.data.profilePicture
           }
 
           CurrentUser.setUser(user);

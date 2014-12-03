@@ -295,11 +295,16 @@ CREATE OR REPLACE FUNCTION add_participant_from_notification()
 	DECLARE
 		x int8;
 	BEGIN
-		IF (NEW.type = 1 OR NEW.type = 2) THEN
+		IF (NEW.type = 1) THEN
+	   		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications)
+	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 2,
+	   				(SELECT COUNT(*) FROM GameWallPost WHERE (gameCreator=NEW.creator) AND (gameID=NEW.gameID)));
+		END IF;
+		IF (NEW.type = 2) THEN
 	   		INSERT INTO Participant(login, creator, gameID, status, numUnreadNotifications)
 	   		VALUES (NEW.userTo, NEW.creator, NEW.gameID, 1,
 	   				(SELECT COUNT(*) FROM GameWallPost WHERE (gameCreator=NEW.creator) AND (gameID=NEW.gameID)));
-		END IF;	   
+		END IF;	   	   
 	   		RETURN NEW;
 	END;
 $$ language 'plpgsql';		
