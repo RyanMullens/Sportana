@@ -906,10 +906,10 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						callback(err, undefined);
  					}
  					else {
- 						if (!result.rows[0]) {
- 							callback("No result found", undefined);
+ 						if (result.rows[0]) {
+ 							gameInfo.requestID = result.rows[0].nid;
  						}
- 						gameInfo.requestID = result.rows[0].nid;
+ 						
 
  						getGamePlayers(gameInfo, username, callback);
  					}
