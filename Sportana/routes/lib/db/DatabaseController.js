@@ -936,6 +936,7 @@ exports.getGamesList = function(username, callback) {
 
 exports.getGamesNotifications = function(username, callback) {
 	pg.connect(connString, function (err, client, done) {
+<<<<<<< HEAD
  		if (err) {
  			callback(err, undefined);
  		}
@@ -976,6 +977,31 @@ exports.getGamesNotifications = function(username, callback) {
         });
 }
 });
+=======
+		if (err) {
+			callback(err, undefined);
+		}
+		else {
+			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy, n.nid "+
+			"From Game as g, Notifications as n " +
+			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator AND type = 1";
+			client.query(SQLQuery, [username], function (err, result) {
+				done();
+				client.end();
+				pg.end();
+				if (err) {
+					callback(err, undefined);
+				}
+				else {
+					if (!result.rows[0]) {
+						callback("No result found", undefined);
+					}
+					callback(undefined, result.rows);
+				}
+			});
+		}
+	});
+>>>>>>> ebacd7a0ef8d7bd373457a661055db29034d2a85
 };
 
 exports.removePlayer = function(username, gameID, creator, callback) {

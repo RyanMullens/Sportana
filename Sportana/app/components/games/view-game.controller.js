@@ -90,14 +90,14 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	$scope.isJoined = function(player){
 		if(player){
-			return player.status === 0;
+			return player.status === 0 || player.status === 1;
 		}
 		else return false;
 	};
 
 	$scope.isInvited = function(player){
 		if(player){
-			return player.status === 1;
+			return player.status === 2;
 		}
 		else return false;
 	};
@@ -132,7 +132,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.acceptGame = function(){
 		var that = this;
-
+		console.log($scope.getUser());
 		$http.post('/api/requests/' + $scope.getUser().nid, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.getUser().status = 0;
@@ -181,7 +181,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 				console.log('There was an error with posting the message');
 			});
 			that.getFriends().splice(that.getFriends().indexOf(friend), 1);
-			friend.status = 1;
+			friend.status = 2;
 			that.getPlayers().push(friend);
 		}
 		this.getInvites().length = 0;
