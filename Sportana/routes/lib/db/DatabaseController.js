@@ -927,7 +927,7 @@ exports.getGamesList = function(username, callback) {
 		else {
 			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport "+
 			"From Game as g, Participant as p " +
-			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator ";
+			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator AND p.status != 2 ";
 			client.query(SQLQuery, [username], function (err, result) {
           // Ends the "transaction":
           done();
@@ -959,7 +959,7 @@ exports.getGamesNotifications = function(username, callback) {
  		else {
  			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, " +
  			"Notifications.creator, Notifications.gameID, Game.sport, Game.location, Game.gameDate, Game.gameStart, Users.firstName, Users.lastName " +
- 			"FROM Game INNER JOIN Notifications ON ((Notifications.gameCreator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			"FROM Game INNER JOIN Notifications ON ((Notifications.creator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
  			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
  			client.query({ text : SQLQuery,
  				values : [username]},
