@@ -109,7 +109,7 @@ router.put('/game', function(req, res) {
 
 /**
  *****************************************************
- * GET	/games/
+ * GET	/requests/games/
  * REQUEST:
  * {
  * }

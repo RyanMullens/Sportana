@@ -922,6 +922,7 @@ exports.getGamesList = function(username, callback) {
           	callback(err, undefined);
           }
           else {
+          console.log(result);
           	if (!result.rows[0]) {
           		callback("No result found", undefined);
           	}
@@ -935,29 +936,46 @@ exports.getGamesList = function(username, callback) {
 
 exports.getGamesNotifications = function(username, callback) {
 	pg.connect(connString, function (err, client, done) {
-		if (err) {
-			callback(err, undefined);
-		}
-		else {
-			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy "+
-			"From Game as g, Notifications as n " +
-			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator ";
-			client.query(SQLQuery, [username], function (err, result) {
-				done();
-				client.end();
-				pg.end();
-				if (err) {
-					callback(err, undefined);
-				}
-				else {
-					if (!result.rows[0]) {
-						callback("No result found", undefined);
-					}
-					callback(undefined, result.rows);
-				}
-			});
-		}
-	});
+ 		if (err) {
+ 			callback(err, undefined);
+ 		}
+ 		else {
+ 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, Notifications.timeSent, " +
+ 			"Notifications.creator, Notifications.gameID, Users.firstName, Users.lastName, Users.profilePicture " +
+ 			"FROM Notifications INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
+ 			client.query({ text : SQLQuery,
+ 				values : [username]},
+ 				function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+        		callback(err, undefined);
+        	}
+        	else {
+        		var requests = [];
+        		for( var i = 0; i < result.rows.length; i++ ) {
+        			var request = {};
+        			request.id = result.rows[i].nid;
+        			request.userFrom = result.rows[i].userfrom;
+        			request.userFromName = result.rows[i].firstname + " " + result.rows[i].lastname;
+        			request.userFromImage = result.rows[i].profilepicture;
+        			request.type = result.rows[i].type;
+        			request.date = timeHelper.makeDateFromDateAndTime(result.rows[i].timesent);
+        			request.time = timeHelper.makeTimeFromDateAndTime(result.rows[i].timesent);
+        			request.gameCreator = result.rows[i].creator;
+        			request.gameID = result.rows[i].gameid;
+        			requests.push(request);
+        		}
+        		callback(undefined, requests);
+        	}
+        });
+}
+});
 };
 
 exports.removePlayer = function(username, gameID, creator, callback) {
