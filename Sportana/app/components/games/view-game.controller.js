@@ -101,7 +101,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		}
 		else return false;
 	};
-	*/
+	
 	this.isPublic = function(){
 		return this.getGame().isPublic;
 	};

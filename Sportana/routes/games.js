@@ -124,10 +124,11 @@ router.get('', function (req, res) {
 					response.success = false;
 					response.message = err;
 				} else {
-					response = jsonGameInfo;
+					response.games = jsonGameInfo;
 					response.success = true;
 					response.message = "";
 				}
+				console.log(response);
 				res.write(JSON.stringify(response));
           		res.end();
 			});
