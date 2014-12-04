@@ -49,6 +49,27 @@ INSERT INTO Sport(sport , imageURL) values
 ('Football' , '/assets/img/sports/football.png');
 INSERT INTO Sport(sport , imageURL) values
 ('Basketball' , '/assets/img/sports/basketball.png');
+INSERT INTO Sport(sport , imageURL) values
+('Billiards' , '/assets/img/sports/billiards.png');
+INSERT INTO Sport(sport , imageURL) values
+('Disc Golf' , '/assets/img/sports/discGolf.png');
+INSERT INTO Sport(sport , imageURL) values
+('Hockey' , '/assets/img/sports/hockey.png');
+INSERT INTO Sport(sport , imageURL) values
+('Lacrosse' , '/assets/img/sports/lacrosse.png');
+INSERT INTO Sport(sport , imageURL) values
+('Running' , '/assets/img/sports/running.png');
+INSERT INTO Sport(sport , imageURL) values
+('Swimming' , '/assets/img/sports/swimming.png');
+INSERT INTO Sport(sport , imageURL) values
+('Tennis' , '/assets/img/sports/tennis.png');
+INSERT INTO Sport(sport , imageURL) values
+('Table Tennis' , '/assets/img/sports/tableTennis.png');
+INSERT INTO Sport(sport , imageURL) values
+('Ultimate' , '/assets/img/sports/ultimateFrisbee.png');
+INSERT INTO Sport(sport , imageURL) values
+('Volleyball' , '/assets/img/sports/volleyball.png');
+
 
 INSERT INTO FavoriteSports(login , sport) values
 ('myoda' , 'Soccer');
@@ -59,9 +80,18 @@ INSERT INTO FavoriteSports(login , sport) values
 INSERT INTO FavoriteSports(login , sport) values
 ('myoda' , 'Basketball');
 INSERT INTO FavoriteSports(login , sport) values
+('myoda' , 'Swimming');
+INSERT INTO FavoriteSports(login , sport) values
 ('mscott' , 'Soccer');
 INSERT INTO FavoriteSports(login , sport) values
+('mscott' , 'Disc Golf');
+INSERT INTO FavoriteSports(login , sport) values
 ('ckent' , 'Football');
+INSERT INTO FavoriteSports(login , sport) values
+('ckent' , 'Ultimate');
+INSERT INTO FavoriteSports(login , sport) values
+('ckent' , 'Running');
+
 
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
 ('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'Basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true, false);
