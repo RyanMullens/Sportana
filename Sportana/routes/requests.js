@@ -144,7 +144,7 @@ router.get('/games', function(req, res) {
 					response.message = err;
 					response.success = false;
 				} else {
-					response = jsonGameInfo;
+					response.notifications = jsonGameInfo;
 					response.message = "";
 					response.success = true;
 				}
