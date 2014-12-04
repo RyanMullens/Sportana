@@ -927,7 +927,7 @@ exports.getGamesList = function(username, callback) {
 		else {
 			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport "+
 			"From Game as g, Participant as p " +
-			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator ";
+			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator AND p.status != 2 ";
 			client.query(SQLQuery, [username], function (err, result) {
           // Ends the "transaction":
           done();
