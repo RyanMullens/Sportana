@@ -984,8 +984,8 @@ exports.getGamesNotifications = function(username, callback) {
         			request.id = result.rows[i].nid;
         			request.invitedBy = result.rows[i].userfrom;
         			request.invitedByName = result.rows[i].firstname + " " + result.rows[i].lastname;
-        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gameDate);
-        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gameStart);
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gamestart);
         			request.creator = result.rows[i].creator;
         			request.gameID = result.rows[i].gameid;
         			requests.push(request);
