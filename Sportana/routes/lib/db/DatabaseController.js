@@ -244,21 +244,23 @@ var isFriend = function(username, login, callback) {
 });
 }
 
+
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
-			callback(undefined, {message: "error"});
+			callback(undefined, {message: "error 250"});
 		}
 		else {
 			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
 			client.query({ text : sqlStatement,
 				values : [login]},
 				function(err, result){
-					done();
 					if(err){
-						callback(undefined, {message: "error"});
+						done(); client.end(); pg.end();
+						callback(undefined, {message: "error 259"});
 					}
 					else if(result.rows[0] == undefined){
+						done(); client.end(); pg.end();
 						callback(undefined, {message: "User does not exist"});
 					}
 					else{
@@ -279,7 +281,7 @@ exports.getUserProfile = function (username, login, callback) {
 					  			client.end();
 					  			pg.end();
 					  			if(err){
-					  				callback(undefined, {message: "error"});
+					  				callback(undefined, {message: "error 282"});
 					  			}
 					  			else {
 					  				if(result.rows[0]["login"] === login){
@@ -299,7 +301,7 @@ exports.getUserProfile = function (username, login, callback) {
 
 					  					isFriend(username, login, function(err, value, nid){
 					  						if(err){
-					  							callback(undefined, {message: "error"});
+					  							callback(undefined, {message: "error 302"});
 					  						}
 			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 			            					result.rows[0]["isFriend"] = value;
@@ -312,7 +314,7 @@ exports.getUserProfile = function (username, login, callback) {
 					  				}
 					  				else{
 					  					console.log("user does not exist");
-					  					callback(undefined, {message: "error"});
+					  					callback(undefined, {message: "error 315"});
 					  				}
 					  			}
 					  		});

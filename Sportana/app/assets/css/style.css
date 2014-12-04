@@ -11,6 +11,16 @@ body {
   background-color: #B0B0B0;
 }
 
+#login{
+	text-align: center;
+	padding: 100px
+}
+
+#signup{
+	text-align: center;
+	padding: 100px
+}
+
 /* Hide for mobile, show later */
 /*
 .sidebar {
