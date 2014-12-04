@@ -959,7 +959,7 @@ exports.getGamesNotifications = function(username, callback) {
  		else {
  			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, " +
  			"Notifications.creator, Notifications.gameID, Game.sport, Game.location, Game.gameDate, Game.gameStart, Users.firstName, Users.lastName " +
- 			"FROM Game INNER JOIN Notifications ON ((Notifications.gameCreator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			"FROM Game INNER JOIN Notifications ON ((Notifications.creator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
  			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
  			client.query({ text : SQLQuery,
  				values : [username]},
@@ -984,8 +984,8 @@ exports.getGamesNotifications = function(username, callback) {
         			request.id = result.rows[i].nid;
         			request.invitedBy = result.rows[i].userfrom;
         			request.invitedByName = result.rows[i].firstname + " " + result.rows[i].lastname;
-        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gameDate);
-        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gameStart);
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gamestart);
         			request.creator = result.rows[i].creator;
         			request.gameID = result.rows[i].gameid;
         			requests.push(request);
