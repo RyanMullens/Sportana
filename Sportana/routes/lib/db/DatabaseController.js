@@ -894,8 +894,26 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						gameInfo.minAge = result.rows[0].minage;
  						gameInfo.maxAge = result.rows[0].maxage;
  						gameInfo.isPublic = result.rows[0].ispublic;
+ 						
+ 			SQLQuery = "SELECT Notifications.nid From Game where (gameID = $1) and (gameCreator = $2) AND (userTo=$3)";
+ 			client.query({ text : SQLQuery, 
+ 				values : [gameID , gameCreator, username]}, 
+ 				function (err, result) {
+ 					done();
+ 					client.end();
+ 					pg.end();
+ 					if (err) {
+ 						callback(err, undefined);
+ 					}
+ 					else {
+ 						if (!result.rows[0]) {
+ 							callback("No result found", undefined);
+ 						}
+ 						gameInfo.requestID = result.rows[0].nid;
 
  						getGamePlayers(gameInfo, username, callback);
+ 					}
+ 				});
  					}
  				});
 }
@@ -936,14 +954,13 @@ exports.getGamesList = function(username, callback) {
 
 exports.getGamesNotifications = function(username, callback) {
 	pg.connect(connString, function (err, client, done) {
-<<<<<<< HEAD
  		if (err) {
  			callback(err, undefined);
  		}
  		else {
- 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, Notifications.timeSent, " +
- 			"Notifications.creator, Notifications.gameID, Users.firstName, Users.lastName, Users.profilePicture " +
- 			"FROM Notifications INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, " +
+ 			"Notifications.creator, Notifications.gameID, Game.sport, Game.location, Game.gameDate, Game.gameStart, Users.firstName, Users.lastName " +
+ 			"FROM Games INNER JOIN Notifications ON ((Notifications.gameCreator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
  			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
  			client.query({ text : SQLQuery,
  				values : [username]},
@@ -961,47 +978,22 @@ exports.getGamesNotifications = function(username, callback) {
         		var requests = [];
         		for( var i = 0; i < result.rows.length; i++ ) {
         			var request = {};
+ 					request.location = result.rows[i].location;
+ 					request.sport = result.rows[i].sport;
         			request.id = result.rows[i].nid;
-        			request.userFrom = result.rows[i].userfrom;
-        			request.userFromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-        			request.userFromImage = result.rows[i].profilepicture;
-        			request.type = result.rows[i].type;
-        			request.date = timeHelper.makeDateFromDateAndTime(result.rows[i].timesent);
-        			request.time = timeHelper.makeTimeFromDateAndTime(result.rows[i].timesent);
-        			request.gameCreator = result.rows[i].creator;
+        			request.invitedBy = result.rows[i].userfrom;
+        			request.invitedByName = result.rows[i].firstname + " " + result.rows[i].lastname;
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gameDate);
+        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gameStart);
+        			request.creator = result.rows[i].creator;
         			request.gameID = result.rows[i].gameid;
         			requests.push(request);
         		}
         		callback(undefined, requests);
         	}
         });
-}
-});
-=======
-		if (err) {
-			callback(err, undefined);
-		}
-		else {
-			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy, n.nid "+
-			"From Game as g, Notifications as n " +
-			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator AND type = 1";
-			client.query(SQLQuery, [username], function (err, result) {
-				done();
-				client.end();
-				pg.end();
-				if (err) {
-					callback(err, undefined);
-				}
-				else {
-					if (!result.rows[0]) {
-						callback("No result found", undefined);
-					}
-					callback(undefined, result.rows);
-				}
-			});
-		}
+	  }
 	});
->>>>>>> ebacd7a0ef8d7bd373457a661055db29034d2a85
 };
 
 exports.removePlayer = function(username, gameID, creator, callback) {

@@ -125,6 +125,8 @@ router.put('/game', function(req, res) {
  *  "location"   	: string
  * 	“sport"      	: string
  *  "invitedBy"		: string
+ *  "invitedByName" : string
+ *  "id"			: int
  * }
  *****************************************************
  */
