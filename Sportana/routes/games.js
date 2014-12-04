@@ -387,6 +387,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 					response.success = true;
 					response.message = "";
 				}
+				console.log(JSON.stringify(response));
 				res.write(JSON.stringify(response));
           		res.end();
 			});
