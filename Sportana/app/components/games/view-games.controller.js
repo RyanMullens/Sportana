@@ -24,6 +24,7 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	$http.get('/api/games/').
 	success(function(data, status, headers, config) {
+		console.log(data);
 		if(data.success){
 			for(var game in data.games){
 				data.games[game].sportImg = '/assets/img/sports/' + data.games[game].sport.toLowerCase() + '.png';

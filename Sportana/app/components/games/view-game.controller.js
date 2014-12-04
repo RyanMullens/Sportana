@@ -40,6 +40,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 				$scope.user = tempUser;
 			}
 			$scope.gameLoaded = true;
+			console.log($scope.game);
 		}
 		else console.log("This game does not exist");
 	})
@@ -133,7 +134,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	this.acceptGame = function(){
 		var that = this;
 		console.log($scope.getUser());
-		$http.post('/api/requests/' + $scope.getGame().requestID, {confirmed: 'true'})
+		$http.post('/api/requests/' + that.getGame().requestID, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.getUser().status = 0;
 		})
@@ -144,7 +145,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.declineGame = function(){
 		var that = this;
-		$http.post('/api/requests/' + $scope.getGame().requestID, {confirmed: 'false'})
+		$http.post('/api/requests/' + that.getGame().requestID, {confirmed: 'false'})
 		.success(function(data, status, headers, config){
 			that.getPlayers().splice(that.getPlayers().indexOf($scope.getUser()),1);
 			$scope.getUser().status = -1;
@@ -176,9 +177,10 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			var friend = that.getInvites()[i];
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
 			.success(function(data, status, headers, config){
+				console.log("success!");
 			})
 			.error(function(data, status, headers, config) {
-				console.log('There was an error with posting the message');
+				console.log('There was an error with inviting the user');
 			});
 			that.getFriends().splice(that.getFriends().indexOf(friend), 1);
 			friend.status = 2;
