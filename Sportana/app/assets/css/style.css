@@ -9,6 +9,8 @@ body {
   overflow-x: hidden !important;
   overflow-y: hidden !important;
   background-color: #B0B0B0;
+  text-align: center;
+  padding: 100px;
 }
 
 /* Hide for mobile, show later */
