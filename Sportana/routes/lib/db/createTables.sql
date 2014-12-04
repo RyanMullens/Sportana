@@ -347,7 +347,7 @@ CREATE RULE queue_on_duplicate_ignore AS ON INSERT TO Queue
 
 CREATE RULE participant_add_update AS ON INSERT TO Participant
   WHERE EXISTS(SELECT 1 FROM Participant 
-                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID))
+                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID) AND (status=1 OR status=2))
   DO INSTEAD UPDATE Participant SET status=0 WHERE (login=NEW.login) AND (creator=NEW.creator) AND (gameID=NEW.gameID);
 
 CREATE TRIGGER update_notifications
