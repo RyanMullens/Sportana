@@ -20,6 +20,12 @@ insert INTO Users(login, emailSuffix, password, firstName, lastName, city, birth
 INSERT INTO Friends(userA , userB) values
 ('myoda' , 'jbond');
 INSERT INTO Friends(userA , userB) values
+('myoda' , 'mscott');
+INSERT INTO Friends(userA , userB) values
+('myoda' , 'ckent');
+INSERT INTO Friends(userA , userB) values
+('myoda' , 'bwayne');
+INSERT INTO Friends(userA , userB) values
 ('jbond' , 'myoda');
 INSERT INTO Friends(userA , userB) values
 ('jbond' , 'mscott');
