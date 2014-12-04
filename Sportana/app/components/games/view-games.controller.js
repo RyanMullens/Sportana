@@ -8,7 +8,6 @@ app.controller("ViewGamesController", function($http, $scope){
 	$http.get('/api/requests/games').
 	success(function(data, status, headers, config) {
 		if(data.success){
-			console.log(data);
 			for(var notification in data){
 				data[notification].sportImg = '/assets/img/sports/' + data[notification].sport.toLowerCase() + '.png';
 			}
@@ -29,7 +28,6 @@ app.controller("ViewGamesController", function($http, $scope){
 			for(var game in data){
 				data[game].sportImg = '/assets/img/sports/' + data[game].sport.toLowerCase() + '.png';
 			}
-			console.log(data);
 			$scope.games = data;
 		}
 		else{

@@ -20,7 +20,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			status: -1
 		};
 	}());
-	console.log($scope.user);
 
 	$scope.contains = function(type, login){
 		for(var i = 0; i < type.length; i++){
@@ -35,7 +34,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	.success(function(data, status, headers, config){
 		if(data.success){
 			data.sportImg = '/assets/img/sports/' + data.sport.toLowerCase() + '.png';
-			console.log(data);
 			$scope.game = data;
 			var tempUser = $scope.contains($scope.game.players, $scope.user.login);
 			if(tempUser){
@@ -51,7 +49,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	$http.get('/api/games/messages?creator=' + $stateParams.creatorId + '&gameID=' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-		console.log(data);
 		$scope.messages = data.posts;
 		$scope.messagesLoaded = true;
 	})
@@ -144,8 +141,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		.success(function(data, status, headers, config){
 			$scope.getUser().status = 0;
 			that.getPlayers().push($scope.getUser());
-
-			console.log($scope.getUser());
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with joining the game');
@@ -190,16 +185,10 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		else{
 			this.getInvites().splice(index, 1);
 		}
-		console.log(friend);
 	};
 
 	this.inviteFriends = function(){
 		var that = this;
-
-		console.log('invites');
-		console.log(this.getInvites());
-		console.log('friend');
-		console.log(this.getFriends());
 		for(var i = 0; i < this.getInvites().length; i++){
 			var friend = that.getInvites()[i];
 			$http.put('/api/requests/game', {userTo: friend.login, gameCreator: that.getGame().creator, gameID: that.getGame().gameID})
@@ -213,11 +202,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 			that.getPlayers().push(friend);
 		}
 		this.getInvites().length = 0;
-		console.log('invites');
-		console.log(this.getInvites());
-		console.log('friend');
-		console.log(this.getFriends());
-		console.log(this.getPlayers());
 	};
 
 	this.getMessages = function(){
