@@ -943,7 +943,18 @@ exports.getGamesList = function(username, callback) {
           	if (!result.rows[0]) {
           		callback("No result found", undefined);
           	}
-
+	        	var requests = [];
+        		for( var i = 0; i < result.rows.length; i++ ) {
+        			var request = {};
+ 					request.creator = result.rows[i].creator;
+ 					request.gameID = result.rows[i].gameid;
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+        			request.gameStart = timeHelper.makeDateFromDateAndTime(result.rows[i].gamestart);
+        			request.location = result.rows[i].location;
+        			request.sport = result.rows[i].sport;
+        			requests.push(request);
+        		}
+        		callback(undefined, requests);
           	callback(undefined, result.rows);
           }
       });
@@ -975,7 +986,6 @@ exports.getGamesNotifications = function(username, callback) {
         		callback(err, undefined);
         	}
         	else {
-        		console.log(result);
         		var requests = [];
         		for( var i = 0; i < result.rows.length; i++ ) {
         			var request = {};
