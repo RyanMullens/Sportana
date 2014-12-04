@@ -52,28 +52,6 @@ app.directive('popOver', function ($compile) {
   };
 });
 
-
-/*
-"<div ng-repeat='friend in viewGame.getFriends() track by $index' class='checkbox'><label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label></div><button type='button' class='btn btn-primary' ng-click='viewGame.inviteFriends()'>Invite</button>"
-"<div><label ng-repeat='item in items'><input type='checkbox' value='{{item.id}}''>{{item.firstname}} {{item.lastname}}</label></div><button type='button' class='btn btn-primary' ng-click='viewGame.inviteFriends()'>Invite</button>"
-
-<div ng-repeat="friend in viewGame.getFriends() track by $index" class="checkbox">
-    <label><input type="checkbox" value="{{friend.id}}">{{friend.firstname}} {{friend.lastname}}</label>
-</div>                          
-<button type="button" class="btn btn-primary" ng-click="viewGame.inviteFriends()">
-    Invite
-</button>
-
-
-<form>
-    <div ng-repeat='friend in viewGame.getFriends() track by $index' class='checkbox'>
-        <label><input type='checkbox' value='{{friend.id}}'>{{friend.firstname}} {{friend.lastname}}</label>
-    </div>                          
-    <button type='button' class='btn btn-primary' ng-click='viewGame.inviteFriends()'>
-        Invite
-    </button>
-</form>
-*/
 app.directive('tooltip', function(){
   return {
     restrict: 'A',

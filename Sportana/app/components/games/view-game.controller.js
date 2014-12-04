@@ -83,17 +83,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	this.getInvites = function(){
 		return $scope.invites;
 	};
-/*
-	this.getInvited = function(){
-		return $scope.game.invited;
-	};
-	*/
+
 	$scope.getUser = function(){
 		return $scope.user;
 	};
 
-
-	//this is for ng-repeat filter
 	$scope.isJoined = function(player){
 		if(player){
 			return player.status === 0;
@@ -101,22 +95,11 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		else return false;
 	};
 
-/*	//this is for all the ng-show/hide
-	this.isJoined = function(user){
-		return !!this.contains(this.getPlayers(), this.getUser());
-	};
-	*/
-	//this is for ng-repeat filter
 	$scope.isInvited = function(player){
 		if(player){
 			return player.status === 1;
 		}
 		else return false;
-	};
-/*
-	//this is for all the ng-show/hide
-	this.isInvited = function(id){
-		return !!this.contains(this.getInvited(), id);
 	};
 	*/
 	this.isPublic = function(){
@@ -222,21 +205,3 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		});
 	};
 });
-
-
-/*
- creator         | character varying(50)  | not null
- gameid          | integer                | not null
- gamedate        | date                   | 
- gamestart       | time without time zone | 
- gameend         | time without time zone | 
- sport           | character varying(50)  | 
- location        | character varying(100) | 
- numparticipants | integer                | 
- minplayers      | integer                | 
- maxplayers      | integer                | 
- reservedspots   | integer                | 
- minage          | integer                | 
- maxage          | integer                | 
- ispublic        | boolean              
- */

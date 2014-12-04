@@ -1,4 +1,3 @@
-'use strict';
 app.controller("ViewGamesController", function($http, $scope){
 
 	$scope.games = [];
@@ -76,18 +75,3 @@ app.controller("ViewGamesController", function($http, $scope){
 	};
 
 });
-
-/*
-Game info:
--sport (name and icon)
--# players joined
--# players invited
--Date
--Time
--location
-
-INvitation info:
-invited by
-invited by photo
-game info
-*/
