@@ -38,6 +38,7 @@
 				</div>
 				
 				<div class="row invited">
+					<h3>Invited</h3>
 					<script type="text/javascript">
 						$(document).ready(function(){
 							$('[data-toggle="tooltip"]').tooltip();   
@@ -89,7 +90,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row buttons">
 		<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="isJoined(getUser())">Leave Game</button>
 		<button type="button" class="btn btn-primary" ng-click="viewGame.joinGame()" ng-show="(viewGame.isPublic() && !isJoined(getUser()))">Join Game</button>
 		<button type="button" class="btn btn-success" ng-click="viewGame.acceptGame()" ng-show="isInvited(getUser())">Accept</button>
