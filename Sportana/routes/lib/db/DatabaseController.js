@@ -959,7 +959,7 @@ exports.getGamesNotifications = function(username, callback) {
  		else {
  			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, " +
  			"Notifications.creator, Notifications.gameID, Game.sport, Game.location, Game.gameDate, Game.gameStart, Users.firstName, Users.lastName " +
- 			"FROM Games INNER JOIN Notifications ON ((Notifications.gameCreator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			"FROM Game INNER JOIN Notifications ON ((Notifications.gameCreator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
  			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
  			client.query({ text : SQLQuery,
  				values : [username]},
@@ -971,9 +971,11 @@ exports.getGamesNotifications = function(username, callback) {
         	// This cleans up connected clients to the database and allows subsequent requests to the database
         	pg.end();
         	if (err) {
+        		console.log(err);
         		callback(err, undefined);
         	}
         	else {
+        		console.log(result);
         		var requests = [];
         		for( var i = 0; i < result.rows.length; i++ ) {
         			var request = {};
