@@ -132,8 +132,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		.success(function(data, status, headers, config){
 			that.getPlayers().splice(that.getPlayers().indexOf($scope.getUser()),1);
 			$scope.getUser().status = -1;
-			console.log(that.getPlayers());
-			console.log($scope.isJoined($scope.getUser()));
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with leaving the game');
@@ -157,7 +155,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	this.acceptGame = function(){
 		var that = this;
 
-		$http.post('/api/requests/' + player.nid, {confirmed: 'true'})
+		$http.post('/api/requests/' + $scope.getUser().nid, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.getUser().status = 0;
 		})
@@ -168,7 +166,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.declineGame = function(){
 		var that = this;
-		$http.post('/api/requests/' + player.nid, {confirmed: 'false'})
+		$http.post('/api/requests/' + $scope.getUser().nid, {confirmed: 'false'})
 		.success(function(data, status, headers, config){
 			that.getPlayers().splice(that.getPlayers().indexOf($scope.getUser()),1);
 			$scope.getUser().status = -1;

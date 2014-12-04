@@ -92,7 +92,7 @@
 	</div>
 	<div class="row buttons">
 		<button type="button" class="btn btn-warning" ng-click="viewGame.leaveGame()" ng-show="isJoined(getUser())">Leave Game</button>
-		<button type="button" class="btn btn-primary" ng-click="viewGame.joinGame()" ng-show="(viewGame.isPublic() && !isJoined(getUser()))">Join Game</button>
+		<button type="button" class="btn btn-primary" ng-click="viewGame.joinGame()" ng-show="(viewGame.isPublic() && !isJoined(getUser()) && !isInvited(getUser()))">Join Game</button>
 		<button type="button" class="btn btn-success" ng-click="viewGame.acceptGame()" ng-show="isInvited(getUser())">Accept</button>
 		<button type="button" class="btn btn-danger" ng-click="viewGame.declineGame()" ng-show="isInvited(getUser())">Decline</button>
 	</div>
