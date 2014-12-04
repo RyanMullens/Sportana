@@ -6,6 +6,7 @@ app.controller("ViewGamesController", function($http, $scope){
 	var that = this;
 	$http.get('/api/requests/games').
 	success(function(data, status, headers, config) {
+		console.log(data);
 		if(data.success){
 			for(var notification in data.notifications){
 				data.notifications[notification].sportImg = '/assets/img/sports/' + data.notifications[notification].sport.toLowerCase() + '.png';

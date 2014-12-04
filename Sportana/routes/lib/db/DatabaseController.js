@@ -939,9 +939,9 @@ exports.getGamesNotifications = function(username, callback) {
 			callback(err, undefined);
 		}
 		else {
-			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom, n.nid as invitedBy "+
+			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy, n.nid "+
 			"From Game as g, Notifications as n " +
-			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator ";
+			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator AND type = 1";
 			client.query(SQLQuery, [username], function (err, result) {
 				done();
 				client.end();
