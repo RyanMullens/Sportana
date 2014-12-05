@@ -1,3 +1,19 @@
+# Project 4 Feedback
+
+Your technical spec is incredibly thorough, as I expected! Well done!
+
+Your insistence on being mobile is a great. Having your app be mobile-first is a necessity since you are facilitating real-world events where plans could change suddenly. Plus, given that mobile users are much more likely to share their geolocation with web apps than desktop/laptop users, I can imagine a platform where users traveling could spontaneously interact with new people in a much more friendly, casual, less creepy way? Airbnb brought humanity into travel, I think Sportana could potentially introduce humanity back into meeting new people. 
+
+Addressing the challenges you mentioned:
+
+You mentioned some interesting challenges you may face when implementing search, especially when searching for other players. I wonder if a social graph, like "I played soccer with so-and-so and so-and-so played (and enjoyed) baseball with some-other-player so some-other-player should be high on my results", could help players find both compatible people competitively, socially. I also wonder how users will behave using the player search: will a user want to find a specific person, where pages of users would be helpful, or would users want to find a few people that they could be very compatible with? I would monitor your user's activity in search and see.
+
+On a similar note: you mentioned difficulty in displaying search results of available games around a particular user. Your current query, as I understand it, is location-based in "hubs", like "Boston games" or "Houston games." You didn't mention how you may incorporate Facebook/Google API integration, though I could imagine a query where available games are shown according to: friends of the user are attending this game, the game is of the user's interest, the game has participants that the user would be compatible with, and the game is in this user's area. This would definitely be a tricky query, especially determining the weight of each of these components. (like, is it more important that the user likes the sport, or if their friends are playing it would they be open to trying some new sport?) I don't think A/B testing is the end-all, but it could give you some interesting insight into these implicit weights. 
+
+As I mentioned in my last feedback, you haven't been taking team notes since the beginning of November. However, your Trello activity is extremely high and admirable. 
+
+Thumbs up, as usual, and I can't wait to see the final version of Sportana!
+
 # Project 3 Feedback
 
 I find your non-goal of not reminding the players of an upcoming game intriquing. I would speculate on whether or not users would remember the games they have joined, but perhaps you could do some A/B testing on this matter. (Participants would be split, half would be notified, half would not. I wonder how this would effect and not effect the rate of remembering and participating)

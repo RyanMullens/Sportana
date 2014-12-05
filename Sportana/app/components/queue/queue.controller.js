@@ -4,14 +4,17 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 	$scope.preferences = {};
 	$scope.hasPreferences = false;
 	$scope.sports = [];
+	$scope.matches = [];
 
 	var mode;
+	var editModeCachedPreferences = {};
+	var editModeCachedSelections = {};
 	// Sports that are visibly selected
 	var selectedSports = [];
 	// The sports that existed in the preferences that were retrieved
 	var existingSports = [];
 
-	$scope.joinedGames = [];
+	var joinedGames = [];
 
 	// 1)	Runs on page load
 	var initialize = function() {
@@ -40,14 +43,16 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 		selectedSports = [];
 		existingSports = [];
+		$scope.matches = [];
 
 		mode = QUEUE_CONST.normal;
 		$scope.hasPreferences = false;
+		setInstructions();
 	}
 
 	// Clear all of the locally selected queue preferences
 	var initializePreferencePlaceholders = function() {
-		$scope.preferences.city = "Enter a city";
+		$scope.preferences.city = "";
 		$scope.preferences.ageMin = "No Preference";
 		$scope.preferences.ageMax = "No Preference";
 		$scope.preferences.competitive = false;
@@ -64,7 +69,12 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 			if(preferences && preferences.sports.length > 0) {
 
-				$scope.preferences = preferences;
+				$scope.preferences.city = preferences.city;
+				$scope.preferences.ageMin = (preferences.ageMin === 16) ? "No Preference" : preferences.ageMin;
+				$scope.preferences.ageMax = (preferences.ageMax === 70) ? "No Preference" : preferences.ageMax;
+				$scope.preferences.competitive = preferences.competitive;
+				$scope.preferences.sports = preferences.sports;
+
 				$scope.hasPreferences = true;
 
 				// Keep track of the existing sports
@@ -91,7 +101,7 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 				$scope.instructions = "Update your game preferences.";
 			} else {
 
-				if($scope.matches() && $scope.matches().length > 0) {
+				if($scope.matches && $scope.matches.length > 0) {
 
 					$scope.instructions = "Sportana has found these games that match your preferences.";
 				} else {
@@ -178,6 +188,15 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 	$scope.agesMin = function() {
 		return ages("min");
 	}
+
+	this.currentAgeMin = function() {
+		return ($scope.preferences.ageMin === 16) ? "No Preference" : $scope.preferences.ageMin;
+	}
+
+	this.currentAgeMax = function() {
+		return ($scope.preferences.ageMax === 70) ? "No Preference" : $scope.preferences.ageMax;
+	}
+
 	$scope.agesMax = function() {
 		return ages("max");
 	}
@@ -227,9 +246,6 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 		return result;
 	}
 
-	// TODO Do not call the server to update the preferences when finished.
-	// Find a way to work with the arrays that currently exist.
-
 	// Save the user's queue preferences by first dropping the queue entirely.
 	// Then, find all of the sports added and removed, and update the local preferences.
 	// Once the local preferences have been updated, join the queue with them.
@@ -266,10 +282,23 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 			if($scope.preferences.sports.length > 0) {
 
-				QueueService.joinQueue($scope.preferences).then(function (res) {
+				var updatedPreferences = $scope.preferences;
+				console.log(updatedPreferences);
+
+				updatedPreferences.ageMin = (updatedPreferences.ageMin === "No Preference") ? 16 : $scope.preferences.ageMin;
+				updatedPreferences.ageMax = (updatedPreferences.ageMax === "No Preference") ? 70 : $scope.preferences.ageMax;
+				updatedPreferences.competitive = (updatedPreferences.competitive) ? 1 : 0;
+
+				QueueService.joinQueue(updatedPreferences).then(function (res) {
+
+					QueueService.getMatches(updatedPreferences).then(function(res) {
+						console.log(res[0].data.results);
+						$scope.matches = res[0].data.results;
+					});
 
 					resetQueue();
 					getPreferences();
+
 
 				}, function (err) {
 					console.log(err);
@@ -291,26 +320,50 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 	// @ONCLICK
 	$scope.enterEditMode = function() {
+
+		// Cache the preferenced before editing
+		for(var i in $scope.preferences) {
+			editModeCachedPreferences[i] = $scope.preferences[i];
+		}
+
+		// Clear the old selection cache and generate a new one
+		editModeCachedSelections = [];
+		for(var i in selectedSports) {
+			editModeCachedSelections[i] = selectedSports[i];
+		}
+
 		mode = QUEUE_CONST.edit;
 		setInstructions();
 	}
 
+	$scope.isSaveValid = function() {
+		return ($scope.preferences.city.trim() != "") && (selectedSports.length > 0);
+	}
+
 	// @ONCLICK
 	$scope.createGame = function() {
-		// TODO Perform any necessary cleanup
 		$state.go('app.createGame');
 	}
 
 	// @ONCLICK
 	$scope.updatePreferences = function() {
-		// TODO Validate that the city and sports are not empty
 		savePreferences();
 	}
 
 	// @ONCLICK
 	$scope.cancelPreferenceChanges = function() {
 
-		// TODO Revert preference object to what it was before editing
+		// Revert the preferences to the cached version
+		for(var i in editModeCachedPreferences) {
+			$scope.preferences[i] = editModeCachedPreferences[i];
+		}
+
+		// Clear the old selections and revert back to cache
+		selectedSports = [];
+		for(var i in editModeCachedSelections) {
+			selectedSports[i] = editModeCachedSelections[i];
+		}
+
 		mode = QUEUE_CONST.normal;
 		setInstructions();
 	}
@@ -332,9 +385,15 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 		return ($scope.preferences.competitive) ? "Competitive" : "Casual";
 	}
 
-	$scope.matches = function() {
-		// TODO GET the matches for the current preferences
-	}
+	// $scope.matches = function() {
+	//
+	// 	QueueService.getMatches($scope.preferences).then(function(res) {
+	// 		console.log(res);
+	// 		return res;
+	// 	});
+	// 	// TODO : Error handling
+	//
+	// }
 
 	// @ONCLICK
 	$scope.viewGame = function(game) {

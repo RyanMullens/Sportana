@@ -64,9 +64,9 @@ INSERT INTO Sport(sport , imageURL) values
 INSERT INTO Sport(sport , imageURL) values
 ('Tennis' , '/assets/img/sports/tennis.png');
 INSERT INTO Sport(sport , imageURL) values
-('Table Tennis' , '/assets/img/sports/tableTennis.png');
+('Table Tennis' , '/assets/img/sports/tabletennis.png');
 INSERT INTO Sport(sport , imageURL) values
-('Ultimate' , '/assets/img/sports/ultimateFrisbee.png');
+('Ultimate' , '/assets/img/sports/ultimatefrisbee.png');
 INSERT INTO Sport(sport , imageURL) values
 ('Volleyball' , '/assets/img/sports/volleyball.png');
 

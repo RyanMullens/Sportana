@@ -10,7 +10,7 @@ app.controller("CreateGameController", function($http, $scope)
 		end: 		new Date(2999,01,01,15,00,00)
 	};
 	$scope.gameLocation = {
-		city: "Amherst"
+		city: ""
 	};
 	$scope.players = {
 		minAge: "No Preference",
@@ -150,92 +150,91 @@ app.controller("CreateGameController", function($http, $scope)
 		return (sport === $scope.selectedSport);
 	};
 
-	$scope.isReady = function() {
-		return true;
-	};
+	$scope.isCreateValid = function() {
+		return ($scope.gameLocation.city.trim() != "");
+	}
 
 	$scope.create = function () {
 
-		if($scope.isReady()) {
+		Date.prototype.yyyymmdd = function() {
+			var yyyy = this.getFullYear().toString();
+			var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+			var dd  = this.getDate().toString();
+			return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+		};
 
-			Date.prototype.yyyymmdd = function() {
-				var yyyy = this.getFullYear().toString();
-				var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-				var dd  = this.getDate().toString();
-				return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
-			};
+		Date.prototype.hhmmss = function() {
+			var hh = this.getHours().toString();
+			var mm = this.getMinutes().toString();
+			var ss = this.getSeconds().toString();
+			return (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + ":" + (ss[1]?dd:"0"+ss[0]); // padding
+		};
 
-			Date.prototype.hhmmss = function() {
-				var hh = this.getHours().toString();
-				var mm = this.getMinutes().toString();
-				var ss = this.getSeconds().toString();
-				return (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + ":" + (ss[1]?dd:"0"+ss[0]); // padding
-			};
+		var dateString = $scope.gameDate.yyyymmdd();
+		var startString = $scope.gameTime.start.hhmmss();
+		var endString = $scope.gameTime.end.hhmmss();
 
-			var dateString = $scope.gameDate.yyyymmdd();
-			var startString = $scope.gameTime.start.hhmmss();
-			var endString = $scope.gameTime.end.hhmmss();
+		/**
+		*****************************************************
+		* PUT	/games
+		* REQUEST:
+		* {
+		* 	“sportID"       : string
+		*  "gameDate" 	    : date // yyyy-mm-dd
+		*  "startTime"     : time // hh:mm:ss
+		*  "endTime"       : time // hh:mm:ss
+		*  "location"      : string
+		*  "minAge"	    : int
+		*  "maxAge"	    : int
+		*  "minPlayers"    : int
+		*  "maxPlayers"    : int
+		*  "reservedSpots" : int
+		*  "public"	    : boolean
+		*  "competitive"   : boolean
+		* }
+		*
+		* RESPONSE:
+		* {
+		* 	“message”             : string // empty on success
+		* 	“success”             : boolean
+		* }
+		*****************************************************
+		*/
 
-			/**
-			*****************************************************
-			* PUT	/games
-			* REQUEST:
-			* {
-			* 	“sportID"       : string
-			*  "gameDate" 	    : date // yyyy-mm-dd
-			*  "startTime"     : time // hh:mm:ss
-			*  "endTime"       : time // hh:mm:ss
-			*  "location"      : string
-			*  "minAge"	    : int
-			*  "maxAge"	    : int
-			*  "minPlayers"    : int
-			*  "maxPlayers"    : int
-			*  "reservedSpots" : int
-			*  "public"	    : boolean
-			*  "competitive"   : boolean
-			* }
-			*
-			* RESPONSE:
-			* {
-			* 	“message”             : string // empty on success
-			* 	“success”             : boolean
-			* }
-			*****************************************************
-			*/
+		var gameInformation = {
+			sportID: 			$scope.selectedSport.sport,
+			gameDate: 		dateString,
+			startTime: 		startString,
+			endTime: 			endString,
+			location: 		$scope.gameLocation.city,
+			minAge: 			($scope.players.minAge === "No Preference") ? 16 : $scope.players.minAge,
+			maxAge: 			($scope.players.maxAge === "No Preference") ? 100 : $scope.players.maxAge,
+			minPlayers: 	($scope.players.minAmount === "No Preference") ? 2 : $scope.players.minAmount,
+			maxPlayers: 	($scope.players.maxAmount === "No Preference") ? 25 : $scope.players.maxAmount,
+			reservedSpots:0, // TODO : Allow player to set this.
+			competitive: 	($scope.competitive) ? 1 : 0,
+			public: 			($scope.public) ? 1 : 0
+		};
 
-			var gameInformation = {
-				sportID: 			$scope.selectedSport.sport,
-				gameDate: 		dateString,
-				startTime: 		startString,
-				endTime: 			endString,
-				location: 		$scope.gameLocation.city,
-				minAge: 			($scope.players.minAge === "No Preference") ? 16 : $scope.players.minAge,
-				maxAge: 			($scope.players.maxAge === "No Preference") ? 100 : $scope.players.maxAge,
-				minPlayers: 	($scope.players.minAmount === "No Preference") ? 2 : $scope.players.minAmount,
-				maxPlayers: 	($scope.players.maxAmount === "No Preference") ? 25 : $scope.players.maxAmount,
-				reservedSpots:0, // TODO : Allow player to set this.
-				competitive: 	($scope.competitive) ? 1 : 0,
-				public: 			($scope.public) ? 1 : 0
-			};
+		console.log(gameInformation);
 
-			console.log(gameInformation);
+		$http.put('/api/games', gameInformation)
+			.then(function (res) {
+				if(res.data.success) {
+					console.log(res.data);
 
-			$http.put('/api/games', gameInformation)
-				.then(function (res) {
-					if(res.data.success) {
-						console.log(res.data);
+					// .state("app.viewGame", {
+					// 	url: "/game/:creatorId/:gameId" ,
 
-						// TODO : Send friend invites : Delegated to @VIEW-GAME PAGE
-						// TODO : REDIRECT TO @VIEW-GAME PAGE
+					// TODO : Need game creatorId and gameId returned from API call
 
-					} else {
-						console.log(res.data.message);
-					}
-				});
+					// TODO : Send friend invites : Delegated to @VIEW-GAME PAGE
+					// TODO : REDIRECT TO @VIEW-GAME PAGE
 
-		} else {
-			// Not ready to create a game.
-		}
+				} else {
+					console.log(res.data.message);
+				}
+			});
 	};
 
 

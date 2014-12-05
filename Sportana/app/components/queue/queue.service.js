@@ -1,4 +1,4 @@
-app.factory('QueueService', function($http) {
+app.factory('QueueService', function($http, $q) {
 
   var queueService = {};
 
@@ -152,6 +152,105 @@ app.factory('QueueService', function($http) {
       return err;
     });
   }
+
+
+  /**
+  *****************************************************
+  * GET	/search/games?sport={currentSearchText}
+  *					 &city={city}
+  *					 &ageMin={min}
+  *					 &ageMax={max}
+  *					 &competitive={isCompetitive}
+  *
+  * RESPONSE:
+  * {
+  * 	“message”  : string    // empty on success
+  * 	“success”  : boolean
+  *  "results" :
+  *   [{
+  "creator"         : string
+  "gameID"          : int
+  "gameDate"		  : date // yyyy-mm-dd
+  "gameStart"		  : time // hh:mm:ss
+  "gameEnd"		  : time // hh:mm:ss
+  "sport" 		  : string
+  "sportImage"	  : string // imageURL
+  "location"		  : string
+  "numParticipants" : int
+  "" 	  : int
+  "maxPlayers" 	  : int
+  "minAge" 		  : int
+  "maxAge" 		  : int
+  *   }]
+  * }
+  *****************************************************
+  */
+  queueService.getMatches = function(preferences) {
+
+    var city = preferences.city;
+    var ageMin = preferences.ageMin;
+    var ageMax = preferences.ageMax;
+    var competitive = preferences.competitive;
+    var sports = preferences.sports;
+
+    var params = {};
+
+    if(ageMin && ageMin != "No Preference") {
+      params['ageMin'] = ageMin;
+    }
+    if(ageMax && ageMax != "No Preference") {
+      params['ageMax'] = ageMax;
+    }
+    params['competitive'] = competitive;
+
+
+    // Generates a promise containing the results of all of the GET requests
+    var deferred = $q.defer();
+    var urlCalls = [];
+    angular.forEach(preferences.sports, function(sport) {
+      params['sport'] = sport.sport.toLowerCase();
+      urlCalls.push($http.get('/api/search/games', {params: params}));
+    });
+
+    return $q.all(urlCalls)
+    .then(
+      function(results) {
+        deferred.resolve(
+          results
+        );
+        return deferred.promise;
+      });
+  }
+
+
+  /**
+  *****************************************************
+  * GET	/requests
+  * REQUEST:
+  * {
+  * }
+  *
+  * RESPONSE:
+  * {
+  * 	message  : string    // empty on success
+  * 	success  : boolean
+  *  "requests" :
+  *   [{
+  *    "id"            : int
+  *    "userFrom" 	  : string // users login
+  *    "userFromName"  : string // users name
+  *    "userFromImage" : string // url
+  *    "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
+  *    "date"          : date // yyyy-mm-dd format
+  *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
+  *    "gameCreator"   : string // for types 1, 2, and 3
+  *    "gameID"        : int // for types 1, 2, and 3
+  *   }]
+  * }
+  *****************************************************
+  // TODO
+
+
 
 
   /**
