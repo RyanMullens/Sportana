@@ -109,7 +109,7 @@ router.put('/game', function(req, res) {
 
 /**
  *****************************************************
- * GET	/games/
+ * GET	/requests/games/
  * REQUEST:
  * {
  * }
@@ -125,6 +125,8 @@ router.put('/game', function(req, res) {
  *  "location"   	: string
  * 	“sport"      	: string
  *  "invitedBy"		: string
+ *  "invitedByName" : string
+ *  "id"			: int
  * }
  *****************************************************
  */
@@ -144,7 +146,7 @@ router.get('/games', function(req, res) {
 					response.message = err;
 					response.success = false;
 				} else {
-					response = jsonGameInfo;
+					response.notifications = jsonGameInfo;
 					response.message = "";
 					response.success = true;
 				}

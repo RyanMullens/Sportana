@@ -258,6 +258,8 @@ router.get('/messages', function(req, res) {
 	var creator = req.query.creator;
 	var gameID = req.query.gameID;
 	var auth = req.get('SportanaAuthentication');
+	console.log("GET /games/messages?creator="+creator+"&gameID="+gameID);
+	console.log("Auth = " + auth);
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response ={};
 		if (err || (!username)) {
@@ -275,6 +277,7 @@ router.get('/messages', function(req, res) {
 					response.success = true;
 					response.posts = messages;
 				}
+				console.log("Response: " + JSON.stringify(response));
 				res.write(JSON.stringify(response));
           		res.end();
 			});
@@ -384,6 +387,7 @@ router.get('/:gameCreator/:gameID', function (req, res) {
 					response.success = true;
 					response.message = "";
 				}
+				console.log(JSON.stringify(response));
 				res.write(JSON.stringify(response));
           		res.end();
 			});

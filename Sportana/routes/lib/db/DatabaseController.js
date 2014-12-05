@@ -244,21 +244,23 @@ var isFriend = function(username, login, callback) {
 });
 }
 
+
 exports.getUserProfile = function (username, login, callback) {
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
-			callback(undefined, {message: "error"});
+			callback(undefined, {message: "error 250"});
 		}
 		else {
 			var sqlStatement = "SELECT Users.login FROM Users WHERE Users.login = $1";
 			client.query({ text : sqlStatement,
 				values : [login]},
 				function(err, result){
-					done();
 					if(err){
-						callback(undefined, {message: "error"});
+						done(); client.end(); pg.end();
+						callback(undefined, {message: "error 259"});
 					}
 					else if(result.rows[0] == undefined){
+						done(); client.end(); pg.end();
 						callback(undefined, {message: "User does not exist"});
 					}
 					else{
@@ -279,7 +281,7 @@ exports.getUserProfile = function (username, login, callback) {
 					  			client.end();
 					  			pg.end();
 					  			if(err){
-					  				callback(undefined, {message: "error"});
+					  				callback(undefined, {message: "error 282"});
 					  			}
 					  			else {
 					  				if(result.rows[0]["login"] === login){
@@ -299,7 +301,7 @@ exports.getUserProfile = function (username, login, callback) {
 
 					  					isFriend(username, login, function(err, value, nid){
 					  						if(err){
-					  							callback(undefined, {message: "error"});
+					  							callback(undefined, {message: "error 302"});
 					  						}
 			            				else{ //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 			            					result.rows[0]["isFriend"] = value;
@@ -312,7 +314,7 @@ exports.getUserProfile = function (username, login, callback) {
 					  				}
 					  				else{
 					  					console.log("user does not exist");
-					  					callback(undefined, {message: "error"});
+					  					callback(undefined, {message: "error 315"});
 					  				}
 					  			}
 					  		});
@@ -870,9 +872,6 @@ var getGamePlayers = function(gameInfo, username, callback) {
  			client.query({ text : SQLQuery,
  				values : [gameID , gameCreator]},
  				function (err, result) {
- 					done();
- 					client.end();
- 					pg.end();
  					if (err) {
  						callback(err, undefined);
  					}
@@ -894,8 +893,26 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						gameInfo.minAge = result.rows[0].minage;
  						gameInfo.maxAge = result.rows[0].maxage;
  						gameInfo.isPublic = result.rows[0].ispublic;
-
+ 						
+ 			SQLQuery = "SELECT Notifications.nid From Notifications where (gameID = $1) and (creator = $2) AND (userTo=$3)";
+ 			client.query({ text : SQLQuery, 
+ 				values : [gameID , gameCreator, username]}, 
+ 				function (err, result) {
+ 					done();
+ 					client.end();
+ 					pg.end();
+ 					if (err) {
+ 					console.log(err);
+ 						callback(err, undefined);
+ 					}
+ 					else {
+ 						if (result.rows[0]) {
+ 							gameInfo.requestID = result.rows[0].nid;
+ 						}
+ 						
  						getGamePlayers(gameInfo, username, callback);
+ 					}
+ 				});
  					}
  				});
 }
@@ -910,7 +927,7 @@ exports.getGamesList = function(username, callback) {
 		else {
 			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport "+
 			"From Game as g, Participant as p " +
-			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator ";
+			"WHERE p.login = $1 AND p.gameid = g.gameid AND p.creator = g.creator AND p.status != 2 ";
 			client.query(SQLQuery, [username], function (err, result) {
           // Ends the "transaction":
           done();
@@ -922,10 +939,22 @@ exports.getGamesList = function(username, callback) {
           	callback(err, undefined);
           }
           else {
+          console.log(result);
           	if (!result.rows[0]) {
           		callback("No result found", undefined);
           	}
-
+	        	var requests = [];
+        		for( var i = 0; i < result.rows.length; i++ ) {
+        			var request = {};
+ 					request.creator = result.rows[i].creator;
+ 					request.gameID = result.rows[i].gameid;
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+        			request.gameStart = timeHelper.makeDateFromDateAndTime(result.rows[i].gamestart);
+        			request.location = result.rows[i].location;
+        			request.sport = result.rows[i].sport;
+        			requests.push(request);
+        		}
+        		callback(undefined, requests);
           	callback(undefined, result.rows);
           }
       });
@@ -935,28 +964,46 @@ exports.getGamesList = function(username, callback) {
 
 exports.getGamesNotifications = function(username, callback) {
 	pg.connect(connString, function (err, client, done) {
-		if (err) {
-			callback(err, undefined);
-		}
-		else {
-			var SQLQuery = 	"SELECT g.creator, g.gameID, g.gameDate, g.gameStart, g.location, g.sport, n.userfrom as invitedBy "+
-			"From Game as g, Notifications as n " +
-			"WHERE n.userto = $1 AND n.gameid = g.gameid AND n.creator = g.creator ";
-			client.query(SQLQuery, [username], function (err, result) {
-				done();
-				client.end();
-				pg.end();
-				if (err) {
-					callback(err, undefined);
-				}
-				else {
-					if (!result.rows[0]) {
-						callback("No result found", undefined);
-					}
-					callback(undefined, result.rows);
-				}
-			});
-		}
+ 		if (err) {
+ 			callback(err, undefined);
+ 		}
+ 		else {
+ 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.type, " +
+ 			"Notifications.creator, Notifications.gameID, Game.sport, Game.location, Game.gameDate, Game.gameStart, Users.firstName, Users.lastName " +
+ 			"FROM Game INNER JOIN Notifications ON ((Notifications.creator=Game.creator) AND (Notifications.gameID=Game.gameID)) INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
+ 			"WHERE (Notifications.userTo = $1) AND (Notifications.type=1) ORDER BY Notifications.timeSent DESC";
+ 			client.query({ text : SQLQuery,
+ 				values : [username]},
+ 				function (err, result) {
+        	// Ends the "transaction":
+        	done();
+        	// Disconnects from the database:
+        	client.end();
+        	// This cleans up connected clients to the database and allows subsequent requests to the database
+        	pg.end();
+        	if (err) {
+        		console.log(err);
+        		callback(err, undefined);
+        	}
+        	else {
+        		var requests = [];
+        		for( var i = 0; i < result.rows.length; i++ ) {
+        			var request = {};
+ 					request.location = result.rows[i].location;
+ 					request.sport = result.rows[i].sport;
+        			request.id = result.rows[i].nid;
+        			request.invitedBy = result.rows[i].userfrom;
+        			request.invitedByName = result.rows[i].firstname + " " + result.rows[i].lastname;
+        			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
+        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gamestart);
+        			request.creator = result.rows[i].creator;
+        			request.gameID = result.rows[i].gameid;
+        			requests.push(request);
+        		}
+        		callback(undefined, requests);
+        	}
+        });
+	  }
 	});
 };
 

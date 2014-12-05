@@ -345,6 +345,11 @@ CREATE RULE queue_on_duplicate_ignore AS ON INSERT TO Queue
                 WHERE (login, sport)=(NEW.login, NEW.sport))
   DO INSTEAD NOTHING;
 
+CREATE RULE participant_add_update AS ON INSERT TO Participant
+  WHERE EXISTS(SELECT 1 FROM Participant 
+                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID)) AND (NEW.status=0)
+  DO INSTEAD UPDATE Participant SET status=0 WHERE (login=NEW.login) AND (creator=NEW.creator) AND (gameID=NEW.gameID);
+
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
 	FOR EACH ROW
@@ -398,4 +403,4 @@ CREATE TRIGGER add_participant_from_notification
 CREATE TRIGGER remove_from_queue
 	AFTER INSERT ON Notifications
 	FOR EACH ROW
-	EXECUTE PROCEDURE remove_user_from_queue();		
+	EXECUTE PROCEDURE remove_user_from_queue();	

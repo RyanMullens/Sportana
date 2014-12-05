@@ -6,11 +6,12 @@ app.controller("ViewGamesController", function($http, $scope){
 	var that = this;
 	$http.get('/api/requests/games').
 	success(function(data, status, headers, config) {
+		console.log(data);
 		if(data.success){
-			for(var notification in data){
-				data[notification].sportImg = '/assets/img/sports/' + data[notification].sport.toLowerCase() + '.png';
+			for(var notification in data.notifications){
+				data.notifications[notification].sportImg = '/assets/img/sports/' + data.notifications[notification].sport.toLowerCase() + '.png';
 			}
-			$scope.notifications = data;
+			$scope.notifications = data.notifications;
 		}
 		else{
 			console.log("No notifications were found");
@@ -23,6 +24,7 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	$http.get('/api/games/').
 	success(function(data, status, headers, config) {
+		console.log(data);
 		if(data.success){
 			for(var game in data.games){
 				data.games[game].sportImg = '/assets/img/sports/' + data.games[game].sport.toLowerCase() + '.png';
@@ -46,7 +48,8 @@ app.controller("ViewGamesController", function($http, $scope){
 	};
 
 	this.acceptGame = function(notification){
-		$http.post('/api/requests/' + player.nid, {confirmed: 'true'})
+		console.log(notification);
+		$http.post('/api/requests/' + notification.id, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.games.push(notification);
 			$scope.notifications.splice($scope.notifications.indexOf(notification),1);
