@@ -60,7 +60,58 @@ router.get('', function (req, res) {
 	});
 });
 
-
+/**
+ *****************************************************
+ * GET	/requests/friends
+ * REQUEST:
+ * {
+ * }
+ *
+ * RESPONSE:
+ * {
+ * 	message  : string    // empty on success
+ * 	success  : boolean
+ *  "requests" :
+ *   [{
+// *    "id"            : int
+// *    "userFrom" 	  : string // users login
+// *    "userFromName"  : string // users name
+// *    "userFromImage" : string // url
+// *    "type"          : int // 0: friend, 1: game, 2: queue, 3: game reminder
+// *    "date"          : date // yyyy-mm-dd format
+// *    "time"          : time // hh:mm:ss - 24 hour format (ex. 13:00:00 vs 1:00pm)
+// *    "gameCreator"   : string // for types 1, 2, and 3
+// *    "gameID"        : int // for types 1, 2, and 3
+ *   }]
+ * }
+ *****************************************************
+ */
+router.get('/friends', function (req, res) {
+	var auth = req.get('SportanaAuthentication');
+	authenticator.deserializeUser(auth, function(err, username) {
+		var response = {};
+		if (err || (!username)) {
+			response.message = "Error with authentication";
+			response.success = false;
+          res.write(JSON.stringify(response));
+          res.end();
+		} else {
+			dbc.getFriendRequests(username, function(err, requests) {
+				console.log("getFriendRequests called");
+				if (err) {
+					response.message = err;
+					response.success = false;
+				} else {
+					response.message = "";
+					response.success = true;
+					response.requests = requests;
+				}
+				res.write(JSON.stringify(response));
+          		res.end();
+			});
+		}
+	});
+});
 
 /**
  *****************************************************
@@ -74,8 +125,8 @@ router.get('', function (req, res) {
  *
  * RESPONSE:
  * {
- * 	â€œmessageâ€� : string    // empty on success
- * 	â€œsuccessâ€� : boolean
+ * 	Ã¢â‚¬Å“messageÃ¢â‚¬ï¿½ : string    // empty on success
+ * 	Ã¢â‚¬Å“successÃ¢â‚¬ï¿½ : boolean
  * }
  *****************************************************
  */
@@ -116,14 +167,14 @@ router.put('/game', function(req, res) {
  *
  * RESPONSE:
  * {
- * 	“message”    	: string // empty on success
- * 	“success”    	: boolean
+ * 	â€œmessageâ€�    	: string // empty on success
+ * 	â€œsuccessâ€�    	: boolean
  *  "creator"    	: string
  *  "gameID"        : int
  *  "gameDate" 	 	: date // yyyy-mm-dd
  *  "gameStart"  	: time // hh:mm:ss
  *  "location"   	: string
- * 	“sport"      	: string
+ * 	â€œsport"      	: string
  *  "invitedBy"		: string
  *  "invitedByName" : string
  *  "id"			: int
@@ -162,13 +213,13 @@ router.get('/games', function(req, res) {
  * PUT	/requests/friend
  * REQUEST:
  * {
- * 	â€œuserToIDâ€� : string
+ * 	Ã¢â‚¬Å“userToIDÃ¢â‚¬ï¿½ : string
  * }
  *
  * RESPONSE:
  * {
- * 	â€œmessageâ€� : string    // empty on success
- * 	â€œsuccessâ€� : boolean
+ * 	Ã¢â‚¬Å“messageÃ¢â‚¬ï¿½ : string    // empty on success
+ * 	Ã¢â‚¬Å“successÃ¢â‚¬ï¿½ : boolean
  * }
  *****************************************************
  */
