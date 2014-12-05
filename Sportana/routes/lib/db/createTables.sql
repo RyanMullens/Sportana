@@ -329,6 +329,16 @@ CREATE OR REPLACE FUNCTION add_creator_to_participants()
 	RETURN NEW;
 	END;
 $$ language 'plpgsql';	
+
+CREATE OR REPLACE FUNCTION remove_participant()
+	RETURNS TRIGGER AS $$
+	BEGIN
+		IF ((OLD.type = 1) OR (OLD.type = 2)) THEN
+			DELETE FROM Participant WHERE (Participant.login=OLD.userTo) AND (Participant.creator=OLD.creator) AND (Participant.gameID=OLD.gameID) AND ((Participant.status=1) OR (Participant.status=2));
+		END IF;
+	RETURN NEW;
+	END;
+$$ language 'plpgsql';	
 	
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
@@ -384,6 +394,11 @@ CREATE TRIGGER remove_from_queue
 	AFTER INSERT ON Notifications
 	FOR EACH ROW
 	EXECUTE PROCEDURE remove_user_from_queue();	
+
+CREATE TRIGGER remove_participant_from_notification
+	AFTER DELETE ON Notifications
+	FOR EACH ROW
+	EXECUTE PROCEDURE remove_participant();
 	
 CREATE RULE participant_on_duplicate_ignore AS ON INSERT TO Participant
   WHERE EXISTS(SELECT 1 FROM Participant 
