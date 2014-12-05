@@ -203,6 +203,7 @@ app.factory('QueueService', function($http, $q) {
     }
     params['competitive'] = competitive;
 
+    console.log(params);
 
     // Generates a promise containing the results of all of the GET requests
     var deferred = $q.defer();
