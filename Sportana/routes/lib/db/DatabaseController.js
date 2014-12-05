@@ -479,7 +479,7 @@ exports.addFavoriteSport = function (username, sport, callback) {
 													}
 												}
 												)
-										}		
+										}
 									});
 }
 else{
@@ -524,7 +524,7 @@ exports.rate = function(UserObject, callback) {
 		else {
 			var SQLQuery = "WITH upsert AS (UPDATE Ratings SET friendliness=$3, timeliness=$4, skilllevel=$5 WHERE userrated=$1 AND rater=$2 RETURNING *) " +
 			"INSERT INTO Ratings (userrated, rater, friendliness, timeliness, skilllevel) SELECT $1, $2, $3, $4, $5 WHERE NOT EXISTS (SELECT * FROM upsert)";
-			
+
 			client.query({ text : SQLQuery, values : [UserObject.userRated, UserObject.rater, UserObject.friendliness, UserObject.timeliness, UserObject.skilllevel]},
 				function(err, result){
 					done();
@@ -827,10 +827,10 @@ var getGamePlayers = function(gameInfo, username, callback) {
 		}
 		else {
 			var SQLQuery = 	"SELECT u.login, u.firstname, u.lastname, u.profilepicture, p.status " +
-			"FROM Participant as p, Users as u " + 
+			"FROM Participant as p, Users as u " +
 			"WHERE p.gameid = $1 and p.creator = $2 and p.login = u.login";
-			client.query({ text : SQLQuery, 
-				values : [gameInfo.gameID , gameInfo.creator]}, 
+			client.query({ text : SQLQuery,
+				values : [gameInfo.gameID , gameInfo.creator]},
 				function (err, result) {
 					done();
 					client.end();
@@ -867,8 +867,8 @@ var getGamePlayers = function(gameInfo, username, callback) {
  		}
  		else {
  			var SQLQuery = "SELECT * From Game where (gameID = $1 and creator = $2)";
- 			client.query({ text : SQLQuery, 
- 				values : [gameID , gameCreator]}, 
+ 			client.query({ text : SQLQuery,
+ 				values : [gameID , gameCreator]},
  				function (err, result) {
  					done();
  					client.end();
