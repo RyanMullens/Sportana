@@ -125,10 +125,12 @@ router.post('/photoUpload', function(req, res) {
 	    	
 	    	if(files.file != undefined && files.file.path != undefined)
 	    	{
-	    		var urlPart = files.file.path.split("/");
+	    		var urlReplace = files.file.path.replace(/\\/g, "/");
+	    		var urlPart = urlReplace.split("/");
+	    		console.log("urlPart: "+ urlPart);
 	    		var fileName = urlPart[urlPart.length-1];
-	    		//console.log(fileName);
-
+	    		console.log("filename: " + fileName);
+	    		
 	    		var dbFinalPath = "/assets/img/users/" + fileName;
 
 	    		//TODO update db entry

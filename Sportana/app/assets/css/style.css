@@ -13,12 +13,37 @@ body {
 
 #login{
 	text-align: center;
-	padding: 100px
+	padding: 100px 100px 0px 100px;
 }
 
 #signup{
 	text-align: center;
-	padding: 100px
+	padding: 100px 100px 0px 100px;
+}
+
+
+.loginImage
+{
+  width: 100%;
+}
+
+
+.loginButton
+{
+    width:40%;
+}
+
+
+.loginInput 
+{
+  margin-left: auto;
+  margin-right: auto;
+
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  width:40%;
+  height:40px;
 }
 
 /* Hide for mobile, show later */
@@ -113,6 +138,10 @@ body {
 
   #friends{
     margin:0 10px;
+  }
+
+  #request-list{
+    margin-bottom: 20px;
   }
 
   .friend{

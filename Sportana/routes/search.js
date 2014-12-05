@@ -51,7 +51,7 @@ router.get('/games', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.searchGames(sport, city, ageMin, ageMax, isCompetitive, function(err, games) {
+			dbc.searchGames(username, sport, city, ageMin, ageMax, isCompetitive, function(err, games) {
 				if (err) {
 					response.message = err;
 					response.success = false;
