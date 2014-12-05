@@ -9,24 +9,19 @@
 				<div class="row">
 					<h2><img class="sport" ng-src="{{game.sportImg}}" />{{game.sport}}</h2>
 				</div>
-				<div class="row date">
-					{{game.gameDate | date}}<br/>
-					{{game.gameStart}} - {{game.gameEnd}}
-				</div>
-				<div class="row location">
-					{{game.location}}
-				</div>
-				<div class="row">
-					<ul>
-						<li>Age Demographic: {{game.minAge}} - {{game.maxAge}}</li>
-						<li>Players Desired: {{game.minPlayers}} - {{game.maxPlayers}}</li>
-					</ul>
+				<div class="row info">
+					<h3>Date: <small>{{game.gameDate | date}}</small></h3>
+					<h3>Time: <small>{{game.gameStart}} - {{game.gameEnd}}</small></h3>
+					<h3>Location: <small>{{game.location}}</small></h3>
+					<h3>Age Demographic: <small>{{game.minAge}} - {{game.maxAge}}</small></h3>
+					<h3>Players Desired: <small>{{game.minPlayers}} - {{game.maxPlayers}}</small></h3>
 				</div>
 				<div class="row invite">
-					Current Players: ({{viewGame.getPlayers().length}})
-					<div class="btn-group" ng-show="isJoined(getUser())">
-						<span class="btn btn-primary" pop-over that="viewGame.getThis()" title="Invite Friends">Invite</span>
-					</div>
+					<h3>Current Players: <small>({{viewGame.getPlayers().length}})</small>
+						<div class="btn-group" ng-show="isJoined(getUser())">
+							<span class="btn btn-primary" pop-over that="viewGame.getThis()" title="Invite Friends">Invite</span>
+						</div>
+					</h3>
 				</div>
 				<div class="row players">
 					<script type="text/javascript">
