@@ -41,11 +41,11 @@
 				Location: {{game.location}}
 			</div>
 			<div class="col-md-3">
-				Date: {{game.gamedate | date}} <br />
-				Time: {{game.gamestart}}
+				Date: {{game.gameDate | date}} <br />
+				Time: {{game.gameStart}}
 			</div>
 			<div class="col-md-2">
-				<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: game.creator, gameId: game.gameid})">View Game</a>
+				<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: game.creator, gameId: game.gameID})">View Game</a>
 			</div>
 		</div>
 	</div>
