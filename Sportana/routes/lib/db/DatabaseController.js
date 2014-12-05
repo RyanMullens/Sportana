@@ -949,7 +949,7 @@ exports.getGamesList = function(username, callback) {
  					request.creator = result.rows[i].creator;
  					request.gameID = result.rows[i].gameid;
         			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
-        			request.gameStart = timeHelper.makeDateFromDateAndTime(result.rows[i].gamestart);
+        			request.gameStart = result.rows[i].gamestart;
         			request.location = result.rows[i].location;
         			request.sport = result.rows[i].sport;
         			requests.push(request);
@@ -995,7 +995,7 @@ exports.getGamesNotifications = function(username, callback) {
         			request.invitedBy = result.rows[i].userfrom;
         			request.invitedByName = result.rows[i].firstname + " " + result.rows[i].lastname;
         			request.gameDate = timeHelper.makeDateFromDateAndTime(result.rows[i].gamedate);
-        			request.gameStart = timeHelper.makeTimeFromDateAndTime(result.rows[i].gamestart);
+        			request.gameStart = result.rows[i].gamestart;
         			request.creator = result.rows[i].creator;
         			request.gameID = result.rows[i].gameid;
         			requests.push(request);
