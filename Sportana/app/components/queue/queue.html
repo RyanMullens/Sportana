@@ -30,7 +30,7 @@
 						</span>
 
 						<!-- TODO : Replace remove with toggle? -->
-						<button class="btn" ng-repeat="sport in getSelectedSports()" ng-click="removeSport(sport)">{{sport.name}}  X</button>
+						<button class="selectedSports btn" ng-repeat="sport in Queue.getSelectedSports()" ng-click="Queue.removeSport(sport)">{{sport.sport}}  X</button>
 					</div>
 
 					<div class="details col-md-7">
@@ -128,9 +128,9 @@
 
 		<div id="queue-game-matches" ng-show="isViewingMatches()">
 
-			<ul>
+			<ul class="list-unstyled">
 				<li ng-repeat="game in matches" class="queue-game-row">
-					<img class="sportIcon" ng-src="{{game.sportImage}}"/>
+					<img class="sportIcon sport-thumbnail" ng-src="{{game.sportImage}}"/>
 					{{game.sport}}
 					{{game.location}}
 					{{game.numParticipants}}
