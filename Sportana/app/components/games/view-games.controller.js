@@ -49,7 +49,7 @@ app.controller("ViewGamesController", function($http, $scope){
 
 	this.acceptGame = function(notification){
 		console.log(notification);
-		$http.post('/api/requests/' + notification.nid, {confirmed: 'true'})
+		$http.post('/api/requests/' + notification.id, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.games.push(notification);
 			$scope.notifications.splice($scope.notifications.indexOf(notification),1);
@@ -60,7 +60,7 @@ app.controller("ViewGamesController", function($http, $scope){
 	};
 
 	this.declineGame = function(notification){
-		$http.post('/api/requests/' + notfication.nid, {confirmed: 'false'})
+		$http.post('/api/requests/' + notfication.id, {confirmed: 'false'})
 		.success(function(data, status, headers, config){
 			$scope.notifications.splice($scope.notifications.indexOf(notification),1);
 		})

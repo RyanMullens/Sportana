@@ -13,17 +13,17 @@
 						Location: {{notification.location}}
 					</div>
 					<div class="col-md-3">
-						Date: {{notification.gamedate | date}} <br />
-						Time: {{notification.gamestart}}
+						Date: {{notification.gameDate | date}} <br />
+						Time: {{notification.gameStart}}
 					</div>
 					<div class="col-md-3">
-						<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: notification.creator, gameId: notification.gameid})">View Game</a>
+						<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: notification.creator, gameId: notification.gameID})">View Game</a>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6"></div>
 					<div class="col-md-3">
-						Invited By: <a ui-sref="app.user({userId: notification.invitedby})">{{notification.invitedByName}}</a>
+						Invited By: <a ui-sref="app.user({userId: notification.invitedBy})">{{notification.invitedByName}}</a>
 					</div>
 					<div class="col-md-3">
 						<button type="button" ng-click="viewGames.acceptGame(notification)" class="btn btn-success">Accept</button>
