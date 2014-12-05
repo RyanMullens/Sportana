@@ -1,7 +1,7 @@
 <h1 class="page-header">View Friends</h1>
 <div id="friends">
 	<div id="request-list" ng-show="hasRequests()">
-		<a class="row friend btn btn-default" ng-repeat="request in requests" ui-sref="app.user({userId: request.login})">
+		<div class="row friend btn btn-default" ng-repeat="request in requests">
 			<div class="col-md-4 col-lg-4">
 				<img ng-src="{{request.profilePhoto}}" class="img-round"/>	
 			</div>
@@ -17,7 +17,7 @@
 						City: {{request.city}}
 					</div>
 					<div class="view">
-						<div class="btn btn-primary">View Profile</div>
+						<a class="btn btn-primary" ui-sref="app.user({userId: request.login})">View Profile</a>
 					</div>
 					<div class="accept">
 						<button class="btn btn-success" ng-click="accept(request)">
@@ -29,7 +29,7 @@
 					</div>
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
 
 	<div id="friend-list">

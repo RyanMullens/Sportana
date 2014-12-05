@@ -4,8 +4,13 @@ app.controller("ViewFriendsController", function($scope, $http){
 	$scope.requests = [];
 
 	$http.get('/api/friends').success(function(data, status, headers, config) {
-		$scope.friends = data.friends;
-		console.log(data);
+		if(data.success){
+			$scope.friends = data.friends;
+			console.log(data);
+		}
+		else{
+			console.log("You have no friends");
+		}
 	}).
 
 	error(function(data, status, headers, config) {
@@ -13,8 +18,13 @@ app.controller("ViewFriendsController", function($scope, $http){
 	});
 
 	$http.get('/api/requests/friends').success(function(data, status, headers, config) {
-		$scope.requests = data.requests;
-		console.log(data);
+		if(data.success){
+			$scope.requests = data.requests;
+			console.log(data);
+		}
+		else{
+			console.log("You have no requests");
+		}
 	}).
 
 	error(function(data, status, headers, config) {
@@ -22,14 +32,14 @@ app.controller("ViewFriendsController", function($scope, $http){
 	});
 
 	$scope.hasRequests = function(){
-		return !!$scope.requests.length;
+		return $scope.requests.length;
 	};
 
 	$scope.accept = function(request){
 		$http.post('/api/requests/' + request.id, {confirmed: 'true'})
 		.success(function(data, status, headers, config){
 			$scope.friends.push(request);
-			$scope.request.splice($scope.request.indexOf(reuest),1);
+			$scope.requests.splice($scope.requests.indexOf(request),1);
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with accepting the game');
@@ -39,7 +49,7 @@ app.controller("ViewFriendsController", function($scope, $http){
 	$scope.decline = function(request){
 		$http.post('/api/requests/' + request.id, {confirmed: 'false'})
 		.success(function(data, status, headers, config){
-			$scope.request.splice($scope.request.indexOf(reuest),1);
+			$scope.requests.splice($scope.requests.indexOf(request),1);
 		})
 		.error(function(data, status, headers, config) {
 			console.log('There was an error with accepting the game');
