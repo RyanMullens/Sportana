@@ -175,16 +175,15 @@ var isFriend = function(username, login, callback) {
 			client.query({ text : SQLQuery,
 				values : [username]},
 				function(err, result){
-					done();
 					if(err){
-						client.end(); pg.end();
+						done(); client.end(); pg.end();
 						callback(undefined, {message: "error"});
 					}
 					else {
 						for(var i = 0; i < result.rows.length; i++){
 							if(result.rows[i]["userb"] === login){
 								isFriend = 1;
-								client.end(); pg.end();
+					       		done(); client.end(); pg.end();
 								callback(undefined, isFriend, undefined);
 								return;
 							}
@@ -194,9 +193,8 @@ var isFriend = function(username, login, callback) {
 				       client.query({ text : SQLQuery1,
 				       	values : [username]},
 				       	function(err, result1){
-				       		done();
 				       		if(err){
-				       			client.end(); pg.end();
+					       		done(); client.end(); pg.end();
 				       			callback(undefined, {message: "error"});
 				       		}
 				       		else{
@@ -204,7 +202,7 @@ var isFriend = function(username, login, callback) {
 				       				if(result1.rows[j]["userto"] === login){
 				       					isFriend = 2;
 				       					var nid = result1.rows[j]["nid"];
-				       					client.end(); pg.end();
+							       		done(); client.end(); pg.end();
 				       					callback(undefined, isFriend, nid);
 				       					return;
 				       				}
@@ -214,9 +212,8 @@ var isFriend = function(username, login, callback) {
 							   	   client.query({ text : SQLQuery2,
 							   	   	values : [username]},
 							   	   	function(err, result2){
-							   	   		done();
 							   	   		if(err){
-							   	   			client.end(); pg.end();
+								       		done(); client.end(); pg.end();
 							   	   			callback(undefined, {message: "error"});
 							   	   		}
 							   	   		else{
@@ -224,13 +221,13 @@ var isFriend = function(username, login, callback) {
 							   	   				if(result2.rows[k]["userfrom"] === login){
 							   	   					isFriend = 3;
 							   	   					var nid = result2.rows[k]["nid"];
-							   	   					client.end(); pg.end();
+										       		done(); client.end(); pg.end();
 							   	   					callback(undefined, isFriend, nid);
 							   	   					return;
 							   	   				}
 							   	   			}
 		 									   if(k == result2.rows.length && j == result1.rows.length && i == result.rows.length){ // Not Friend
-		 									   	client.end(); pg.end();
+		 								       	done(); client.end(); pg.end();
 		 									   	callback(undefined, isFriend);
 		 									   	return;
 		 									   }
@@ -439,9 +436,8 @@ exports.addFavoriteSport = function (username, sport, callback) {
 			var SQLQuery = "Select sport from favoritesports where login = $1";
 			client.query({ text: SQLQuery, values : [username]},
 				function(err, result){
-					done();
 					if(err){
-						client.end(); pg.end();
+			       		done(); client.end(); pg.end();
 						callback(undefined, {message: "error"});
 					}
 					else{
@@ -454,17 +450,15 @@ exports.addFavoriteSport = function (username, sport, callback) {
 								client.query({ text : SQLQuery,
 									values : [username, sport]},
 									function(err, result){
-										done();
 										if(err){
-											client.end(); pg.end();
+								       		done(); client.end(); pg.end();
 											callback(undefined, {message: "Insert error"});
 										}
 										else{
 											var SQLQuery = "SELECT Sport.sport, Sport.ImageURL from Sport left join FavoriteSports ON favoritesports.sport = sport.sport WHERE favoritesports.login = $1";
 											client.query({ text : SQLQuery, values : [username]},
 												function(err, result){
-													done();
-													client.end(); pg.end();
+									       		done(); client.end(); pg.end();
 													if(err){
 														callback(undefined, {message: "error"});
 													}

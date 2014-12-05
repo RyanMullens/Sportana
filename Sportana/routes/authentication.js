@@ -92,7 +92,6 @@ var serializeUserHelper = function(username, auth, callback) {
  *****************************************************
  */
 exports.deserializeUser = function(id, callback) {
-  console.log("AuthToken: " + id);
   dbc.getUserByAuth(id, function(err, username) {
     callback(err, username);
   });
