@@ -43,7 +43,6 @@ router.get('/games', function(req, res) {
 	var ageMax = req.query.ageMax;
 	var isCompetitive = req.query.competitive;
 	var auth = req.get('SportanaAuthentication');
-console.log("Request: " + req);
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};
 		if (err || (!username)) {
@@ -52,7 +51,7 @@ console.log("Request: " + req);
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.searchGames(sport, city, ageMin, ageMax, isCompetitive, function(err, games) {
+			dbc.searchGames(username, sport, city, ageMin, ageMax, isCompetitive, function(err, games) {
 				if (err) {
 					response.message = err;
 					response.success = false;

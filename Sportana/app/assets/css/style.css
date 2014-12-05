@@ -412,10 +412,42 @@ body {
   transform: translate(-50%, -50%);
 }
 
+#queue-game-matches {
+  width: auto;
+  /* height: 400px; */
+  margin-left: -40;
+  margin-right: -40;
+  /* overflow-x: scroll;
+  overflow-y: hidden; */
+  white-space: nowrap;
+}
+
+#queue-game-matches .ul {
+  list-style-type: none;
+}
+
+.queue-game-row {
+
+  font-size: 18pt;
+  /* width: 200px; */
+
+  height: 120px;
+  vertical-align: top;
+  padding: 10px;
+  border-top: 1px solid #C7C8CA;
+  border-bottom: 1px solid #C7C8CA;
+  border-right: 1px solid #C7C8CA;
+  white-space:normal;
+  text-align: center;
+  background-color: #FFFFFF;
+  position: relative
+}
+
 .hairline {
   border-top: 1px solid ;
   border-color: #C7C8CA;
 }
+
 
 
 /****  END CREATE GAME ****/
@@ -900,6 +932,7 @@ body {
   text-align: center;
   vertical-align: center;
   white-space:normal;
+  overflow-y: scroll;
 }
 
 #selectedSports .btn {
