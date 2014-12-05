@@ -337,8 +337,8 @@ exports.createUser = function(UserObject, callback) {
 					else if (!result.rows[0])
 					{
                  // TODO : INSERT HERE -- No user exists with that name, so go ahead and create it
-                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, city, birthday) VALUES (" +
-                 	"$1, $2, $3, $4, $5, $6, $7)";
+                 var SQLQuery = "INSERT INTO Users(login, emailSuffix, password, firstName, lastName, city, birthday,profilepicture) VALUES (" +
+                 	"$1, $2, $3, $4, $5, $6, $7,'/assets/img/profile.png')";
 
 			client.query({
 				text : SQLQuery,
