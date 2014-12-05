@@ -8,7 +8,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 	$scope.game = {players: [], invited: [], friends: []};
 	$scope.messages = [];
 	$scope.gameLoaded = false;
-	$scope.messagesLoaded = true;
 	$scope.invites = [];
 	$scope.user = (function(){
 		var userInfo = CurrentUser.getUser();
@@ -50,8 +49,13 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	$http.get('/api/games/messages?creator=' + $stateParams.creatorId + '&gameID=' + $stateParams.gameId)
 	.success(function(data, status, headers, config){
-		$scope.messages = data.posts;
-		$scope.messagesLoaded = true;
+		console.log(data);
+		if(data.success){
+			$scope.messages = data.posts;
+		}
+		else{
+			console.log("there are not messages");
+		}
 	})
 	.error(function(data, status, headers, config) {
 		console.log('There was an error retrieving messages');
@@ -59,10 +63,6 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 	this.isGameLoaded = function(){
 		return $scope.gameLoaded;
-	};
-
-	this.isMessagesLoaded = function(){
-		return $scope.messagesLoaded;
 	};
 
 	this.getThis = function(){
@@ -199,7 +199,7 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 
 		$http.post('/api/games/messages', {creator: that.getGame().creator, gameID: that.getGame().gameID, message: post})
 		.success(function(data, status, headers, config){
-			$scope.messages.push({from: $scope.getUser().login, message: post, time: Date.now()});
+			that.getMessages().push({from: $scope.getUser().login, message: post, time: Date.now()});
 			$scope.message = '';
 		})
 		.error(function(data, status, headers, config) {
