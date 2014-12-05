@@ -117,12 +117,12 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
    url: "/queue",
    views: {
     "content@main": {
-      templateUrl: "/components/queue/queue-sports.html",
-      controller: "QueueSportController as queue"
+      templateUrl: "/components/queue/queue.html",
+      controller: "QueueController as Queue"
     }
   }
 })
-  
+
   .state("app.viewGame", {
    url: "/game/:creatorId/:gameId" ,
    views: {
