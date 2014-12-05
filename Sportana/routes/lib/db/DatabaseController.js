@@ -171,15 +171,16 @@ var isFriend = function(username, login, callback) {
 			client.query({ text : SQLQuery,
 				values : [username]},
 				function(err, result){
+					done();
 					if(err){
-						done(); client.end(); pg.end();
+						client.end(); pg.end();
 						callback(undefined, {message: "error"});
 					}
 					else {
 						for(var i = 0; i < result.rows.length; i++){
 							if(result.rows[i]["userb"] === login){
 								isFriend = 1;
-					       		done(); client.end(); pg.end();
+								client.end(); pg.end();
 								callback(undefined, isFriend, undefined);
 								return;
 							}
@@ -189,8 +190,9 @@ var isFriend = function(username, login, callback) {
 				       client.query({ text : SQLQuery1,
 				       	values : [username]},
 				       	function(err, result1){
+				       		done();
 				       		if(err){
-					       		done(); client.end(); pg.end();
+				       			client.end(); pg.end();
 				       			callback(undefined, {message: "error"});
 				       		}
 				       		else{
@@ -198,7 +200,7 @@ var isFriend = function(username, login, callback) {
 				       				if(result1.rows[j]["userto"] === login){
 				       					isFriend = 2;
 				       					var nid = result1.rows[j]["nid"];
-							       		done(); client.end(); pg.end();
+				       					client.end(); pg.end();
 				       					callback(undefined, isFriend, nid);
 				       					return;
 				       				}
@@ -208,8 +210,9 @@ var isFriend = function(username, login, callback) {
 							   	   client.query({ text : SQLQuery2,
 							   	   	values : [username]},
 							   	   	function(err, result2){
+							   	   		done();
 							   	   		if(err){
-								       		done(); client.end(); pg.end();
+							   	   			client.end(); pg.end();
 							   	   			callback(undefined, {message: "error"});
 							   	   		}
 							   	   		else{
@@ -217,13 +220,13 @@ var isFriend = function(username, login, callback) {
 							   	   				if(result2.rows[k]["userfrom"] === login){
 							   	   					isFriend = 3;
 							   	   					var nid = result2.rows[k]["nid"];
-										       		done(); client.end(); pg.end();
+							   	   					client.end(); pg.end();
 							   	   					callback(undefined, isFriend, nid);
 							   	   					return;
 							   	   				}
 							   	   			}
 		 									   if(k == result2.rows.length && j == result1.rows.length && i == result.rows.length){ // Not Friend
-		 								       	done(); client.end(); pg.end();
+		 									   	client.end(); pg.end();
 		 									   	callback(undefined, isFriend);
 		 									   	return;
 		 									   }
@@ -430,8 +433,9 @@ exports.addFavoriteSport = function (username, sport, callback) {
 			var SQLQuery = "Select sport from favoritesports where login = $1";
 			client.query({ text: SQLQuery, values : [username]},
 				function(err, result){
+					done();
 					if(err){
-			       		done(); client.end(); pg.end();
+						client.end(); pg.end();
 						callback(undefined, {message: "error"});
 					}
 					else{
@@ -444,15 +448,17 @@ exports.addFavoriteSport = function (username, sport, callback) {
 								client.query({ text : SQLQuery,
 									values : [username, sport]},
 									function(err, result){
+										done();
 										if(err){
-								       		done(); client.end(); pg.end();
+											client.end(); pg.end();
 											callback(undefined, {message: "Insert error"});
 										}
 										else{
 											var SQLQuery = "SELECT Sport.sport, Sport.ImageURL from Sport left join FavoriteSports ON favoritesports.sport = sport.sport WHERE favoritesports.login = $1";
 											client.query({ text : SQLQuery, values : [username]},
 												function(err, result){
-									       		done(); client.end(); pg.end();
+													done();
+													client.end(); pg.end();
 													if(err){
 														callback(undefined, {message: "error"});
 													}
@@ -1327,7 +1333,7 @@ exports.searchUsers = function(firstName, lastName, callback) {
 });
 };
 
-exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callback) {
+exports.searchGames = function(username, sport, city, ageMin, ageMax, isCompetitive, callback) {
 	if (!sport && !city && !ageMin && !ageMax && !isCompetitive) {
 		callback('No search parameters given', undefined);
 	}
@@ -1340,12 +1346,12 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
 			"FROM Game INNER JOIN Sport ON (Game.sport = Sport.sport) WHERE (Game.isPublic = true)";
 			var searchValues = [];
 			if (sport) {
-				SQLQuery += " AND lower(Game.sport) = lower($"+(searchValues.length+1)+")";
+				SQLQuery += " AND (lower(Game.sport) = lower($"+(searchValues.length+1)+"))";
 				searchValues.push(sport);
 			}
 
 			if (city) {
-				SQLQuery += " AND lower(Game.location) = lower($" + (searchValues.length + 1) +")";
+				SQLQuery += " AND (lower(Game.location) = lower($" + (searchValues.length + 1) +"))";
 				searchValues.push(city);
 			}
 
@@ -1364,14 +1370,17 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
 				searchValues.push(isCompetitive);
 			}
 
+			SQLQuery += " AND ((Game.creator, Game.gameID) NOT IN (SELECT Participant.creator, Participant.gameID FROM Participant WHERE Participant.login=$"+(searchValues.length+1)+"))";
+			searchValues.push(username);
 			var currentDate = timeHelper.getCurrentDate();
 			SQLQuery += " AND (Game.gameDate > $" + (searchValues.length+1) + ")";
 			searchValues.push(currentDate);
 			SQLQuery += " OR ((Game.gameDate = $" + (searchValues.length+1) + ")";
 				searchValues.push(currentDate);
 				SQLQuery += " AND (Game.gameStart > $" + (searchValues.length+1) + "))";
-searchValues.push(timeHelper.getCurrentTime());
-SQLQuery += " ORDER BY Game.gameDate, Game.gameStart ASC";
+			searchValues.push(timeHelper.getCurrentTime());
+
+			SQLQuery += " ORDER BY Game.gameDate, Game.gameStart ASC";
 
 client.query({ text : SQLQuery,
 	values : searchValues},
