@@ -107,7 +107,7 @@ INSERT INTO Participant(login , creator , gameID , status , numUnreadNotificatio
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
 ('ckent' , 'mscott' , 1 , 0 , 0);
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
-('myoda' , 'mscott' , 1 , 0 , 0);
+('myoda' , 'jbond' , 1 , 0 , 0);
 
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 ('ckent' , 'myoda' , 3 , 'mscott' , 1);
@@ -116,9 +116,9 @@ INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
 INSERT INTO Notifications(userTo , userFrom , type) values
 ('jbond' , 'bwayne' , 0);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('myoda' , 'bwayne' , 2 , 'mscott' , 1);
+('myoda' , 'bwayne' , 1 , 'mscott' , 1);
 INSERT INTO Notifications(userTo , userFrom , type , creator , gameID) values
-('myoda' , 'bwayne' , 1 , 'ckent' , 1);
+('myoda' , 'mscott' , 1 , 'ckent' , 1);
 
 INSERT INTO GameWallPost(userPosting , gameCreator , gameID , post) values
 ('ckent' , 'jbond' , 1 , 'This game is going to be awesome!');
