@@ -2,7 +2,7 @@
 
   <div id="instructions">
     Create your game.
-    <button class="btn" ng-show="isReady()" ng-click="create()">Create</button>
+    <button class="btn" ng-click="create()" ng-disabled="!isCreateValid()">Create</button>
   </div>
 
   <div id="game-panel">
@@ -29,7 +29,7 @@
               City
             </div>
             <div class="col-md-10">
-              <input type="text" ng-model="gameLocation.city" class="form-control"/>
+              <input type="text" ng-model="gameLocation.city" class="form-control" placeholder="Where do you want to play?"/>
             </div>
           </div>
           <div class="age row">

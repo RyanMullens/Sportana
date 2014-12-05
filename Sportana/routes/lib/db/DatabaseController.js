@@ -893,10 +893,10 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						gameInfo.minAge = result.rows[0].minage;
  						gameInfo.maxAge = result.rows[0].maxage;
  						gameInfo.isPublic = result.rows[0].ispublic;
- 						
+
  			SQLQuery = "SELECT Notifications.nid From Notifications where (gameID = $1) and (creator = $2) AND (userTo=$3)";
- 			client.query({ text : SQLQuery, 
- 				values : [gameID , gameCreator, username]}, 
+ 			client.query({ text : SQLQuery,
+ 				values : [gameID , gameCreator, username]},
  				function (err, result) {
  					done();
  					client.end();
@@ -909,7 +909,7 @@ var getGamePlayers = function(gameInfo, username, callback) {
  						if (result.rows[0]) {
  							gameInfo.requestID = result.rows[0].nid;
  						}
- 						
+
  						getGamePlayers(gameInfo, username, callback);
  					}
  				});
