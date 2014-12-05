@@ -1,4 +1,4 @@
-app.controller("CreateGameController", function($http, $scope)
+app.controller("CreateGameController", function($http, $scope, $state)
 {
 
 	// TODO : DRY this up!
@@ -223,8 +223,7 @@ app.controller("CreateGameController", function($http, $scope)
 				if(res.data.success) {
 					console.log(res.data);
 
-					// .state("app.viewGame", {
-					// 	url: "/game/:creatorId/:gameId" ,
+					$state.go('app.viewGame', {creatorId: res.data.gameCreator, gameId: res.data.gameID});
 
 					// TODO : Need game creatorId and gameId returned from API call
 

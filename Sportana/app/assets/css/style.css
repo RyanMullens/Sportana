@@ -408,6 +408,35 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.queue-sport-tag {
+  margin: 20 auto;
+  text-align: center;
+}
+
+.btn-margin {
+  margin: 5 5;
+}
+
+h4 {
+  display: inline;
+  font-size: 12;
+  color: #979797;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.queue-preferences-overview {
+  text-align: center;
+}
+
+.preferences-text {
+  font-size: 16pt;
+  font-weight: 200;
+  color: #464648;
+  height: 50px;
+  text-align: center;
+}
+
 #queue-game-matches {
   width: auto;
   /* height: 400px; */

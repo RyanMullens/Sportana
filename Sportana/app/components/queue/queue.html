@@ -112,17 +112,26 @@
 
 		<div id="queue-preferences-overview" ng-show="hasPreferences" class="{minimized: isViewingMatches()}">
 
-			<ul>
-				<li ng-repeat="sport in preferences.sports" class="queue-sport-tag">
-					{{sport.image}}
-					{{sport.sport}}
-				</li>
-			</ul>
+			<!-- PREFERENCES -->
+			<div class="queue-sport-tag">
+				<button class="selectedSports btn disabled btn-margin" ng-repeat="sport in preferences.sports">{{sport.sport}}</button>
+			</div>
+			<!-- PREFERENCES -->
 
-			{{preferences.city}}
-			{{preferences.ageMin}}
-			{{preferences.ageMax}}
-			{{gameType()}}
+			<div class="preferences-text">
+
+				<h4>Location</h4>&nbsp;
+				{{preferences.city}}&nbsp;&nbsp;&nbsp;&nbsp;
+
+				<h4>Minimum Age</h4>&nbsp;
+				{{preferences.ageMin}}&nbsp;&nbsp;&nbsp;&nbsp;
+
+				<h4>Maximum Age</h4>&nbsp;
+				{{preferences.ageMax}}&nbsp;&nbsp;&nbsp;&nbsp;
+
+				<h4>Game Type</h4>&nbsp;
+				{{gameType()}}
+			</div>
 
 		</div>
 
@@ -148,27 +157,6 @@
 
 				</li>
 			</ul>
-
-			<!-- ALTERNATE LAYOUT for GAMES view -->
-
-			<!-- <div class="row games">
-				<h2>My Games</h2>
-				<div class="game row btn btn-default" ng-repeat="game in matches" >
-					<div class="col-md-3"><img class="sport" ng-src='{{game.sportImg}}' /> {{game.sport}}</div>
-					<div class="col-md-4">
-						Location: {{game.location}}
-					</div>
-					<div class="col-md-3">
-						Date: {{game.gameDate | date}} <br />
-						Time: {{game.gameStart}}
-					</div>
-					<div class="col-md-2">
-						<a class="btn btn-primary" ui-sref="app.viewGame({creatorId: game.creator, gameId: game.gameID})">View Game</a>
-					</div>
-				</div>
-			</div> -->
-
-			<!-- END ALTERNATE LAYOUT -->
 
 		</div>
 
