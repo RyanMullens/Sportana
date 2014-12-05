@@ -679,19 +679,27 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
 			var SQLQuery = "INSERT INTO Game(creator, sport, gameDate, gameStart, gameEnd, location, minPlayers, maxPlayers, reservedSpots, minAge, maxAge, isPublic, isCompetitive) values "+
 			"($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)";
 			client.query(SQLQuery, [creator, sportID, gameDate, startTime, endTime, location, minPlayers, maxPlayers, reservedSlots, minAge, maxAge, status, isCompetitive], function(err, result) {
-				done();
-				client.end();
-              // This cleans up connected clients to the database and allows subsequent requests to the database
-              pg.end();
               if(err){
               	callback(err);
               }
               else {
-              	callback(undefined);
+              	var SQLQuery = "SELECT max(gameID) AS gameid FROM Game WHERE Game.creator = $1";
+					client.query(SQLQuery, [creator], function(err, result) {
+						done();
+						client.end();
+						pg.end();
+						if(err){
+							callback(err);
+						}	
+						else {
+                			var gameID = result.rows[0].gameid;
+							callback(undefined, gameID);
+						}
+					});
               }
           });
 		}
-	});
+    });
 };
 
 exports.editPassword = function (username, password, callback) {
@@ -1541,25 +1549,15 @@ exports.waitForGame = function(login, sports, city, ageMin, ageMax, isCompetitiv
 	});
 };
 
-exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, competitive, openSlots, callback) {
+exports.findUsersForGame = function(creator, gameID, sportID, location, minAge, maxAge, competitive, openSlots, callback) {
 	var now = timeHelper.getCurrentDateAndTime();
 	pg.connect(connString, function(err, client, done) {
 		if(err) {
 			callback(err);
 		}
 		else {
-			var SQLQuery = "SELECT max(gameID) AS gameid FROM Game WHERE Game.creator = $1";
-			client.query(SQLQuery, [creator], function(err, result) {
-				done();
-				if(err){
-					client.end();
-					pg.end();
-					callback(err);
-				}
-				else {
-					var gameID = result.rows[0].gameid;
-					SQLQuery = "INSERT INTO Notifications (userTo, type, timeSent, creator, gameID) " +
-					"(SELECT Queue.login, 2, $7, $8, $9 FROM Queue " +
+			var	SQLQuery = "INSERT INTO Notifications (userTo, type, timeSent, creator, gameID) " +
+						"(SELECT Queue.login, 2, $7, $8, $9 FROM Queue " +
 						"WHERE ((Queue.sport=$1) OR (Queue.sport IS NULL)) " +
 						"AND ((Queue.location=$2) OR (Queue.location IS NULL)) " +
 						"AND ((Queue.minAge >= $3) OR (Queue.minAge IS NULL)) " +
@@ -1576,11 +1574,9 @@ exports.findUsersForGame = function(creator, sportID, location, minAge, maxAge, 
                 else {
                 	callback(undefined);
                 }
-            });
+             });	
 		}
 	});
-}
-});
 };
 
 exports.getQueueProfile = function(username, callback) {

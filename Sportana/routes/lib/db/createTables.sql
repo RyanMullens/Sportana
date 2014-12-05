@@ -330,26 +330,6 @@ CREATE OR REPLACE FUNCTION add_creator_to_participants()
 	END;
 $$ language 'plpgsql';	
 	
-CREATE RULE participant_on_duplicate_ignore AS ON INSERT TO Participant
-  WHERE EXISTS(SELECT 1 FROM Participant 
-                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID))
-  DO INSTEAD NOTHING;
-  
-CREATE RULE notification_on_duplicate_ignore AS ON INSERT TO Notifications
-  WHERE EXISTS(SELECT 1 FROM Notifications 
-                WHERE (userTo, type, creator, gameID)=(NEW.userTo, NEW.type, NEW.creator, NEW.gameID))
-  DO INSTEAD NOTHING;
-
-CREATE RULE queue_on_duplicate_ignore AS ON INSERT TO Queue
-  WHERE EXISTS(SELECT 1 FROM Queue 
-                WHERE (login, sport)=(NEW.login, NEW.sport))
-  DO INSTEAD NOTHING;
-
-CREATE RULE participant_add_update AS ON INSERT TO Participant
-  WHERE EXISTS(SELECT 1 FROM Participant 
-                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID)) AND (NEW.status=0)
-  DO INSTEAD UPDATE Participant SET status=0 WHERE (login=NEW.login) AND (creator=NEW.creator) AND (gameID=NEW.gameID);
-
 CREATE TRIGGER update_notifications
 	BEFORE INSERT ON Notifications
 	FOR EACH ROW
@@ -404,3 +384,24 @@ CREATE TRIGGER remove_from_queue
 	AFTER INSERT ON Notifications
 	FOR EACH ROW
 	EXECUTE PROCEDURE remove_user_from_queue();	
+	
+CREATE RULE participant_on_duplicate_ignore AS ON INSERT TO Participant
+  WHERE EXISTS(SELECT 1 FROM Participant 
+                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID))
+  DO INSTEAD NOTHING;
+  
+CREATE RULE notification_on_duplicate_ignore AS ON INSERT TO Notifications
+  WHERE EXISTS(SELECT 1 FROM Notifications 
+                WHERE (userTo, type, creator, gameID)=(NEW.userTo, NEW.type, NEW.creator, NEW.gameID))
+  DO INSTEAD NOTHING;
+
+CREATE RULE queue_on_duplicate_ignore AS ON INSERT TO Queue
+  WHERE EXISTS(SELECT 1 FROM Queue 
+                WHERE (login, sport)=(NEW.login, NEW.sport))
+  DO INSTEAD NOTHING;
+
+CREATE RULE participant_add_update AS ON INSERT TO Participant
+  WHERE EXISTS(SELECT 1 FROM Participant 
+                WHERE (login, creator, gameID)=(NEW.login, NEW.creator, NEW.gameID)) AND (NEW.status=0)
+  DO INSTEAD UPDATE Participant SET status=0 WHERE (login=NEW.login) AND (creator=NEW.creator) AND (gameID=NEW.gameID);
+	

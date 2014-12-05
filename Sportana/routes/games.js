@@ -26,8 +26,10 @@ var authenticator = require('./authentication'); // Authentication Handler
  *
  * RESPONSE:
  * {
- * 	“message”             : string // empty on success
- * 	“success”             : boolean
+ * 	“message”       : string // empty on success
+ * 	“success”       : boolean
+ *  "gameCreator"   : string
+ *  "gameID"		: int
  * }
  *****************************************************
  */
@@ -54,7 +56,7 @@ router.put('', function(req, res) {
           res.write(JSON.stringify(response));
           res.end();
 		} else {
-			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, isCompetitive, reservedSlots, isPublic, function(err) {
+			dbc.createGame(creator, sportID, startTime, endTime , gameDate, location, minAge, maxAge, minPlayers, maxPlayers, isCompetitive, reservedSlots, isPublic, function(err, gameID) {
 				if (err) {
 					response.message = err;
 					response.success = false;
@@ -63,13 +65,15 @@ router.put('', function(req, res) {
 				} else {
 					var openSlots = maxPlayers - reservedSlots;
 					if ((openSlots > 0) && (isPublic === 'true')) {
-						dbc.findUsersForGame(creator, sportID, location, minAge, maxAge, isCompetitive, openSlots, function(err) {
+						dbc.findUsersForGame(creator, gameID, sportID, location, minAge, maxAge, isCompetitive, openSlots, function(err) {
 							if (err) {
 								response.message = err;
 								response.success = false;
 							} else {
 								response.message = "";
 								response.success = true;
+								response.gameCreator = creator;
+								response.gameID = gameID;
 							}
 							res.write(JSON.stringify(response));
           					res.end();
@@ -77,6 +81,8 @@ router.put('', function(req, res) {
 					} else {
 						response.message = "";
 						response.success = true;
+						response.gameCreator = creator;
+						response.gameID = gameID;
 						res.write(JSON.stringify(response));
           				res.end();
 					}
