@@ -1371,12 +1371,12 @@ exports.searchGames = function(sport, city, ageMin, ageMax, isCompetitive, callb
 			}
 
 			if (ageMin) {
-				SQLQuery += " AND (Game.minAge > $" + (searchValues.length + 1) +")";
+				SQLQuery += " AND (Game.minAge >= $" + (searchValues.length + 1) +")";
 				searchValues.push(ageMin);
 			}
 
 			if (ageMax) {
-				SQLQuery += " AND (Game.maxAge < $" + (searchValues.length + 1) +")";
+				SQLQuery += " AND (Game.maxAge <= $" + (searchValues.length + 1) +")";
 				searchValues.push(ageMax);
 			}
 
@@ -1397,6 +1397,8 @@ SQLQuery += " ORDER BY Game.gameDate, Game.gameStart ASC";
 client.query({ text : SQLQuery,
 	values : searchValues},
 	function (err, result) {
+		console.log("Query: " + SQLQuery);
+		console.log("Result: " + result.rows);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:

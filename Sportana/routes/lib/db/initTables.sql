@@ -94,11 +94,11 @@ INSERT INTO FavoriteSports(login , sport) values
 
 
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
-('mscott' , '2014-11-20' , '10:00:00' , '11:00:00' , 'Basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 10 , 30 , true, false);
+('mscott' , '2014-12-20' , '10:00:00' , '11:00:00' , 'Basketball' , 'Orchard Hill courts', 0 , 20 , 8 , 4 , 16 , 30 , true, false);
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
-('ckent' , '2014-12-20' , '08:00:00' , '09:00:00' , 'Soccer' , 'umass', 0 , 30 , 10 , 6 , 10 , 30 , true, true);
+('ckent' , '2014-12-20' , '08:00:00' , '09:00:00' , 'Soccer' , 'umass', 0 , 30 , 10 , 6 , 16 , 30 , true, false);
 INSERT INTO Game(creator , gameDate , gameStart , gameEnd , sport , location , numParticipants , maxPlayers , minPlayers , reservedSpots , minAge , maxAge, isPublic, isCompetitive) values
-('jbond' , '2014-11-21' , '13:00:00' , '15:00:00' , 'Football' , 'Mcguirk', 0 , 50 , 20 , 15 , 15 , 35 , true, false);
+('jbond' , '2014-12-21' , '13:00:00' , '15:00:00' , 'Football' , 'Mcguirk', 0 , 50 , 20 , 15 , 16 , 35 , true, false);
 
 INSERT INTO Participant(login , creator , gameID , status , numUnreadNotifications) values
 ('bwayne' , 'mscott' , 1 , 0 , 0);
