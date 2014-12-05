@@ -100,7 +100,6 @@ exports.putUserAuth = function(login, auth, callback) {
 };
 
 var CheckRatings = function(obj, callback){
-	console.log("CheckRatings called");
 	var result = obj;
 	if(result.rows[0]["friendliness"] == null && result.rows[0]["timeliness"] == null && result.rows[0]["skilllevel"] == null){
 		result.rows[0]["friendliness"] = 0;
@@ -111,7 +110,6 @@ var CheckRatings = function(obj, callback){
 }
 
 var ConcatSports = function(obj, callback){
-	console.log("ConcatSports called");
 	var sportsArray = [];
 	var result = obj;
 	if(result.rows.length > 0 && result.rows[0]["sport"] != null){ //Has at least one favorite sport
@@ -133,7 +131,6 @@ var ConcatSports = function(obj, callback){
 }
 
 var hasRated = function(username, login, callback){
-	console.log("hasRated called");
 	pg.connect(connString, function(err, client, done){
 		if(err){ pg.end(); callback(undefined, {message: "error"}); }
 		else{
@@ -162,7 +159,6 @@ var hasRated = function(username, login, callback){
 }
 
 var isFriend = function(username, login, callback) {
-	console.log("isFriend called");
 	pg.connect(connString, function(err, client, done) {
 		var isFriend = 0; //0 - Not friend || 1 - Friend || 2 - Pending || 3 - Requested
 		if(err) {
@@ -307,13 +303,11 @@ exports.getUserProfile = function (username, login, callback) {
 			            					result.rows[0]["isFriend"] = value;
 			            					if(nid !== undefined)
 			            						result.rows[0]["requestID"] = nid;
-			            					console.log(result.rows[0]);
 			            					callback(undefined, result.rows[0]);
 			            				}
 			            			});
 					  				}
 					  				else{
-					  					console.log("user does not exist");
 					  					callback(undefined, {message: "error 315"});
 					  				}
 					  			}
@@ -531,12 +525,10 @@ exports.rate = function(UserObject, callback) {
 				function(err, result){
 					done();
 					if(err){
-						console.log("insert/update error");
 						client.end(); pg.end();
 						callback(undefined, {message: "insert/update error"});
 					}
 					else{
-						console.log("successful insert/update");
 						var SQLQuery = "SELECT round(Users.friendliness*100)/100 as friendliness, " +
 						"round(Users.timeliness*100)/100 as timeliness, " +
 						"round(Users.skilllevel*100)/100 as skilllevel " +
@@ -548,7 +540,6 @@ exports.rate = function(UserObject, callback) {
 									callback(undefined, {message: "error"});
 								}
 								else{
-									console.log(result.rows[0]);
 									callback(undefined, result.rows[0]);
 								}
 							});
@@ -777,7 +768,6 @@ exports.editPassword = function (username, password, callback) {
         	pg.end();
         	if (err) {
         		callback(err, undefined);
-        		console.log(result);
         	}
         	else {
         		if (!result.rows[0]) {
@@ -813,7 +803,6 @@ var getInvited = function(gameInfo, username, callback) {
         	pg.end();
         	if (err) {
         		callback(err, undefined);
-        		console.log(result);
         	}
         	else {
         		if (!result.rows[0]) {
@@ -910,7 +899,6 @@ var getGamePlayers = function(gameInfo, username, callback) {
  					client.end();
  					pg.end();
  					if (err) {
- 					console.log(err);
  						callback(err, undefined);
  					}
  					else {
@@ -947,7 +935,6 @@ exports.getGamesList = function(username, callback) {
           	callback(err, undefined);
           }
           else {
-          console.log(result);
           	if (!result.rows[0]) {
           		callback("No result found", undefined);
           	}
@@ -990,7 +977,6 @@ exports.getGamesNotifications = function(username, callback) {
         	// This cleans up connected clients to the database and allows subsequent requests to the database
         	pg.end();
         	if (err) {
-        		console.log(err);
         		callback(err, undefined);
         	}
         	else {
@@ -1092,7 +1078,6 @@ exports.acceptRequest = function(username, requestID, callback) {
              		callback(err);
              	}
              	else {
-             		console.log(result);
              		var from = result.rows[0].userfrom;
              		var type = result.rows[0].type;
              		var gameCreator = result.rows[0].creator;
@@ -1120,7 +1105,7 @@ exports.removeRequest = function(username, requestID, callback) {
 			callback(err);
 		}
 		else {
-			var SQLQuery = "DELETE FROM Notifications WHERE (userTO=$1) AND (nid=$2)";
+			var SQLQuery = "DELETE FROM Notifications WHERE (userTo=$1) AND (nid=$2)";
 			client.query(SQLQuery, [username, requestID], function(err, result) {
 				done();
 				client.end();
@@ -1397,8 +1382,6 @@ SQLQuery += " ORDER BY Game.gameDate, Game.gameStart ASC";
 client.query({ text : SQLQuery,
 	values : searchValues},
 	function (err, result) {
-		console.log("Query: " + SQLQuery);
-		console.log("Result: " + result.rows);
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
