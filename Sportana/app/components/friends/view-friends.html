@@ -1,24 +1,58 @@
 <h1 class="page-header">View Friends</h1>
 <div id="friends">
-	<a class="row friend btn btn-default" ng-repeat="friend in friends" ui-sref="app.user({userId: friend.login})">
-		<div class="col-md-4 col-lg-4">
-			<img ng-src="{{friend.profilePhoto}}" class="img-round"/>	
-		</div>
-		<div class="col-md-8 col-lg-8">
-			<div class="info">
-				<div class="name">
-					{{friend.firstName}} {{friend.lastName}}
-				</div>
-				<div class="age">
-					Age: {{friend.age}}
-				</div>
-				<div class="location">
-					City: {{friend.city}}
-				</div>
-				<div class="view">
-					<div class="btn btn-primary">View Profile</div>
+	<div id="request-list" ng-show="hasRequests()">
+		<a class="row friend btn btn-default" ng-repeat="request in requests" ui-sref="app.user({userId: request.login})">
+			<div class="col-md-4 col-lg-4">
+				<img ng-src="{{request.profilePhoto}}" class="img-round"/>	
+			</div>
+			<div class="col-md-8 col-lg-8">
+				<div class="info">
+					<div class="name">
+						{{request.firstName}} {{request.lastName}}
+					</div>
+					<div class="age">
+						Age: {{request.age}}
+					</div>
+					<div class="location">
+						City: {{request.city}}
+					</div>
+					<div class="view">
+						<div class="btn btn-primary">View Profile</div>
+					</div>
+					<div class="accept">
+						<button class="btn btn-success" ng-click="accept(request)">
+							Accept
+						</button>
+						<button class="btn btn-danger" ng-click="decline(request)">
+							Decline
+						</button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</a>
+		</a>
+	</div>
+
+	<div id="friend-list">
+		<a class="row friend btn btn-default" ng-repeat="friend in friends" ui-sref="app.user({userId: friend.login})">
+			<div class="col-md-4 col-lg-4">
+				<img ng-src="{{friend.profilePhoto}}" class="img-round"/>	
+			</div>
+			<div class="col-md-8 col-lg-8">
+				<div class="info">
+					<div class="name">
+						{{friend.firstName}} {{friend.lastName}}
+					</div>
+					<div class="age">
+						Age: {{friend.age}}
+					</div>
+					<div class="location">
+						City: {{friend.city}}
+					</div>
+					<div class="view">
+						<div class="btn btn-primary">View Profile</div>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
 </div>

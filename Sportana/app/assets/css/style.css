@@ -115,6 +115,10 @@ body {
     margin:0 10px;
   }
 
+  #request-list{
+    margin-bottom: 20px;
+  }
+
   .friend{
     display: block;
     margin: 0 auto;
