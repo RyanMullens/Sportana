@@ -690,7 +690,7 @@ exports.createGame = function(creator, sportID, startTime, endTime , gameDate, l
 						pg.end();
 						if(err){
 							callback(err);
-						}	
+						}
 						else {
                 			var gameID = result.rows[0].gameid;
 							callback(undefined, gameID);
@@ -1576,7 +1576,7 @@ exports.findUsersForGame = function(creator, gameID, sportID, location, minAge, 
                 else {
                 	callback(undefined);
                 }
-             });	
+             });
 		}
 	});
 };

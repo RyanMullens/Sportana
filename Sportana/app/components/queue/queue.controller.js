@@ -14,7 +14,7 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 	// The sports that existed in the preferences that were retrieved
 	var existingSports = [];
 
-	var joinedGames = [];
+	$scope.joinedGames = [];
 
 	// 1)	Runs on page load
 	var initialize = function() {
@@ -385,23 +385,16 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 		return ($scope.preferences.competitive) ? "Competitive" : "Casual";
 	}
 
-	// $scope.matches = function() {
-	//
-	// 	QueueService.getMatches($scope.preferences).then(function(res) {
-	// 		console.log(res);
-	// 		return res;
-	// 	});
-	// 	// TODO : Error handling
-	//
-	// }
-
 	// @ONCLICK
 	$scope.viewGame = function(game) {
 		// TODO Perform any necessary cleanup
 		$state.go('app.viewGame', {creatorId: game.creator, gameId: game.gameID});
 	}
 
+	// TODO
 	$scope.isJoined = function(game) {
+
+		// $scope.matches
 		return joinedGames.indexOf(game.gameId) > -1;
 	}
 
