@@ -186,6 +186,8 @@ body {
 #viewGames .game .player, #viewGame .player{
   width:auto;
   height:100px;
+  padding:3px;
+  border-radius:10px;
 }
 #viewGame{
   margin: 0 20px;

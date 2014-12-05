@@ -2,8 +2,7 @@
 	<div class="alert alert-warning" ng-hide="viewGame.isPublic() || isJoined(getUser()) || isInvited(getUser())">
 		This game is private, please ask the creator to invite you if you wish to join.
 	</div>
-	<div ng-show="viewGame.isPublic() || isJoined(getUser()) || isInvited(getUser())">
-		<h1 class="page-header" ng-init="game = viewGame.getGame()">Game Info</h1>
+	<div ng-show="viewGame.isPublic() || isJoined(getUser()) || isInvited(getUser())" ng-init="game = viewGame.getGame()">
 		<div class="row">
 			<div class="col-md-6">
 				<div class="row">
@@ -18,7 +17,7 @@
 				</div>
 				<div class="row invite">
 					<h3>Current Players: <small>({{viewGame.getPlayers().length}})</small>
-						<div class="btn-group" ng-show="isJoined(getUser())">
+					<div class="btn-group" ng-show="isJoined(getUser()) && viewGame.getFriends().length">
 							<span class="btn btn-primary" pop-over that="viewGame.getThis()" title="Invite Friends">Invite</span>
 						</div>
 					</h3>
@@ -32,7 +31,7 @@
 					<a ng-repeat="player in viewGame.getPlayers() | filter:isJoined track by $index" ui-sref="app.user({userId: player.login})" ><img data-toggle="tooltip" tooltip data-placement="bottom" title="{{player.firstname}} {{player.lastname}}" class="player" ng-src="{{player.profilepicture}}"/></a>
 				</div>
 				
-				<div class="row invited">
+				<div class="row invited" ng-show="hasInvited()">
 					<h3>Invited</h3>
 					<script type="text/javascript">
 						$(document).ready(function(){
