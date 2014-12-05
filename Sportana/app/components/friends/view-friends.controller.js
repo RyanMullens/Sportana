@@ -12,7 +12,7 @@ app.controller("ViewFriendsController", function($scope, $http){
 		console.log('there was an error');
 	});
 
-	$http.get('/api/request/friends').success(function(data, status, headers, config) {
+	$http.get('/api/requests/friends').success(function(data, status, headers, config) {
 		$scope.requests = data.requests;
 		console.log(data);
 	}).

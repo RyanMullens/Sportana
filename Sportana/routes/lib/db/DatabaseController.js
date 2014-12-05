@@ -1299,13 +1299,14 @@ exports.getAllSports = function(callback) {
  			callback(err, undefined);
  		}
  		else {
- 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, Notifications.timeSent, " +
+ 			var SQLQuery = "SELECT Notifications.userFrom, Notifications.nid, " +
  			"Users.firstName, Users.lastName, Users.profilePicture, Users.city, Users.birthday " +
  			"FROM Notifications INNER JOIN Users ON (Notifications.userFrom = Users.login) " +
- 			"WHERE (Notifications.userTo = $1 AND Notifications.type = " + '1' + ") ORDER BY Notifications.timeSent DESC";
+ 			"WHERE (Notifications.userTo = $1 AND Notifications.type = " + '0' + ")";
  			client.query({ text : SQLQuery,
  				values : [username]},
  				function (err, result) {
+ 					console.log("hello");
         	// Ends the "transaction":
         	done();
         	// Disconnects from the database:
@@ -1316,19 +1317,20 @@ exports.getAllSports = function(callback) {
         		callback(err, undefined);
         	}
         	else {
+        		console.log(result);
         		var requests = [];
         		for( var i = 0; i < result.rows.length; i++ ) {
         			var request = {};
         			request.id = result.rows[i].nid;
-        			request.userFrom = result.rows[i].userfrom;
-        			request.userFromName = result.rows[i].firstname + " " + result.rows[i].lastname;
-        			request.userFromImage = result.rows[i].profilepicture;
+        			request.login = result.rows[i].userfrom;
+        			request.firstName = result.rows[i].firstname
+        			request.lastName = result.rows[i].lastname;
+        			request.profilePhoto = result.rows[i].profilepicture;
         			request.city = result.rows[i].city;
         			request.age = timeHelper.makeAgeFromBirthday(result.rows[i].birthday);
-        			request.date = timeHelper.makeDateFromDateAndTime(result.rows[i].timesent);
-        			request.time = timeHelper.makeTimeFromDateAndTime(result.rows[i].timesent);
         			requests.push(request);
         		}
+        		console.log(requests);
         		callback(undefined, requests);
         	}
         });
