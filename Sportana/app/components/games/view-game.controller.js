@@ -102,6 +102,13 @@ app.controller("ViewGameController", function($http, $stateParams, $scope, Curre
 		}
 		else return false;
 	};
+
+	$scope.hasInvited = function(){
+		for(player in $scope.game.players){
+			if($scope.game.players[player].status === 2) return true;
+		}
+		return false;
+	};
 	
 	this.isPublic = function(){
 		return this.getGame().isPublic;
