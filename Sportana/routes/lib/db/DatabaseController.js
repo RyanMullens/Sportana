@@ -1480,6 +1480,9 @@ client.query({ text : SQLQuery,
         			game.sportImage = result.rows[i].imageurl;
         			games.push(game);
         		}
+
+						console.log(games);
+
         		callback(undefined, games);
         	}
         });

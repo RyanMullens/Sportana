@@ -30,7 +30,7 @@
 						</span>
 
 						<!-- TODO : Replace remove with toggle? -->
-						<button class="selectedSports btn" ng-repeat="sport in Queue.getSelectedSports()" ng-click="Queue.removeSport(sport)">{{sport.sport}}  X</button>
+						<button class="selectedSports btn" ng-repeat="sport in Queue.getSelectedSports()" ng-click="Queue.toggle(sport)">{{sport.sport}}  X</button>
 					</div>
 
 					<div class="details col-md-7">
@@ -143,15 +143,13 @@
 					{{game.sport}}
 					{{game.location}}
 					{{game.numParticipants}}
-					{{game.gameDate}}
-					{{game.gameStart}}
-					{{game.gameEnd}}
+					{{game.gameDate | date}}
+					{{game.gameStart | date:'h:mm a'}}
+					{{game.gameEnd | date:'h:mm a'}}
 					{{game.minPlayers}}
 					{{game.maxPlayers}}
 
-					<span ng-show="isJoined(game)">Joined</span>
-
-					<button class="btn" ng-click="viewGame(game)">View</button>
+					<button class="btn" ng-click="viewGame(game)">View Game</button>
 					<button class="btn" ng-hide="isJoined(game)" ng-click="joinGame(game)">Join</button>
 					<button class="btn" ng-hide="isJoined(game)" ng-click="declineGame(game)">Dismiss</button>
 

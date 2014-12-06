@@ -8,7 +8,7 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 	var mode;
 	var editModeCachedPreferences = {};
-	var editModeCachedSelections = {};
+	var editModeCachedSelections = [];
 	// Sports that are visibly selected
 	var selectedSports = [];
 	// The sports that existed in the preferences that were retrieved
@@ -21,7 +21,9 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 		// Destroy any local queue settings so that we are
 		// in normal mode and all placeholders are refreshed
+		$scope.hasPreferences = false;
 		resetQueue();
+		$scope.matches = [];
 
 		// 2)	Retreive all the sports and retrieve the queue preferences for the user
 		QueueService.getSports()
@@ -43,10 +45,10 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 		selectedSports = [];
 		existingSports = [];
-		$scope.matches = [];
+		// $scope.matches = [];
 
 		mode = QUEUE_CONST.normal;
-		$scope.hasPreferences = false;
+		// $scope.hasPreferences = false;
 		setInstructions();
 	}
 
@@ -287,26 +289,39 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 
 				updatedPreferences.ageMin = (updatedPreferences.ageMin === "No Preference") ? 16 : $scope.preferences.ageMin;
 				updatedPreferences.ageMax = (updatedPreferences.ageMax === "No Preference") ? 70 : $scope.preferences.ageMax;
-				updatedPreferences.competitive = (updatedPreferences.competitive) ? 1 : 0;
+				updatedPreferences.competitive = (updatedPreferences.competitive) ? true : false;
 
 				QueueService.joinQueue(updatedPreferences).then(function (res) {
 
+					console.log("PREFERENCES SAVED:")
+					console.log(updatedPreferences);
+
+					console.log("RESULTS FROM UPDATING:")
+					console.log(res.data);
+
 					QueueService.getMatches(updatedPreferences).then(function(res) {
-						console.log(res[0].data.results);
+
+						console.log("HER!!!!");
+						console.log(res);
+
+						// console.log("MATHCES FOUND:")
+						// console.log(res[0].data.results);
 						$scope.matches = res[0].data.results;
+
+						// var allMatches = [];
+						// for(var i=0; i < res.length; i++) {
+						// 	// console.log(res[i].data.results);
+						// 	allMatches.push(res[i].data.results)
+						// }
+						// $scope.matches = allMatches;
+
+						getPreferences();
 					});
-
-					resetQueue();
-					getPreferences();
-
-
 				}, function (err) {
 					console.log(err);
 				});
 			} else {
-
-				// Validation error
-
+				// TODO Validation Error
 			}
 
 		}, function(err) {
@@ -372,6 +387,9 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 	$scope.dropFromQueue = function() {
 		QueueService.dropFromQueue().then(function(res) {
 			resetQueue();
+			$scope.hasPreferences = false;
+			$scope.matches = [];
+			setInstructions();
 		}, function(err) {
 			console.log(err);
 		});
@@ -395,7 +413,8 @@ app.controller('QueueController', function(QUEUE_CONST, $location, QueueService,
 	$scope.isJoined = function(game) {
 
 		// $scope.matches
-		return joinedGames.indexOf(game.gameId) > -1;
+		// return joinedGames.indexOf(game.gameId) > -1;
+		return true;
 	}
 
 	// @ONCLICK

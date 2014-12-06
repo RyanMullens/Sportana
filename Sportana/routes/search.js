@@ -19,7 +19,7 @@ var authenticator = require('./authentication'); // Authentication Handler
  * 	“success”  : boolean
  *  "results" :
  *   [{
-        "creator"         : string 
+        "creator"         : string
         "gameID"          : int
         "gameDate"		  : date // yyyy-mm-dd
         "gameStart"		  : time // hh:mm:ss
@@ -42,6 +42,9 @@ router.get('/games', function(req, res) {
 	var ageMin = req.query.ageMin;
 	var ageMax = req.query.ageMax;
 	var isCompetitive = req.query.competitive;
+
+	console.log(req.query);
+
 	var auth = req.get('SportanaAuthentication');
 	authenticator.deserializeUser(auth, function(err, username) {
 		var response = {};

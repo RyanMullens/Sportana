@@ -203,23 +203,29 @@ app.factory('QueueService', function($http, $q) {
     }
     params['competitive'] = competitive;
 
-    console.log(params);
-
     // Generates a promise containing the results of all of the GET requests
     var deferred = $q.defer();
     var urlCalls = [];
     angular.forEach(preferences.sports, function(sport) {
-      params['sport'] = sport.sport.toLowerCase();
-      urlCalls.push($http.get('/api/search/games', {params: params}));
+
+      var newParams = {};
+      for( var key in params ) {
+        newParams[key] = params[key];
+      }
+
+      newParams['sport'] = sport.sport;
+      urlCalls.push($http.get('/api/search/games', {params: newParams}));
     });
 
     return $q.all(urlCalls)
     .then(
       function(results) {
-        deferred.resolve(
-          results
-        );
+        console.log(results);
+        deferred.resolve( results);
         return deferred.promise;
+      },function(errors) {
+        console.log(errors);
+        deferred.reject(errors);
       });
   }
 
