@@ -5,6 +5,10 @@
 
 Sportana knows what sports you like, who you like playing with, and where you like to play.  Whether you just want some friendly competition or are looking for a formidable face-off, Sportana makes it easy to get out and get moving with people who love to play.
 
+# Application Exploration
+
+View our final video demonstrations and source-code walkthroughs in [this Google Drive folder](https://drive.google.com/a/umass.edu/folderview?id=0B75QXRvNo0mQcF9QUWZxTko1cDQ&usp=sharing).
+
 
 # Original Proposal
 
