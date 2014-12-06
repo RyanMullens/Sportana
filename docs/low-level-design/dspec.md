@@ -134,7 +134,9 @@ HIGH LEVEL COMPONENT OVERVIEW:
 
 <b>View Game Alec</b>
 
->A user can find the view of a game they are in from the Games List view. All of the information that is displayed on the page will have been rendered from a http GET request to the server. This page includes all of the information about a specific game including but not limited to the name, sport, who is going, date, and location. The page would also include buttons to leave the game and invite other players. Another main feature of this page is the chat board, this will be the main communication between the players of a game. For the implementation of the chat board we will be using websockets. 
+>A user can find the view of a game they are in from the Games List view. All of the information that is displayed on the page will have been rendered from a http GET request to the server. This page includes all of the information about a specific game including but not limited to the name, sport, who is going, date, and location. The page would also include buttons to leave the game and invite other players. Another main feature of this page is the chat board, this will be the main communication between the players of a game. For the implementation of the chat board we will be using websockets\*\*.
+
+\*\* Websockets have not yet been implemented in the final submission.
 
 <b>Friends Alec</b>
 
