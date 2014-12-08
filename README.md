@@ -7,7 +7,7 @@ Sportana knows what sports you like, who you like playing with, and where you li
 
 # Application Exploration
 
-View our final video demonstrations and source-code walkthroughs in [this Google Drive folder](https://drive.google.com/a/umass.edu/folderview?id=0B75QXRvNo0mQcF9QUWZxTko1cDQ&usp=sharing).
+View our final video demonstrations and source-code walkthroughs in [this Google Drive folder](https://drive.google.com/folderview?id=0B75QXRvNo0mQaVNmM3FreURzTjA&usp=sharing).
 
 
 # Original Proposal
